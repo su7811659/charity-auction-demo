@@ -1,0 +1,33 @@
+/* 完全防止 Modal 造成的佈局偏移 */
+html, body {
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  /* 如需固定保留滾動條空間可啟用 scrollbar-gutter，預設關閉避免右側空白 */
+  /* scrollbar-gutter: stable; */
+}
+
+/* 防止 Ant Design Modal 在 body 上動態注入 style 導致位移 */
+body[style] {
+  overflow: auto !important;
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* 覆蓋 Ant Design 對 body 加的 class 與 style */
+body.ant-scrolling-effect,
+body.ant-modal-open,
+body[style*="overflow: hidden"],
+body[style*="padding-right"],
+body[style*="margin-right"] {
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* 防止根容器偏移 */
+#root {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}

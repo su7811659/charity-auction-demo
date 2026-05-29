@@ -1,0 +1,519 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="dark"] {
+  background-color: #2E2E2E;
+  color: #FAFAFA;
+}
+
+[data-theme="light"] {
+  color: #213547;
+  background-color: #FAFAFA;
+}
+
+[data-theme="dark"] button {
+  background-color: #1a1a1a;
+  color: white;
+}
+
+[data-theme="light"] button {
+  background-color: #f9f9f9;
+  color: black;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 全域只針對按鈕移除黑色外框，其餘元件維持可及性焦點樣式 */
+.ant-btn:focus,
+.ant-btn:focus-visible,
+.ant-btn:active,
+.ant-btn:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.ant-layout-header {
+  line-height: 65px;
+}
+
+.header .ant-menu-item {
+  padding: 0 2.5rem;
+  font-size: large;
+}
+
+.form-item-hoverable {
+  transition: all 0.2s ease;
+  
+}
+
+.form-item-hoverable:hover {
+  background: #fafafa;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding-inline: 6px;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.custom-popover .ant-popover-inner {
+  box-shadow: none !important;
+}
+
+/* Hover Effects */
+
+/* Tag hover effect */
+.hover-float:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Card hover effect */
+.hover-shadow:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* Description border hover effect */
+.hover-border:hover {
+  border-color: #1890ff;
+  box-shadow: 0 4px 12px rgba(24,144,255,0.1);
+}
+
+/* Price hover effect */
+.hover-price:hover span {
+  transform: scale(1.05);
+  color: #096dd9;
+}
+
+/* Button hover effect */
+.hover-float-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Like count hover effect */
+.hover-count:hover {
+  color: #ff4d4f !important;
+  transform: scale(1.05);
+}
+
+/* --- Align ProductSubmit description label actions to the right --- */
+.desc-right .ant-form-item-label > label {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.desc-right .ant-form-item-label > label .desc-right-actions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* --- end --- */
+
+/* 成就通知動畫樣式 */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* 成就通知容器樣式 */
+.ant-notification-bottomRight {
+  right: 24px !important;
+  bottom: 24px !important;
+}
+
+/* 成就通知項目樣式 */
+.achievement-notification.ant-notification-notice {
+  animation: slideInFromRight 0.5s ease-out !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.achievement-notification.ant-notification-notice-close {
+  animation: slideOutToRight 0.3s ease-in !important;
+}
+
+/* 超級強制通知顯示規則 - 終極版本 */
+.ant-notification,
+.ant-notification-topLeft,
+.ant-notification-topRight,
+.ant-notification-bottomLeft,
+.ant-notification-bottomRight {
+  z-index: 99999 !important;
+  display: block !important;
+  visibility: visible !important;
+  position: fixed !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  clip: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+}
+
+.ant-notification-bottomRight {
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 24px !important;
+  z-index: 99999 !important;
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* 強制顯示所有通知項目 */
+.ant-notification-notice,
+.ant-notification-notice-message,
+.ant-notification-notice-description,
+.ant-notification-notice-content,
+.ant-notification-notice-with-icon {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  transform: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  clip: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.ant-notification-bottomRight .ant-notification-notice {
+  margin-right: 0 !important;
+  margin-bottom: 16px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  z-index: 99999 !important;
+}
+
+/* 防止任何隱藏或遮蔽 */
+.ant-notification *,
+.ant-notification-notice *,
+.ant-notification-notice-content * {
+  max-height: none !important;
+  overflow: visible !important;
+  clip: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+}
+
+/* 確保動畫不會導致隱藏 */
+.ant-notification-notice-wrapper {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 99999 !important;
+}
+
+/* 覆蓋可能的隱藏樣式 */
+[style*="display: none"] .ant-notification,
+[style*="visibility: hidden"] .ant-notification,
+[style*="opacity: 0"] .ant-notification {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 防止被其他元素遮蔽 */
+.ant-notification-notice {
+  isolation: isolate !important;
+  contain: none !important;
+}
+
+/* 強制覆蓋任何可能的動畫狀態 */
+.ant-notification-notice.ant-notification-notice-close {
+  display: block !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* 確保圖標和文字都顯示 */
+.ant-notification-notice-icon,
+.ant-notification-notice-message,
+.ant-notification-notice-description {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 極端強制顯示 - 覆蓋所有可能的隱藏規則 */
+.ant-notification-topLeft,
+.ant-notification-topRight,
+.ant-notification-bottomLeft,
+.ant-notification-bottomRight,
+.ant-notification {
+  position: fixed !important;
+  z-index: 2147483647 !important; /* 最大 z-index 值 */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  clip: auto !important;
+  clip-path: none !important;
+  mask: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* 特別針對右下角通知 */
+.ant-notification-bottomRight {
+  right: 24px !important;
+  bottom: 24px !important;
+  top: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 384px !important;
+  max-height: none !important;
+  min-width: 320px !important;
+  overflow: visible !important;
+}
+
+/* 強制所有通知項目可見 */
+.ant-notification .ant-notification-notice {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  transform: translateX(0) !important;
+  margin-bottom: 16px !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  background: white !important;
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 6px 16px -8px rgba(0,0,0,0.08), 0 9px 28px 0 rgba(0,0,0,0.05), 0 3px 6px -4px rgba(0,0,0,0.12) !important;
+  padding: 16px 24px !important;
+}
+
+/* 覆蓋成功通知樣式 */
+.ant-notification-notice-success {
+  border-left: 4px solid #52c41a !important;
+  background-color: #f6ffed !important;
+}
+
+/* 覆蓋信息通知樣式 */
+.ant-notification-notice-info {
+  border-left: 4px solid #1890ff !important;
+  background-color: #e6f7ff !important;
+}
+
+/* 確保通知內容可見 */
+.ant-notification-notice-content {
+  display: block !important;
+  position: relative !important;
+  margin-left: 0 !important;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-content {
+  margin-left: 48px !important;
+}
+
+/* 確保圖標顯示 */
+.ant-notification-notice-icon {
+  position: absolute !important;
+  left: 16px !important;
+  top: 17px !important;
+  font-size: 24px !important;
+  line-height: 24px !important;
+}
+
+.ant-notification-notice-icon .anticon {
+  display: inline-block !important;
+  color: inherit !important;
+}
+
+/* 確保標題和描述顯示 */
+.ant-notification-notice-message {
+  display: block !important;
+  margin-bottom: 4px !important;
+  color: rgba(0,0,0,0.85) !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  font-weight: 500 !important;
+}
+
+.ant-notification-notice-description {
+  display: block !important;
+  color: rgba(0,0,0,0.65) !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+}
+
+/* 關閉按鈕 */
+.ant-notification-notice-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 22px !important;
+  color: rgba(0,0,0,0.45) !important;
+  outline: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  line-height: 22px !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  display: block !important;
+}
+
+/* 防止被任何父容器隱藏 */
+body > .ant-notification,
+#root ~ .ant-notification,
+.ant-notification[data-placement] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 2147483647 !important;
+}
+
+/* 強制覆蓋任何隱藏狀態 */
+.ant-notification[style*="display: none"],
+.ant-notification[style*="visibility: hidden"],
+.ant-notification[style*="opacity: 0"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.ant-notification-notice[style*="display: none"],
+.ant-notification-notice[style*="visibility: hidden"],
+.ant-notification-notice[style*="opacity: 0"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

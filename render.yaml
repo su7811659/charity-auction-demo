@@ -1,0 +1,21 @@
+# Render 部署設定（後端 FastAPI）。
+# 在 Render 建立 Blueprint 時會讀取本檔。
+services:
+  - type: web
+    name: bidforgood-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # 啟動時先灌入示範資料（失敗也不阻擋啟動），再開伺服器。
+    # 免費方案磁碟為暫存性，每次重啟會重新灌一份乾淨的 demo 資料。
+    startCommand: bash -c "cd scripts && python quick_seed.py || true; cd .. && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.10.12"
+      - key: ADMIN_SECRET
+        value: demo-admin
+      # OpenAI 金鑰留空 = Demo 模式（不呼叫 OpenAI）。要啟用真實 AI 再到 Render 後台填入。
+      - key: OPENAI_API_KEY
+        sync: false

@@ -1,0 +1,78 @@
+# ignore Python ENV
+env/
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ignore database file
+backend/database.db
+backend/uploads
+backend/data/
+backend/logs/
+backend/user/
+
+# ignore VS Code config
+.vscode/
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+frontend/package-lock.json
+
+# ── 機密 / 環境檔（切勿提交）──
+.env
+*.env
+!*.env.example
+backend/.env
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+google_credentials.json
+**/google_credentials.json
+*.pem
+*.key
+
+# ── 資料庫與備份 ──
+*.db
+*.db.bak
+*.bak
+backend/backups/
+
+volumes/*
+
+# ignore log files
+logs/

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Git post-merge hook - 在 git pull 後自動檢查資料庫
+# 這個檔案應該放在 .git/hooks/post-merge
+
+echo "🔄 Git pull 完成，檢查是否需要更新資料庫..."
+
+# 檢查是否有 migration 文件變化
+if git diff-tree --name-only HEAD@{1} HEAD | grep -q "backend/migrations/versions/"; then
+    echo "⚠️  發現 migration 文件變化，建議執行資料庫更新"
+    echo ""
+    echo "建議執行以下命令之一："
+    echo "  cd backend && python scripts/db_manager.py check    # 檢查資料庫狀態"
+    echo "  cd backend && python scripts/db_manager.py reset    # 重置資料庫"
+    echo "  cd backend && ./quick_start.sh                      # 智能啟動"
+    echo ""
+fi
+
+# 檢查是否有模型文件變化
+if git diff-tree --name-only HEAD@{1} HEAD | grep -q "backend/models/\|backend/schemas/"; then
+    echo "⚠️  發現模型文件變化，可能需要更新資料庫"
+    echo ""
+    echo "建議執行："
+    echo "  cd backend && python scripts/db_manager.py check"
+    echo ""
+fi
