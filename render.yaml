@@ -7,9 +7,8 @@ services:
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
-    # 啟動時先灌入示範資料（失敗也不阻擋啟動），再開伺服器。
-    # 免費方案磁碟為暫存性，每次重啟會重新灌一份乾淨的 demo 資料。
-    startCommand: bash -c "cd scripts && python quick_seed.py || true; cd .. && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    # 啟動時：先建表並在資料庫為空時灌入示範資料（idempotent），再開伺服器。
+    startCommand: bash -c "python seed_if_empty.py; uvicorn main:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /healthz
     envVars:
       - key: PYTHON_VERSION

@@ -8,8 +8,12 @@ from sqlalchemy.orm import Session
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database import SessionLocal
+from database import SessionLocal, engine, Base
+import models  # 註冊所有 ORM models，確保建表完整
 from schemas.product_schema import Product
+
+# 確保資料表存在（在尚未啟動 app 就先 seed 的情境，例如部署時）
+Base.metadata.create_all(bind=engine)
 from datetime import datetime, timezone
 
 # Sample data for generating fake products
