@@ -415,7 +415,7 @@ const Summary: React.FC = () => {
   const soldPercentage = Math.round((stats.sold_products / stats.total_products) * 100) || 0;
   const targetAmount = 20000; // 目標金額
   const companyMatchAmount = Math.min(totalDonation || 0, targetAmount); // 公司倍倍捐款配對金額，上限20000
-  const ivanSponsorAmount = Math.max((totalDonation || 0) - targetAmount, 0); // Ivan 贊助金額
+  const ivanSponsorAmount = Math.max((totalDonation || 0) - targetAmount, 0); // 執行長加碼金額
   const totalDonationAmount = companyMatchAmount + ivanSponsorAmount + (totalDonation || 0); // 總捐款金額（三項加總）
   const donationPercentage = Math.min(Math.round(((totalDonation || 0) / targetAmount) * 100), 100);
   const companyMatchPercentage = Math.round((companyMatchAmount / targetAmount) * 100);
