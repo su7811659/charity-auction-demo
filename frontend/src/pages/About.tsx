@@ -29,10 +29,12 @@ import buyerStep01 from '../assets/img/buyer_step_01.png';
 import buyerStep02 from '../assets/img/buyer_step_02.png';
 import buyerStep03 from '../assets/img/buyer_step_03.png';
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const { Title, Paragraph, Text } = Typography;
 
 const About = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const topDonors = useSelector((state: RootState) => state.product.topDonors || []);
   
@@ -112,26 +114,26 @@ const About = () => {
   // 愛心點擊文案 - 根據是否已觸發過彩蛋使用不同內容
   const heartMessages = hasTriggeredEasterEgg ? [
     // 已觸發過彩蛋的簡短版本，不會再觸發彩蛋
-    '你輕點了一下 ， 愛心覺羅看著你 ， 彷彿在說 ： 「 趕快去上傳商品 。 」',
-    '你戳了戳他 ， 他的眼睛眨了兩下 ， 好像在問 ： 「 今天有逛市集嗎 ？ 」',
-    '愛心覺羅沒什麼反應 ， 可能是想睡了 。 ',
-    '你碰了一下 ， 他微微歪頭，像是在打量你要做什麼 。 ',
-    '你按了一下 ， 他的眼神意味深長，像是在暗示你去看看下面的活動指南 。 ',
-    '愛心覺羅縮了縮身子 ，  好像有點害羞',
-    '你試著引起他的注意 ， 他只是用餘光瞄了你一下 。 ',
-    '愛心覺羅一動不動 。 '
+    t('你輕點了一下 ， 愛心覺羅看著你 ， 彷彿在說 ： 「 趕快去上傳商品 。 」'),
+    t('你戳了戳他 ， 他的眼睛眨了兩下 ， 好像在問 ： 「 今天有逛市集嗎 ？ 」'),
+    t('愛心覺羅沒什麼反應 ， 可能是想睡了 。 '),
+    t('你碰了一下 ， 他微微歪頭，像是在打量你要做什麼 。 '),
+    t('你按了一下 ， 他的眼神意味深長，像是在暗示你去看看下面的活動指南 。 '),
+    t('愛心覺羅縮了縮身子 ，  好像有點害羞'),
+    t('你試著引起他的注意 ， 他只是用餘光瞄了你一下 。 '),
+    t('愛心覺羅一動不動 。 ')
   ] : [
     // 首次觸發的完整版本
-    '你輕點了一下 ， 它晃動了一下 ， 然後靜止不動 。 ',
-    '你第二次點擊 ， 它表面泛起一層淡淡的微光 。 ',
-    '你第三次點擊 ， 它邊緣劃過一道細緻的光暈 。 ',
-    '你再次點擊 ， 它的中心微微鼓起， 像在呼吸 。 ',
-    '你連點幾下 ， 它跳動了一下 ， 閃出短暫光芒 。 ',
-    '你不斷點擊 ，它浮現幾個模糊的表情圖案 ， 又迅速淡去 。',
-    '你又點了一下 ， 它的光澤變強 ， 然後又恢復原樣 。',
-    '你接連點擊 ， 它周圍出現細碎的光點 ， 緩緩旋轉 。',
-    '第九下 ， 它的顏色瞬間加深 ， 並刻上流動符號 。',
-    '你最後一次點擊 ， 它猛然爆出耀眼光芒 —— 隱藏的祕密被啟動了。 '
+    t('你輕點了一下 ， 它晃動了一下 ， 然後靜止不動 。 '),
+    t('你第二次點擊 ， 它表面泛起一層淡淡的微光 。 '),
+    t('你第三次點擊 ， 它邊緣劃過一道細緻的光暈 。 '),
+    t('你再次點擊 ， 它的中心微微鼓起， 像在呼吸 。 '),
+    t('你連點幾下 ， 它跳動了一下 ， 閃出短暫光芒 。 '),
+    t('你不斷點擊 ，它浮現幾個模糊的表情圖案 ， 又迅速淡去 。'),
+    t('你又點了一下 ， 它的光澤變強 ， 然後又恢復原樣 。'),
+    t('你接連點擊 ， 它周圍出現細碎的光點 ， 緩緩旋轉 。'),
+    t('第九下 ， 它的顏色瞬間加深 ， 並刻上流動符號 。'),
+    t('你最後一次點擊 ， 它猛然爆出耀眼光芒 —— 隱藏的祕密被啟動了。 ')
   ];
 
   // 愛心點擊處理函數
@@ -219,45 +221,45 @@ const About = () => {
   };
 
   const sellerSteps = [
-    { url: sellerStep01, desc: "選擇想要義賣的愛心商品" },
-    { url: sellerStep02, desc: "前往上傳商品、填寫商品資訊後提交審核" },
-    { url: sellerStep03, desc: "待審核通過後確認商品是否上架" },
-    { url: sellerStep04, desc: "活動當日(9/23)將你的愛心商品交給6F夏威夷的ESG小組成員" },
+    { url: sellerStep01, desc: t("選擇想要義賣的愛心商品") },
+    { url: sellerStep02, desc: t("前往上傳商品、填寫商品資訊後提交審核") },
+    { url: sellerStep03, desc: t("待審核通過後確認商品是否上架") },
+    { url: sellerStep04, desc: t("活動當日(9/23)將你的愛心商品交給6F夏威夷的ESG小組成員") },
   ];
 
   const buyerSteps = [
-    { url: buyerStep01, desc: "瀏覽商品列表並挑選你心儀的商品" },
-    { url: buyerStep02, desc: "將點擊商品頁上的愛心加入收藏" },
-    { url: buyerStep03, desc: "活動當日(9/23 的 15:00 ~ 17:30) 在6F夏威夷中尋覓你的心儀商品並交由櫃檯的ESG小組成員進行成交" },
+    { url: buyerStep01, desc: t("瀏覽商品列表並挑選你心儀的商品") },
+    { url: buyerStep02, desc: t("將點擊商品頁上的愛心加入收藏") },
+    { url: buyerStep03, desc: t("活動當日(9/23 的 15:00 ~ 17:30) 在6F夏威夷中尋覓你的心儀商品並交由櫃檯的ESG小組成員進行成交") },
   ];
 
   const donationOrgs = [
     {
-      name: "家扶基金會",
+      name: t("家扶基金會"),
       logo: donateLogo1,
-      desc: "家扶基金會是一個關懷弱勢兒童少年及其家庭的國際性非營利組織，運用社會工作的專業方法，讓兒少享有家庭妥善的照顧、身心安全的保護、健康成長的環境、充分受教育的機會，快樂學習的生活，期待兒少自立後能夠帶著大家的愛展翅飛翔。",
+      desc: t("家扶基金會是一個關懷弱勢兒童少年及其家庭的國際性非營利組織，運用社會工作的專業方法，讓兒少享有家庭妥善的照顧、身心安全的保護、健康成長的環境、充分受教育的機會，快樂學習的生活，期待兒少自立後能夠帶著大家的愛展翅飛翔。"),
       link: "https://www.ccf.org.tw/"
     },
     {
-      name: "南迴基金會",
+      name: t("南迴基金會"),
       logo: donateLogo2,
-      desc: "南迴基金會以從事醫療事業辦理醫療機構及公益事業為目的，包含支援南迴線及臨近區域等急性後醫療照護，協助各村落之巡迴醫療、辦理長期照顧服務、疾病預防篩檢及健康促進業務。關懷南迴線及鄰近區域等在地居民（老人、身心障礙者、弱勢族群）急難救助等相關照護事項。",
+      desc: t("南迴基金會以從事醫療事業辦理醫療機構及公益事業為目的，包含支援南迴線及臨近區域等急性後醫療照護，協助各村落之巡迴醫療、辦理長期照顧服務、疾病預防篩檢及健康促進業務。關懷南迴線及鄰近區域等在地居民（老人、身心障礙者、弱勢族群）急難救助等相關照護事項。"),
       link: "https://www.4141.org.tw/"
     },
   ];
 
   const rewardItems = [
     {
-      title: "員工公益獎勵",
-      desc: "榮登「大善人排行榜」前三名的熱血捐贈者，將獲頒專屬訂製的 公益榮耀獎座。(PS.獎座上印的是你第一個商品的賣家暱稱，所以請好好取名:D)\n\n這不只是個獎座，它是專屬於你的「宇宙級好人認證徽章」，象徵著你在這場善意接力中所留下的溫暖足跡。\n\n當你把它擺在辦公桌上，陽光會在上面灑下一圈光暈，像是在為你的善心加冕。\n它不會替你發聲，但它會替你說話——告訴每一位路過的人，這裡坐著的是一位用行動改變世界的人。\n\n因為你的一點點善意，正化成一道道漣漪，穿過城市的喧囂，輕輕擁抱那些需要幫助的人，讓整個世界的溫柔，被看見、被放大。",
+      title: t("員工公益獎勵"),
+      desc: t("榮登「大善人排行榜」前三名的熱血捐贈者，將獲頒專屬訂製的 公益榮耀獎座。(PS.獎座上印的是你第一個商品的賣家暱稱，所以請好好取名:D)\n\n這不只是個獎座，它是專屬於你的「宇宙級好人認證徽章」，象徵著你在這場善意接力中所留下的溫暖足跡。\n\n當你把它擺在辦公桌上，陽光會在上面灑下一圈光暈，像是在為你的善心加冕。\n它不會替你發聲，但它會替你說話——告訴每一位路過的人，這裡坐著的是一位用行動改變世界的人。\n\n因為你的一點點善意，正化成一道道漣漪，穿過城市的喧囂，輕輕擁抱那些需要幫助的人，讓整個世界的溫柔，被看見、被放大。"),
       color: "#FCFCFC",
       hoverColor: "#f0f5ff",
       iconColor: "#FFDC35",
       icon: TrophyFilled,
     },
     {
-      title: "公司倍倍捐款配對",
-      desc: "為感謝同仁參與公益、擴大善意影響力，公司將依員工實際捐贈總金額進行 1:1 金額配對，公司配對金額上限為 20,000 元。\n\n超過上限的部分，將由執行長 Ivan 親自加碼貼補——是的，他會豪爽地從自己的口袋掏出來，讓每一份善心都能獲得全額加倍。\n\n這不只是企業對公益的承諾與支持，更是我們對永續發展與社會責任的實踐。因為在這場善意接力中，你的愛心不僅不打折，還可能被 Ivan 「限時加倍送」：）",
+      title: t("公司倍倍捐款配對"),
+      desc: t("為感謝同仁參與公益、擴大善意影響力，公司將依員工實際捐贈總金額進行 1:1 金額配對，公司配對金額上限為 20,000 元。\n\n超過上限的部分，將由執行長 Ivan 親自加碼貼補——是的，他會豪爽地從自己的口袋掏出來，讓每一份善心都能獲得全額加倍。\n\n這不只是企業對公益的承諾與支持，更是我們對永續發展與社會責任的實踐。因為在這場善意接力中，你的愛心不僅不打折，還可能被 Ivan 「限時加倍送」：）"),
       color: "#FCFCFC",
       hoverColor: "#fff7e6",
       iconColor: "#66B3FF",
@@ -525,7 +527,7 @@ const About = () => {
 
         {/* 主標題 */}
         <Title level={3} style={{ fontWeight: 400, marginBottom: 8 }}>
-          公益市集活動指南
+          {t("公益市集活動指南")}
         </Title>
 
         {/* 短分隔線 */}
@@ -538,7 +540,7 @@ const About = () => {
 
         {/* 副標題 */}
         <Text italic type="secondary" style={{ fontSize: 14 }}>
-          以善為念，以愛為行
+          {t("以善為念，以愛為行")}
         </Text>
       </motion.div>
       <Divider />
@@ -583,7 +585,7 @@ const About = () => {
                   }}
                 />
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Text strong style={{ fontSize: 20 }}>理念初心</Text>
+                  <Text strong style={{ fontSize: 20 }}>{t("理念初心")}</Text>
                   <div style={{ fontSize: 16, color: "#999", ...englishFontStyle }}>Vision</div>
                 </div>
               </motion.div>
@@ -612,7 +614,7 @@ const About = () => {
                   marginBottom: 24,
                 }}
               >
-                在 BidForGood，我們相信科技應該是為人服務、為社會創造價值的力量。由 ESG 小組主辦的 BidForGood 公益市集，是一場融合「循環永續」與「科技善意」的公益行動。同仁們透過捐出閒置物品，讓舊愛重獲新生，並將拍賣所得捐助給需要幫助的社福單位，實踐共享經濟與愛的延續。
+                {t("在 BidForGood，我們相信科技應該是為人服務、為社會創造價值的力量。由 ESG 小組主辦的 BidForGood 公益市集，是一場融合「循環永續」與「科技善意」的公益行動。同仁們透過捐出閒置物品，讓舊愛重獲新生，並將拍賣所得捐助給需要幫助的社福單位，實踐共享經濟與愛的延續。")}
               </Paragraph>
             </motion.div>
             <motion.div
@@ -630,7 +632,7 @@ const About = () => {
                   marginBottom: 24,
                 }}
               >
-                本次市集更首次導入 AI 技術，協助商品搜尋、產生有趣的商品鑑定報告，讓每件物品的故事被看見，也讓公益參與變得更輕鬆、友善與智慧。透過創新科技的協助，我們希望建立一個充滿人情味的數位公益平台，讓參與者在每一次挑選、每一次捐贈中，看見科技與善意的交會。
+                {t("本次市集更首次導入 AI 技術，協助商品搜尋、產生有趣的商品鑑定報告，讓每件物品的故事被看見，也讓公益參與變得更輕鬆、友善與智慧。透過創新科技的協助，我們希望建立一個充滿人情味的數位公益平台，讓參與者在每一次挑選、每一次捐贈中，看見科技與善意的交會。")}
               </Paragraph>
             </motion.div>
             <motion.div
@@ -647,7 +649,7 @@ const About = () => {
                   textIndent: "2em",
                 }}
               >
-                BidForGood 公益市集，不只是跳蚤市場，更是我們對永續與社會責任的共同承諾。邀請你一同加入，讓 AI 為愛助力，讓每一份心意都有機會被傳遞得更遠。
+                {t("BidForGood 公益市集，不只是跳蚤市場，更是我們對永續與社會責任的共同承諾。邀請你一同加入，讓 AI 為愛助力，讓每一份心意都有機會被傳遞得更遠。")}
               </Paragraph>
             </motion.div>
           </motion.div>
@@ -686,7 +688,7 @@ const About = () => {
                   }}
                 />
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Text strong style={{ fontSize: 20 }}>活動詳程</Text>
+                  <Text strong style={{ fontSize: 20 }}>{t("活動詳程")}</Text>
                   <div style={{ fontSize: 16, color: "#999", ...englishFontStyle }}>Timeline</div>
                 </div>
               </motion.div>
@@ -704,7 +706,7 @@ const About = () => {
             }}
           >
             <Text strong style={{ fontSize: 18, color: "#3C3C3C", letterSpacing: 1.5 }}>
-              活動時程
+              {t("活動時程")}
             </Text>
           </div>
 
@@ -721,8 +723,8 @@ const About = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: 16 }}
             >
-              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>商品上傳開放</Text>
-              <Text style={{ fontSize: 14, color: "#333" }}>8/26（二）網站開放上傳</Text>
+              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>{t("商品上傳開放")}</Text>
+              <Text style={{ fontSize: 14, color: "#333" }}>{t("8/26（二）網站開放上傳")}</Text>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -730,8 +732,8 @@ const About = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: 16 }}
             >
-              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>上架截止時間</Text>
-              <Text style={{ fontSize: 14, color: "#333" }}>9/23（二）中午 12:00</Text>
+              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>{t("上架截止時間")}</Text>
+              <Text style={{ fontSize: 14, color: "#333" }}>{t("9/23（二）中午 12:00")}</Text>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -739,8 +741,8 @@ const About = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: 16 }}
             >
-              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>市集活動日</Text>
-              <Text style={{ fontSize: 14, color: "#333" }}>9/23（二）下午 3:00–5:30</Text>
+              <Text strong style={{ minWidth: 120, fontSize: 14, color: "#555", ...englishFontStyle }}>{t("市集活動日")}</Text>
+              <Text style={{ fontSize: 14, color: "#333" }}>{t("9/23（二）下午 3:00–5:30")}</Text>
             </motion.div>
           </motion.div>
 
@@ -755,17 +757,17 @@ const About = () => {
             }}
           >
             <Text strong style={{ fontSize: 18, color: "#3C3C3C", letterSpacing: 1.5 }}>
-              活動當日(9/23)流程
+              {t("活動當日(9/23)流程")}
             </Text>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 12 }}>
             {[
-              { time: "10:00–14:30", desc: "賣家送件至 6F 夏威夷會場" },
-              { time: "14:30–15:30", desc: "ESG 小組前置準備" },
-              { time: "15:00–17:30", desc: "公益市集活動進行" },
-              { time: "17:30–18:00", desc: "賣家取回未售出商品" },
-              { time: "17:50", desc: "公告未取回物品，統一放置桌面" },
+              { time: "10:00–14:30", desc: t("賣家送件至 6F 夏威夷會場") },
+              { time: "14:30–15:30", desc: t("ESG 小組前置準備") },
+              { time: "15:00–17:30", desc: t("公益市集活動進行") },
+              { time: "17:30–18:00", desc: t("賣家取回未售出商品") },
+              { time: "17:50", desc: t("公告未取回物品，統一放置桌面") },
             ].map(({ time, desc }, idx) => (
               <div
                 key={idx}
@@ -819,7 +821,7 @@ const About = () => {
                   }}
                 />
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Text strong style={{ fontSize: 20 }}>參與指引</Text>
+                  <Text strong style={{ fontSize: 20 }}>{t("參與指引")}</Text>
                   <div style={{ fontSize: 16, color: "#999", ...englishFontStyle }}>Guide</div>
                 </div>
               </motion.div>
@@ -836,7 +838,7 @@ const About = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
               <Text strong style={{ fontSize: 18, color: '#333', borderBottom: '4px solid #003D79', paddingBottom: 4 }}>
-                賣家流程指引
+                {t("賣家流程指引")}
               </Text>
             </div>
           </motion.div>
@@ -854,7 +856,7 @@ const About = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
               <Text strong style={{ fontSize: 18, color: '#333', borderBottom: '4px solid #003D79', paddingBottom: 4 }}>
-                買家流程指引
+                {t("買家流程指引")}
               </Text>
             </div>
           </motion.div>
@@ -910,7 +912,7 @@ const About = () => {
 
                 {/* 文字內容 */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Text strong style={{ fontSize: 20 }}>捐贈機構</Text>
+                  <Text strong style={{ fontSize: 20 }}>{t("捐贈機構")}</Text>
                   <div style={{ fontSize: 16, color: "#999", ...englishFontStyle }}>Charity</div>
                 </div>
               </motion.div>
@@ -999,7 +1001,7 @@ const About = () => {
                         style={{ color: "#1677ff", display: "inline-flex", alignItems: "center", fontWeight: 500 }}
                       >
                         <RightOutlined style={{ fontSize: 14, marginRight: 6 }} />
-                        前往官方網站
+                        {t("前往官方網站")}
                       </a>
                     </motion.div>
                   </div>
@@ -1057,7 +1059,7 @@ const About = () => {
 
                 {/* 標題與副標題 */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Text strong style={{ fontSize: 20 }}>獎勵機制</Text>
+                  <Text strong style={{ fontSize: 20 }}>{t("獎勵機制")}</Text>
                   <div style={{ fontSize: 16, color: "#999", ...englishFontStyle }}>Rewards</div>
                 </div>
               </motion.div>
@@ -1070,7 +1072,7 @@ const About = () => {
             {rewardItems.map((item, index) => {
               const IconComp = item.icon;
               const isHover = hoverIndex === index;
-              const isEmployeeReward = item.title === "員工公益獎勵";
+              const isEmployeeReward = item.title === t("員工公益獎勵");
               
               return (
                 <Col xs={24} sm={12} key={item.title} style={{ display: "flex" }}>

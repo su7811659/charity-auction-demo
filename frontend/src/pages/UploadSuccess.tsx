@@ -18,15 +18,17 @@ import {
     UploadOutlined,
   } from '@ant-design/icons';
   import { useNavigate, useLocation } from 'react-router-dom';
-  
+  import { useTranslation } from "react-i18next";
+
   const { Title, Text } = Typography;
-  
+
   const UploadSuccess = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const productName = location.state?.productName || '商品';
-    const sellerNickname = location.state?.sellerNickname || '使用者暱稱';
-    const sellerName = location.state?.sellerName || '使用者';
+    const productName = location.state?.productName || t('商品');
+    const sellerNickname = location.state?.sellerNickname || t('使用者暱稱');
+    const sellerName = location.state?.sellerName || t('使用者');
   
     return (
       <div
@@ -72,17 +74,17 @@ import {
             }}
         />
         <Title level={2} style={{ marginTop: 16, fontWeight: 600 }}>
-            🎉 愛心發射成功！
+            🎉 {t('愛心發射成功！')}
         </Title>
         <div style={{ marginTop: 12 }}>
             <Text style={{ fontSize: 16 }}>
-            尊貴的 <span style={{ color: '#1890ff', fontWeight: 500 }}>{sellerNickname}</span>
-            （{sellerName}）您好 👋
+            {t('尊貴的')} <span style={{ color: '#1890ff', fontWeight: 500 }}>{sellerNickname}</span>
+            （{sellerName}）{t('您好')} 👋
             </Text>
         </div>
         <div style={{ marginTop: 8 }}>
             <Text style={{ fontSize: 16 }}>
-            您的商品 <strong style={{ color: '#fa541c' }}>{productName}</strong> 已成功上傳至我們的系統！
+            {t('您的商品')} <strong style={{ color: '#fa541c' }}>{productName}</strong> {t('已成功上傳至我們的系統！')}
             </Text>
         </div>
         </div>
@@ -90,20 +92,20 @@ import {
   
           <Row gutter={[32, 32]} wrap style={{ marginBottom: 24 }}>
             <Col xs={24} md={12}>
-                <Title level={4} style={{ marginBottom: 16 }}>📌 下一步</Title>
+                <Title level={4} style={{ marginBottom: 16 }}>📌 {t('下一步')}</Title>
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                <Text><ClockCircleOutlined style={{ color: '#faad14', marginRight: 8 }} /> 商品進入審核流程（預計 1~2 個工作天）</Text>
-                <Text><FileSearchOutlined style={{ color: '#1890ff', marginRight: 8 }} /> 審核通過後會自動上架，無需再次操作</Text>
-                <Text><SmileOutlined style={{ color: '#52c41a', marginRight: 8 }} /> 記得留意信件與活動通知，掌握商品動態</Text>
+                <Text><ClockCircleOutlined style={{ color: '#faad14', marginRight: 8 }} /> {t('商品進入審核流程（預計 1~2 個工作天）')}</Text>
+                <Text><FileSearchOutlined style={{ color: '#1890ff', marginRight: 8 }} /> {t('審核通過後會自動上架，無需再次操作')}</Text>
+                <Text><SmileOutlined style={{ color: '#52c41a', marginRight: 8 }} /> {t('記得留意信件與活動通知，掌握商品動態')}</Text>
                 </Space>
             </Col>
 
             <Col xs={24} md={12}>
-                <Title level={4} style={{ marginBottom: 16 }}>🔔 提醒事項</Title>
+                <Title level={4} style={{ marginBottom: 16 }}>🔔 {t('提醒事項')}</Title>
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                <Text><EditOutlined style={{ color: '#ff4d4f', marginRight: 8 }} /> 商品上傳後不可修改，如需更動請聯絡 ESG 小組</Text>
-                <Text><FireOutlined style={{ color: '#fa541c', marginRight: 8 }} /> 描述越完整，越能吸引目光提升成交機率</Text>
-                <Text><HeartFilled style={{ color: '#eb2f96', marginRight: 8 }} /> 所得將依設定比例作為公益捐贈，謝謝您的愛心</Text>
+                <Text><EditOutlined style={{ color: '#ff4d4f', marginRight: 8 }} /> {t('商品上傳後不可修改，如需更動請聯絡 ESG 小組')}</Text>
+                <Text><FireOutlined style={{ color: '#fa541c', marginRight: 8 }} /> {t('描述越完整，越能吸引目光提升成交機率')}</Text>
+                <Text><HeartFilled style={{ color: '#eb2f96', marginRight: 8 }} /> {t('所得將依設定比例作為公益捐贈，謝謝您的愛心')}</Text>
                 </Space>
             </Col>
             </Row>
@@ -124,7 +126,7 @@ import {
             className="hover-scale"
             onClick={() => navigate('/')}
             >
-            返回商品列表
+            {t('返回商品列表')}
             </Button>
 
             <Button
@@ -140,7 +142,7 @@ import {
             className="hover-scale"
             onClick={() => navigate('/upload')}
             >
-            繼續上傳商品
+            {t('繼續上傳商品')}
             </Button>
 
           </div>

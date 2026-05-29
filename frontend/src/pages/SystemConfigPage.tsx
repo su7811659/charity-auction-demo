@@ -5,6 +5,7 @@ import axiosInstance from '../utils/axiosInstance';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useTranslation } from "react-i18next";
 
 // 初始化 dayjs 插件
 dayjs.extend(utc);
@@ -54,6 +55,7 @@ interface SystemConfigUpdate {
 }
 
 const SystemConfigPage: React.FC = () => {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<SystemConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -127,7 +129,7 @@ const SystemConfigPage: React.FC = () => {
       setMaxConcurrentDeals(currentConfig.max_concurrent_deals_per_user || 5);
     } catch (error) {
       console.error('載入配置失敗:', error);
-      message.error('載入系統配置失敗');
+      message.error(t('載入系統配置失敗'));
     } finally {
       setLoading(false);
     }
@@ -155,10 +157,10 @@ const SystemConfigPage: React.FC = () => {
         headers: getAuthHeaders()
       });
       setConfig(response.data);
-      message.success('系統配置已成功更新！');
+      message.success(t('系統配置已成功更新！'));
     } catch (error) {
       console.error('保存配置失敗:', error);
-      message.error('保存系統配置失敗');
+      message.error(t('保存系統配置失敗'));
     } finally {
       setSaving(false);
     }
@@ -171,11 +173,11 @@ const SystemConfigPage: React.FC = () => {
       await axiosInstance.post('/api/ai-summary/admin/generate', {}, {
         headers: getAuthHeaders()
       });
-      message.success('AI 總結已重新生成！');
+      message.success(t('AI 總結已重新生成！'));
       await loadConfig();
     } catch (error) {
       console.error('重新生成總結失敗:', error);
-      message.error('重新生成 AI 總結失敗');
+      message.error(t('重新生成 AI 總結失敗'));
     } finally {
       setRegenerating(false);
     }
@@ -188,13 +190,13 @@ const SystemConfigPage: React.FC = () => {
       await axiosInstance.delete('/api/ai-summary/admin/clear', {
         headers: getAuthHeaders()
       });
-      message.success('AI總結已清除');
+      message.success(t('AI總結已清除'));
       console.log('清除成功');
       // 重新載入配置以更新UI
       await loadConfig();
     } catch (error) {
       console.error('清除AI總結失敗:', error);
-      message.error('清除AI總結失敗');
+      message.error(t('清除AI總結失敗'));
     } finally {
       console.log('清除操作完成，設置 clearing 為 false');
       setClearing(false);
@@ -206,17 +208,17 @@ const SystemConfigPage: React.FC = () => {
       setRegeneratingTimeline(true);
       // 重新載入時間軸數據（時間軸是基於資料庫動態生成的）
       await loadTimelineData();
-      message.success('時間軸數據已刷新！');
+      message.success(t('時間軸數據已刷新！'));
     } catch (error) {
       console.error('刷新時間軸失敗:', error);
-      message.error('刷新時間軸數據失敗');
+      message.error(t('刷新時間軸數據失敗'));
     } finally {
       setRegeneratingTimeline(false);
     }
   };
 
   const formatDateTime = (dateString: string | null) => {
-    if (!dateString) return '未設定';
+    if (!dateString) return t('未設定');
     return dayjs.utc(dateString).tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
   };
 
@@ -228,7 +230,7 @@ const SystemConfigPage: React.FC = () => {
   if (loading) {
     return (
       <div style={{ padding: '24px', textAlign: 'center' }}>
-        <Text>載入中...</Text>
+        <Text>{t('載入中...')}</Text>
       </div>
     );
   }
@@ -237,26 +239,26 @@ const SystemConfigPage: React.FC = () => {
     <div style={{ padding: '24px' }}>
       <Title level={2} style={{ marginBottom: 24 }}>
         <SettingOutlined style={{ marginRight: 8 }} />
-        系統配置管理
+        {t('系統配置管理')}
       </Title>
       <Text type="secondary" style={{ display: 'block', marginBottom: 24 }}>
-        管理商品上傳時間和總結頁面設定
+        {t('管理商品上傳時間和總結頁面設定')}
       </Text>
 
       <div style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}>
         {/* 商品上傳時間設定 */}
-        <Card title="商品上傳控制" style={{ height: 'fit-content' }}>
+        <Card title={t("商品上傳控制")} style={{ height: 'fit-content' }}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <div>
               <Space style={{ marginBottom: 8 }}>
-                <Text strong>啟用商品上傳：</Text>
+                <Text strong>{t("啟用商品上傳：")}</Text>
                 <Switch
                   checked={uploadEnabled}
                   onChange={setUploadEnabled}
                 />
               </Space>
               <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>
-                關閉後用戶將無法上傳任何商品
+                {t("關閉後用戶將無法上傳任何商品")}
               </Text>
             </div>
 
@@ -264,7 +266,7 @@ const SystemConfigPage: React.FC = () => {
 
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                上傳開始時間：
+                {t("上傳開始時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -276,7 +278,7 @@ const SystemConfigPage: React.FC = () => {
             
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                上傳結束時間：
+                {t("上傳結束時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -288,38 +290,38 @@ const SystemConfigPage: React.FC = () => {
 
             {!isUploadTimeValid() && (
               <Alert
-                message="結束時間必須晚於開始時間"
+                message={t("結束時間必須晚於開始時間")}
                 type="warning"
                 showIcon
               />
             )}
 
             <div>
-              <Text strong>目前狀態：</Text>
+              <Text strong>{t("目前狀態：")}</Text>
               {config?.upload_start_date && config?.upload_end_date ? (
                 <Text style={{ marginLeft: 8 }}>
-                  {formatDateTime(config.upload_start_date)} 至 {formatDateTime(config.upload_end_date)}
+                  {formatDateTime(config.upload_start_date)} {t("至")} {formatDateTime(config.upload_end_date)}
                 </Text>
               ) : (
-                <Text style={{ marginLeft: 8, color: '#52c41a' }}>無時間限制（隨時可上傳）</Text>
+                <Text style={{ marginLeft: 8, color: '#52c41a' }}>{t("無時間限制（隨時可上傳）")}</Text>
               )}
             </div>
           </Space>
         </Card>
 
         {/* 總結頁面設定 */}
-        <Card title="總結頁面控制" style={{ height: 'fit-content' }}>
+        <Card title={t("總結頁面控制")} style={{ height: 'fit-content' }}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <div>
               <Space style={{ marginBottom: 8 }}>
-                <Text strong>總結頁面可見：</Text>
+                <Text strong>{t("總結頁面可見：")}</Text>
                 <Switch
                   checked={summaryVisible}
                   onChange={setSummaryVisible}
                 />
               </Space>
               <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>
-                開啟時用戶可以查看 AI 總結
+                {t("開啟時用戶可以查看 AI 總結")}
               </Text>
             </div>
 
@@ -327,7 +329,7 @@ const SystemConfigPage: React.FC = () => {
 
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                總結顯示開始時間：
+                {t("總結顯示開始時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -340,7 +342,7 @@ const SystemConfigPage: React.FC = () => {
             
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                總結顯示結束時間：
+                {t("總結顯示結束時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -360,7 +362,7 @@ const SystemConfigPage: React.FC = () => {
                 type="primary"
                 ghost
               >
-                {regenerating ? '重新生成中...' : '手動重新生成 AI 總結'}
+                {regenerating ? t('重新生成中...') : t('手動重新生成 AI 總結')}
               </Button>
 
               <Button 
@@ -371,7 +373,7 @@ const SystemConfigPage: React.FC = () => {
                 danger
                 ghost
               >
-                {clearing ? '清除中...' : '清除 AI 總結'}
+                {clearing ? t('清除中...') : t('清除 AI 總結')}
               </Button>
             </div>
 
@@ -384,19 +386,19 @@ const SystemConfigPage: React.FC = () => {
               ghost
               style={{ marginTop: '8px' }}
             >
-              {regeneratingTimeline ? '重新生成中...' : '重新生成時間軸數據'}
+              {regeneratingTimeline ? t('重新生成中...') : t('重新生成時間軸數據')}
             </Button>
             
             {!summaryVisible && (
-              <Text type="secondary" style={{ fontSize: 12 }}>請先開啟總結頁面可見性</Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>{t("請先開啟總結頁面可見性")}</Text>
             )}
 
             <div>
-              <Text strong>AI 總結最後更新：</Text>
+              <Text strong>{t("AI 總結最後更新：")}</Text>
               <Text style={{ marginLeft: 8 }}>
-                {config?.ai_summary_last_generated ? 
-                  formatDateTime(config.ai_summary_last_generated) : 
-                  '尚未生成'
+                {config?.ai_summary_last_generated ?
+                  formatDateTime(config.ai_summary_last_generated) :
+                  t('尚未生成')
                 }
               </Text>
             </div>
@@ -404,24 +406,24 @@ const SystemConfigPage: React.FC = () => {
         </Card>
 
         {/* 線上議價設定 */}
-        <Card title="線上議價控制" style={{ height: 'fit-content' }}>
+        <Card title={t("線上議價控制")} style={{ height: 'fit-content' }}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <div>
               <Space style={{ marginBottom: 8 }}>
-                <Text strong>🔧 系統功能啟用：</Text>
+                <Text strong>{t("🔧 系統功能啟用：")}</Text>
                 <Switch
                   checked={onlineDealEnabled}
                   onChange={setOnlineDealEnabled}
                 />
               </Space>
               <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>
-                主開關：控制整個線上議價模組是否啟用（關閉後所有相關功能都會停用）
+                {t("主開關：控制整個線上議價模組是否啟用（關閉後所有相關功能都會停用）")}
               </Text>
             </div>
 
             <div>
               <Space style={{ marginBottom: 8 }}>
-                <Text strong>📝 用戶申請開放：</Text>
+                <Text strong>{t("📝 用戶申請開放：")}</Text>
                 <Switch
                   checked={onlineDealAvailable}
                   onChange={setOnlineDealAvailable}
@@ -429,7 +431,7 @@ const SystemConfigPage: React.FC = () => {
                 />
               </Space>
               <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>
-                業務開關：在系統啟用下，控制用戶是否可以提出新的議價申請（可臨時關閉申請但不影響現有議價）
+                {t("業務開關：在系統啟用下，控制用戶是否可以提出新的議價申請（可臨時關閉申請但不影響現有議價）")}
               </Text>
             </div>
 
@@ -437,7 +439,7 @@ const SystemConfigPage: React.FC = () => {
 
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                議價開放開始時間：
+                {t("議價開放開始時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -447,13 +449,13 @@ const SystemConfigPage: React.FC = () => {
                 disabled={!onlineDealEnabled}
               />
               <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 4 }}>
-                設定用戶可以開始提出議價申請的時間
+                {t("設定用戶可以開始提出議價申請的時間")}
               </Text>
             </div>
 
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                議價開放結束時間：
+                {t("議價開放結束時間：")}
               </Text>
               <Input
                 type="datetime-local"
@@ -463,13 +465,13 @@ const SystemConfigPage: React.FC = () => {
                 disabled={!onlineDealEnabled}
               />
               <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 4 }}>
-                設定用戶議價申請的截止時間
+                {t("設定用戶議價申請的截止時間")}
               </Text>
             </div>
 
             <div>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                每人同時議價上限：
+                {t("每人同時議價上限：")}
               </Text>
               <InputNumber
                 min={1}
@@ -480,7 +482,7 @@ const SystemConfigPage: React.FC = () => {
                 disabled={!onlineDealEnabled}
               />
               <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 4 }}>
-                限制每個用戶同時進行的議價申請數量
+                {t("限制每個用戶同時進行的議價申請數量")}
               </Text>
             </div>
 
@@ -494,31 +496,31 @@ const SystemConfigPage: React.FC = () => {
               border: '1px solid #d9d9d9'
             }}>
               <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                🔍 當前功能狀態檢查：
+                {t("🔍 當前功能狀態檢查：")}
               </Text>
               <Space direction="vertical" size="small" style={{ width: '100%' }}>
                 <div>
                   <Text style={{ fontSize: 12 }}>
-                    系統功能啟用：{onlineDealEnabled ? '✅ 已啟用' : '❌ 未啟用'}
+                    {t("系統功能啟用：")}{onlineDealEnabled ? t('✅ 已啟用') : t('❌ 未啟用')}
                   </Text>
                 </div>
                 <div>
                   <Text style={{ fontSize: 12 }}>
-                    用戶申請開放：{onlineDealAvailable ? '✅ 已開放' : '❌ 已關閉'}
+                    {t("用戶申請開放：")}{onlineDealAvailable ? t('✅ 已開放') : t('❌ 已關閉')}
                   </Text>
                 </div>
                 <div>
                   <Text style={{ fontSize: 12 }}>
-                    時間區間設定：
+                    {t("時間區間設定：")}
                     {onlineDealBeginDate && onlineDealEndDate ? (
                       (() => {
                         const now = new Date();
                         const start = new Date(onlineDealBeginDate);
                         const end = new Date(onlineDealEndDate);
                         const inTimeRange = now >= start && now <= end;
-                        return inTimeRange ? '✅ 在開放時間內' : '❌ 不在開放時間內';
+                        return inTimeRange ? t('✅ 在開放時間內') : t('❌ 不在開放時間內');
                       })()
-                    ) : '⚠️ 未設定時間區間'}
+                    ) : t('⚠️ 未設定時間區間')}
                   </Text>
                 </div>
                 <Divider style={{ margin: '8px 0' }} />
@@ -536,16 +538,16 @@ const SystemConfigPage: React.FC = () => {
                       return inTimeRange ? '#52c41a' : '#faad14';
                     })()
                   }}>
-                    最終狀態：
+                    {t("最終狀態：")}
                     {(() => {
-                      if (!onlineDealEnabled) return '🔒 功能完全停用';
-                      if (!onlineDealAvailable) return '⏸️ 暫停新申請';
-                      if (!onlineDealBeginDate || !onlineDealEndDate) return '⚠️ 需設定時間';
+                      if (!onlineDealEnabled) return t('🔒 功能完全停用');
+                      if (!onlineDealAvailable) return t('⏸️ 暫停新申請');
+                      if (!onlineDealBeginDate || !onlineDealEndDate) return t('⚠️ 需設定時間');
                       const now = new Date();
                       const start = new Date(onlineDealBeginDate);
                       const end = new Date(onlineDealEndDate);
                       const inTimeRange = now >= start && now <= end;
-                      return inTimeRange ? '🚀 完全可用' : '📅 等待開放時間';
+                      return inTimeRange ? t('🚀 完全可用') : t('📅 等待開放時間');
                     })()}
                   </Text>
                 </div>
@@ -556,25 +558,25 @@ const SystemConfigPage: React.FC = () => {
               <Alert
                 message={(() => {
                   if (!onlineDealBeginDate || !onlineDealEndDate) {
-                    return "⚠️ 需要設定開放時間";
+                    return t("⚠️ 需要設定開放時間");
                   }
                   const now = new Date();
                   const start = new Date(onlineDealBeginDate);
                   const end = new Date(onlineDealEndDate);
                   const inTimeRange = now >= start && now <= end;
-                  return inTimeRange ? "🚀 線上議價完全可用" : "📅 等待開放時間";
+                  return inTimeRange ? t("🚀 線上議價完全可用") : t("📅 等待開放時間");
                 })()}
                 description={(() => {
                   if (!onlineDealBeginDate || !onlineDealEndDate) {
-                    return "系統已啟用且開放申請，但需要設定開放的時間區間";
+                    return t("系統已啟用且開放申請，但需要設定開放的時間區間");
                   }
                   const now = new Date();
                   const start = new Date(onlineDealBeginDate);
                   const end = new Date(onlineDealEndDate);
                   const inTimeRange = now >= start && now <= end;
-                  return inTimeRange 
-                    ? "所有條件都滿足，用戶可以正常提出議價申請" 
-                    : `開放時間：${dayjs.utc(onlineDealBeginDate).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')} ~ ${dayjs.utc(onlineDealEndDate).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')}`;
+                  return inTimeRange
+                    ? t("所有條件都滿足，用戶可以正常提出議價申請")
+                    : `${t("開放時間：")}${dayjs.utc(onlineDealBeginDate).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')} ~ ${dayjs.utc(onlineDealEndDate).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')}`;
                 })()}
                 type={(() => {
                   if (!onlineDealBeginDate || !onlineDealEndDate) return "warning";
@@ -590,8 +592,8 @@ const SystemConfigPage: React.FC = () => {
 
             {onlineDealEnabled && !onlineDealAvailable && (
               <Alert
-                message="⚠️ 暫停接受新申請"
-                description="系統功能正常，但暫時不接受新的議價申請（現有議價仍可繼續處理）"
+                message={t("⚠️ 暫停接受新申請")}
+                description={t("系統功能正常，但暫時不接受新的議價申請（現有議價仍可繼續處理）")}
                 type="warning"
                 showIcon
               />
@@ -599,8 +601,8 @@ const SystemConfigPage: React.FC = () => {
 
             {!onlineDealEnabled && (
               <Alert
-                message="🔒 線上議價功能已停用"
-                description="整個線上議價模組已關閉，用戶無法看到相關功能"
+                message={t("🔒 線上議價功能已停用")}
+                description={t("整個線上議價模組已關閉，用戶無法看到相關功能")}
                 type="info"
                 showIcon
               />
@@ -611,7 +613,7 @@ const SystemConfigPage: React.FC = () => {
 
       {/* AI 總結預覽 */}
       {config?.ai_summary_content && (
-        <Card title="AI 總結預覽" style={{ marginTop: 24 }}>
+        <Card title={t("AI 總結預覽")} style={{ marginTop: 24 }}>
           <div style={{ 
             backgroundColor: '#f5f5f5', 
             padding: '16px', 
@@ -633,7 +635,7 @@ const SystemConfigPage: React.FC = () => {
 
       {/* 時間軸預覽 */}
       {timelineData.length > 0 && (
-        <Card title="時間軸數據預覽" style={{ marginTop: 24 }}>
+        <Card title={t("時間軸數據預覽")} style={{ marginTop: 24 }}>
           <div style={{ 
             backgroundColor: '#f5f5f5', 
             padding: '16px', 
@@ -663,7 +665,7 @@ const SystemConfigPage: React.FC = () => {
                   <Text style={{ fontSize: '13px', color: '#666' }}>{event.description}</Text>
                   <div style={{ marginTop: '6px' }}>
                     <Text type="secondary" style={{ fontSize: '11px' }}>
-                      類型: {event.milestone_type} | 顏色: {event.color}
+                      {t("類型:")} {event.milestone_type} | {t("顏色:")} {event.color}
                     </Text>
                   </div>
                 </div>
@@ -682,7 +684,7 @@ const SystemConfigPage: React.FC = () => {
           disabled={saving || !isUploadTimeValid()}
           size="large"
         >
-          {saving ? '保存中...' : '保存設定'}
+          {saving ? t('保存中...') : t('保存設定')}
         </Button>
       </div>
     </div>

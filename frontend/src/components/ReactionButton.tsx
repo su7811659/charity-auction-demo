@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from "react-i18next";
 import { Tooltip } from 'antd';
 import { ReactionCount } from '../types/reaction';
 import { REACTION_ICONS, REACTION_NAMES } from '../constants/reactionIcons';
@@ -11,6 +12,7 @@ interface ReactionButtonProps {
 }
 
 const ReactionButton: React.FC<ReactionButtonProps> = ({ reaction, userHasReacted, onClick }) => {
+  const { t } = useTranslation();
   const [isHovering, setIsHovering] = useState(false);
   const currentUserEmail = getCurrentUserEmail();
   const currentUserIndex = (reaction.users ?? []).findIndex(email => email === currentUserEmail);
@@ -18,7 +20,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ reaction, userHasReacte
   
   // 準備 tooltip 顯示的用戶列表
   const formatUsers = () => {
-    if (!reaction.users || reaction.users.length === 0) return '沒有人做出此回應';
+    if (!reaction.users || reaction.users.length === 0) return t("沒有人做出此回應");
     
     
     // 處理顯示的用戶列表
@@ -33,7 +35,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ reaction, userHasReacte
     // 取前三個用戶
     const displayUsers = usersToDisplay.slice(0, 3).map(email => {
       if (email === currentUserEmail) {
-        return '你';
+        return t("你");
       } else {
         return email.split('@')[0];
       }
@@ -43,7 +45,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ reaction, userHasReacte
     
     // 如果還有其他人，顯示剩餘人數
     if (reaction.users.length > 3) {
-      usersText += ` 和其他 ${reaction.users.length - 3} 人`;
+      usersText += t(" 和其他 {{count}} 人", { count: reaction.users.length - 3 });
     }
     
     return usersText;
@@ -54,7 +56,7 @@ const ReactionButton: React.FC<ReactionButtonProps> = ({ reaction, userHasReacte
       title={
         <div style={{ textAlign: 'center' }}>
           <div>{formatUsers()}</div>
-          {userHasReacted && <div style={{ marginTop: '4px', color: '#999' }}>（再次點擊取消回應）</div>}
+          {userHasReacted && <div style={{ marginTop: '4px', color: '#999' }}>{t("（再次點擊取消回應）")}</div>}
         </div>
       }
     >

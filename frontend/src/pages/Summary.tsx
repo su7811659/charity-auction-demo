@@ -11,6 +11,7 @@ import robotInitIcon from '../assets/img/robot_init.gif';
 import aiTag03 from '../assets/img/ai_tag_03.svg';
 import aiTag04 from '../assets/img/ai_tag_04.svg';
 import aiTag05 from '../assets/img/ai_tag_05.svg';
+import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -86,6 +87,7 @@ interface TimelineEvent {
 }
 
 const Summary: React.FC = () => {
+  const { t } = useTranslation();
   const summaryRef = useRef<HTMLDivElement>(null);
   const [topLikedProducts, setTopLikedProducts] = useState<TopProduct[]>([]);
   const [topCommentedProducts, setTopCommentedProducts] = useState<TopProduct[]>([]);
@@ -116,8 +118,8 @@ const Summary: React.FC = () => {
   // Bubble 對話框狀態和內容
   const [showHeartBubble, setShowHeartBubble] = useState(false);
   const [showRobotBubble, setShowRobotBubble] = useState(false);
-  const heartBubbleText = '愛心覺羅靜靜的看著你，彷彿在構思下次要出更難的彩蛋';
-  const robotBubbleText = '唉唷，看來我不能稱讚你們做得不戳了😮';
+  const heartBubbleText = t('愛心覺羅靜靜的看著你，彷彿在構思下次要出更難的彩蛋');
+  const robotBubbleText = t('唉唷，看來我不能稱讚你們做得不戳了😮');
 
   useEffect(() => {
     // 添加動畫樣式到頁面
@@ -272,7 +274,7 @@ const Summary: React.FC = () => {
     
     try {
       setIsDownloading(true);
-      message.loading('正在生成總結報告圖片...', 0);
+      message.loading(t('正在生成總結報告圖片...'), 0);
       
       // 暫時隱藏下載按鈕
       const downloadButton = document.querySelector('[style*="position: fixed"]') as HTMLElement;
@@ -372,7 +374,7 @@ const Summary: React.FC = () => {
           URL.revokeObjectURL(url);
           
           message.destroy();
-          message.success('總結報告圖片下載成功！');
+          message.success(t('總結報告圖片下載成功！'));
         } else {
           throw new Error('圖片生成失敗');
         }
@@ -381,7 +383,7 @@ const Summary: React.FC = () => {
     } catch (error) {
       console.error('下載圖片失敗:', error);
       message.destroy();
-      message.error(`下載失敗：${error instanceof Error ? error.message : '未知錯誤'}`);
+      message.error(`${t('下載失敗：')}${error instanceof Error ? error.message : t('未知錯誤')}`);
     } finally {
       setIsDownloading(false);
     }
@@ -438,9 +440,9 @@ const Summary: React.FC = () => {
       color: '#7ed321',
       children: (
         <div>
-          <Text strong>活動啟動</Text>
+          <Text strong>{t("活動啟動")}</Text>
           <br />
-          <Text type="secondary">2025-08-26 - BidForGood 愛心市集正式上線開始</Text>
+          <Text type="secondary">{t("2025-08-26 - BidForGood 愛心市集正式上線開始")}</Text>
         </div>
       ),
     },
@@ -448,9 +450,9 @@ const Summary: React.FC = () => {
       color: '#f5a623',
       children: (
         <div>
-          <Text strong>首個商品上架</Text>
+          <Text strong>{t("首個商品上架")}</Text>
           <br />
-          <Text type="secondary">第一件愛心商品成功上架，活動正式開跑！</Text>
+          <Text type="secondary">{t("第一件愛心商品成功上架，活動正式開跑！")}</Text>
         </div>
       ),
     },
@@ -458,9 +460,9 @@ const Summary: React.FC = () => {
       color: '#FF5151',
       children: (
         <div>
-          <Text strong>熱銷商品出現</Text>
+          <Text strong>{t("熱銷商品出現")}</Text>
           <br />
-          <Text type="secondary">熱門商品開始湧現，參與者踴躍支持</Text>
+          <Text type="secondary">{t("熱門商品開始湧現，參與者踴躍支持")}</Text>
         </div>
       ),
     },
@@ -468,9 +470,9 @@ const Summary: React.FC = () => {
       color: '#52c41a',
       children: (
         <div>
-          <Text strong>捐款持續增長</Text>
+          <Text strong>{t("捐款持續增長")}</Text>
           <br />
-          <Text type="secondary">愛心捐款不斷累積，目標逐步達成</Text>
+          <Text type="secondary">{t("愛心捐款不斷累積，目標逐步達成")}</Text>
         </div>
       ),
     },
@@ -478,9 +480,9 @@ const Summary: React.FC = () => {
       color: '#eb2f96',
       children: (
         <div>
-          <Text strong>彩蛋發現者出現</Text>
+          <Text strong>{t("彩蛋發現者出現")}</Text>
           <br />
-          <Text type="secondary">有使用者發現了愛心覺羅的隱藏彩蛋</Text>
+          <Text type="secondary">{t("有使用者發現了愛心覺羅的隱藏彩蛋")}</Text>
         </div>
       ),
     },
@@ -488,9 +490,9 @@ const Summary: React.FC = () => {
       color: '#FFD700',
       children: (
         <div>
-          <Text strong>活動圓滿結束</Text>
+          <Text strong>{t("活動圓滿結束")}</Text>
           <br />
-          <Text type="secondary">2025-09-16 - BidForGood 愛心市集活動成功落幕</Text>
+          <Text type="secondary">{t("2025-09-16 - BidForGood 愛心市集活動成功落幕")}</Text>
         </div>
       ),
     },
@@ -527,7 +529,7 @@ const Summary: React.FC = () => {
             fontWeight: 'bold'
           }}
         >
-          下載總結報告圖
+          {t("下載總結報告圖")}
         </Button>
       </div>
 
@@ -549,10 +551,10 @@ const Summary: React.FC = () => {
           WebkitTextFillColor: 'transparent',
         }}>
           <CrownFilled style={{ color: '#FFD700', fontSize: 36 }} />
-          BidForGood 公益市集活動總結
+          {t("BidForGood 公益市集活動總結")}
         </Title>
         <Paragraph style={{ fontSize: 16, color: '#666', maxWidth: 600, margin: '0 auto' }}>
-          感謝所有參與者的愛心奉獻，讓我們一起回顧這次活動的美好成果！
+          {t("感謝所有參與者的愛心奉獻，讓我們一起回顧這次活動的美好成果！")}
         </Paragraph>
       </motion.div>
 
@@ -566,11 +568,11 @@ const Summary: React.FC = () => {
           >
             <Card hoverable style={{ textAlign: 'center', borderRadius: 12, border: '2px solid #FFD700' }}>
               <Statistic
-                title={<Text style={{ color: '#666' }}>總捐款金額</Text>}
+                title={<Text style={{ color: '#666' }}>{t("總捐款金額")}</Text>}
                 value={totalDonationAmount || 0}
                 precision={0}
                 prefix={<DollarOutlined style={{ color: '#FFD700' }} />}
-                suffix="元"
+                suffix={t("元")}
                 valueStyle={{ color: '#FFD700', fontWeight: 'bold' }}
               />
             </Card>
@@ -584,10 +586,10 @@ const Summary: React.FC = () => {
           >
             <Card hoverable style={{ textAlign: 'center', borderRadius: 12, border: '2px solid #7ed321' }}>
               <Statistic
-                title={<Text style={{ color: '#666' }}>商品總數</Text>}
+                title={<Text style={{ color: '#666' }}>{t("商品總數")}</Text>}
                 value={stats.total_products}
                 prefix={<ShoppingOutlined style={{ color: '#7ed321' }} />}
-                suffix="件"
+                suffix={t("件")}
                 valueStyle={{ color: '#7ed321', fontWeight: 'bold' }}
               />
             </Card>
@@ -601,10 +603,10 @@ const Summary: React.FC = () => {
           >
             <Card hoverable style={{ textAlign: 'center', borderRadius: 12, border: '2px solid #FF5151' }}>
               <Statistic
-                title={<Text style={{ color: '#666' }}>已售出商品</Text>}
+                title={<Text style={{ color: '#666' }}>{t("已售出商品")}</Text>}
                 value={stats.sold_products}
                 prefix={<HeartFilled style={{ color: '#FF5151' }} />}
-                suffix="件"
+                suffix={t("件")}
                 valueStyle={{ color: '#FF5151', fontWeight: 'bold' }}
               />
             </Card>
@@ -618,10 +620,10 @@ const Summary: React.FC = () => {
           >
             <Card hoverable style={{ textAlign: 'center', borderRadius: 12, border: '2px solid #D3A4FF' }}>
               <Statistic
-                title={<Text style={{ color: '#666' }}>參與人數</Text>}
+                title={<Text style={{ color: '#666' }}>{t("參與人數")}</Text>}
                 value={stats.total_participants}
                 prefix={<UserOutlined style={{ color: '#D3A4FF' }} />}
-                suffix="人"
+                suffix={t("人")}
                 valueStyle={{ color: '#D3A4FF', fontWeight: 'bold' }}
               />
             </Card>
@@ -639,14 +641,14 @@ const Summary: React.FC = () => {
         <Card title={
           <Space>
             <TrophyOutlined style={{ color: '#FFD700' }} />
-            大善人排行榜
+            {t("大善人排行榜")}
           </Space>
         } style={{ borderRadius: 12 }}>
           {(topDonors || []).length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px', color: '#999' }}>
               <TrophyOutlined style={{ fontSize: 48, marginBottom: 16 }} />
               <br />
-              <Text type="secondary">暫無捐款記錄</Text>
+              <Text type="secondary">{t("暫無捐款記錄")}</Text>
             </div>
           ) : (
             // 頒獎台樣式 - 只顯示前三名
@@ -749,7 +751,7 @@ const Summary: React.FC = () => {
                       display: 'block',
                       letterSpacing: '1px'
                     }}>
-                      愛的Pro獎
+                      {t("愛的Pro獎")}
                     </Text>
                   </div>
                 </motion.div>
@@ -909,7 +911,7 @@ const Summary: React.FC = () => {
                       zIndex: 1,
                       textShadow: '0 2px 4px rgba(0,0,0,0.2)'
                     }}>
-                      善的螺旋獎
+                      {t("善的螺旋獎")}
                     </Text>
                   </div>
                 </motion.div>
@@ -1006,7 +1008,7 @@ const Summary: React.FC = () => {
                       display: 'block',
                       letterSpacing: '1px'
                     }}>
-                      仁的歐尼獎
+                      {t("仁的歐尼獎")}
                     </Text>
                   </div>
                 </motion.div>
@@ -1026,9 +1028,9 @@ const Summary: React.FC = () => {
         <Card title={
           <Space>
             <StarFilled style={{ color: '#FFD700' }} />
-            創世商品
+            {t("創世商品")}
             <Text type="secondary" style={{ fontSize: '14px', fontWeight: 'normal' }}>
-              (第一個獲得高等級評價的商品)
+              {t("(第一個獲得高等級評價的商品)")}
             </Text>
           </Space>
         } style={{ borderRadius: 12 }}>
@@ -1040,7 +1042,7 @@ const Summary: React.FC = () => {
                 title={
                   <Space>
                     <img src={aiTag03} alt="史詩級" style={{ width: '24px', height: '24px' }} />
-                    史詩級
+                    {t("史詩級")}
                   </Space>
                 }
                 style={{ 
@@ -1083,12 +1085,12 @@ const Summary: React.FC = () => {
                   </div>
                 ) : (
                   <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text type="secondary">史詩的篇章仍未展開</Text>
+                    <Text type="secondary">{t("史詩的篇章仍未展開")}</Text>
                   </div>
                 )}
                 <div style={{ textAlign: 'center', borderTop: '1px solid #f0f0f0', paddingTop: '8px', marginTop: 'auto' }}>
                   <Text style={{ fontSize: '12px', color: '#666' }}>
-                    全系統共 {legendaryProductStats.epic_count} 個
+                    {t("全系統共")} {legendaryProductStats.epic_count} {t("個")}
                   </Text>
                 </div>
               </Card>
@@ -1101,7 +1103,7 @@ const Summary: React.FC = () => {
                 title={
                   <Space>
                     <img src={aiTag04} alt="傳說級" style={{ width: '24px', height: '24px' }} />
-                    傳說級
+                    {t("傳說級")}
                   </Space>
                 }
                 style={{ 
@@ -1144,12 +1146,12 @@ const Summary: React.FC = () => {
                   </div>
                 ) : (
                   <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text type="secondary">傳說的低語尚在沉睡</Text>
+                    <Text type="secondary">{t("傳說的低語尚在沉睡")}</Text>
                   </div>
                 )}
                 <div style={{ textAlign: 'center', borderTop: '1px solid #f0f0f0', paddingTop: '8px', marginTop: 'auto' }}>
                   <Text style={{ fontSize: '12px', color: '#666' }}>
-                    全系統共 {legendaryProductStats.legendary_count} 個
+                    {t("全系統共")} {legendaryProductStats.legendary_count} {t("個")}
                   </Text>
                 </div>
               </Card>
@@ -1162,7 +1164,7 @@ const Summary: React.FC = () => {
                 title={
                   <Space>
                     <img src={aiTag05} alt="神話級" style={{ width: '24px', height: '24px' }} />
-                    神話級
+                    {t("神話級")}
                   </Space>
                 }
                 style={{ 
@@ -1205,12 +1207,12 @@ const Summary: React.FC = () => {
                   </div>
                 ) : (
                   <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text type="secondary">神話的星辰靜候點燃</Text>
+                    <Text type="secondary">{t("神話的星辰靜候點燃")}</Text>
                   </div>
                 )}
                 <div style={{ textAlign: 'center', borderTop: '1px solid #f0f0f0', paddingTop: '8px', marginTop: 'auto' }}>
                   <Text style={{ fontSize: '12px', color: '#666' }}>
-                    全系統共 {legendaryProductStats.mythical_count} 個
+                    {t("全系統共")} {legendaryProductStats.mythical_count} {t("個")}
                   </Text>
                 </div>
               </Card>
@@ -1231,7 +1233,7 @@ const Summary: React.FC = () => {
               title={
                 <Space>
                   <HeartFilled style={{ color: '#ff4d4f' }} />
-                  最熱門商品前三名
+                  {t("最熱門商品前三名")}
                 </Space>
               }
               loading={loading}
@@ -1278,7 +1280,7 @@ const Summary: React.FC = () => {
                       description={
                         <Space>
                           <HeartFilled style={{ color: '#ff4d4f' }} />
-                          <Text>{product.like_count} 個讚</Text>
+                          <Text>{product.like_count} {t("個讚")}</Text>
                         </Space>
                       }
                     />
@@ -1298,7 +1300,7 @@ const Summary: React.FC = () => {
               title={
                 <Space>
                   <CommentOutlined style={{ color: '#1890ff' }} />
-                  討論度最高的商品前三名
+                  {t("討論度最高的商品前三名")}
                 </Space>
               }
               loading={loading}
@@ -1345,7 +1347,7 @@ const Summary: React.FC = () => {
                       description={
                         <Space>
                           <CommentOutlined style={{ color: '#1890ff' }} />
-                          <Text>{product.comment_count} 則留言</Text>
+                          <Text>{product.comment_count} {t("則留言")}</Text>
                         </Space>
                       }
                     />
@@ -1365,7 +1367,7 @@ const Summary: React.FC = () => {
               title={
                 <Space>
                   <EyeOutlined style={{ color: '#52c41a' }} />
-                  點閱率最高的商品前三名
+                  {t("點閱率最高的商品前三名")}
                 </Space>
               }
               loading={loading}
@@ -1412,7 +1414,7 @@ const Summary: React.FC = () => {
                       description={
                         <Space>
                           <ShoppingOutlined style={{ color: '#52c41a' }} />
-                          <Text>{product.view_count || 0} 次瀏覽</Text>
+                          <Text>{product.view_count || 0} {t("次瀏覽")}</Text>
                         </Space>
                       }
                     />
@@ -1485,14 +1487,14 @@ const Summary: React.FC = () => {
                       }}
                     />
                   </Popover>
-                  愛心覺羅的彩蛋發掘者
-                  <span style={{ 
+                  {t("愛心覺羅的彩蛋發掘者")}
+                  <span style={{
                     fontSize: '12px', 
                     color: '#666', 
                     fontWeight: 'normal',
                     marginLeft: '8px'
                   }}>
-                    (共 {totalEasterEggStats.total_discoverers} 人發現)
+                    {t("(共")} {totalEasterEggStats.total_discoverers} {t("人發現)")}
                   </span>
                 </Space>
               }
@@ -1538,7 +1540,7 @@ const Summary: React.FC = () => {
                       description={
                         <Space>
                           <StarFilled style={{ color: '#FFD700' }} />
-                          <Text>發現於 {formatDateTime(user.easter_egg_triggered_time)}</Text>
+                          <Text>{t("發現於")} {formatDateTime(user.easter_egg_triggered_time)}</Text>
                         </Space>
                       }
                     />
@@ -1575,14 +1577,14 @@ const Summary: React.FC = () => {
                       }}
                     />
                   </Popover>
-                  AI小助理的煩人精
-                  <span style={{ 
+                  {t("AI小助理的煩人精")}
+                  <span style={{
                     fontSize: '12px', 
                     color: '#666', 
                     fontWeight: 'normal',
                     marginLeft: '8px'
                   }}>
-                    (總共被戳了 {totalTickleStats.total_tickles} 次)
+                    {t("(總共被戳了")} {totalTickleStats.total_tickles} {t("次)")}
                   </span>
                 </Space>
               }
@@ -1628,7 +1630,7 @@ const Summary: React.FC = () => {
                       description={
                         <Space>
                           <RobotOutlined style={{ color: '#722ed1' }} />
-                          <Text>搔癢了 {user.robot_tickle_count} 次</Text>
+                          <Text>{t("搔癢了")} {user.robot_tickle_count} {t("次")}</Text>
                         </Space>
                       }
                     />
@@ -1651,14 +1653,14 @@ const Summary: React.FC = () => {
           title={
             <Space>
               <CrownFilled style={{ color: '#FFD700' }} />
-              破台市集的榮耀者
-              <span style={{ 
+              {t("破台市集的榮耀者")}
+              <span style={{
                 fontSize: '12px', 
                 color: '#666', 
                 fontWeight: 'normal',
                 marginLeft: '8px'
               }}>
-                (獲得「BidForGood公益市集白金獎盃」成就的使用者)
+                {t("(獲得「BidForGood公益市集白金獎盃」成就的使用者)")}
               </span>
             </Space>
           }
@@ -1669,7 +1671,7 @@ const Summary: React.FC = () => {
             <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
               <CrownFilled style={{ fontSize: 48, marginBottom: 16, color: '#ddd' }} />
               <br />
-              <Text type="secondary">尚無使用者獲得白金獎盃</Text>
+              <Text type="secondary">{t("尚無使用者獲得白金獎盃")}</Text>
             </div>
           ) : (
             <div style={{
@@ -1773,7 +1775,7 @@ const Summary: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Card title="銷售進度" style={{ borderRadius: 12 }}>
+            <Card title={t("銷售進度")} style={{ borderRadius: 12 }}>
               <Progress
                 type="circle"
                 percent={soldPercentage}
@@ -1781,13 +1783,13 @@ const Summary: React.FC = () => {
                 format={(percent) => (
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 24, fontWeight: 'bold', color: '#7ed321' }}>{percent}%</div>
-                    <div style={{ fontSize: 12, color: '#666' }}>已售出</div>
+                    <div style={{ fontSize: 12, color: '#666' }}>{t("已售出")}</div>
                   </div>
                 )}
                 size={150}
               />
               <div style={{ textAlign: 'center', marginTop: 16 }}>
-                <Text>{stats.sold_products} / {stats.total_products} 件商品已找到新主人</Text>
+                <Text>{stats.sold_products} / {stats.total_products} {t("件商品已找到新主人")}</Text>
               </div>
             </Card>
           </motion.div>
@@ -1798,7 +1800,7 @@ const Summary: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Card title="捐款目標達成" style={{ borderRadius: 12 }}>
+            <Card title={t("捐款目標達成")} style={{ borderRadius: 12 }}>
               <Row gutter={[16, 16]}>
                 {/* 總目標達成度 */}
                 <Col xs={24} md={8}>
@@ -1810,14 +1812,14 @@ const Summary: React.FC = () => {
                       format={(percent) => (
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: 14, fontWeight: 'bold', color: '#FFD700' }}>{percent}%</div>
-                          <div style={{ fontSize: 10, color: '#666' }}>目標達成</div>
+                          <div style={{ fontSize: 10, color: '#666' }}>{t("目標達成")}</div>
                         </div>
                       )}
                       size={100}
                     />
                     <div style={{ marginTop: 8, fontSize: 11, lineHeight: 1.2 }}>
-                      <div><Text strong>目標 NT$ {targetAmount.toLocaleString()}</Text></div>
-                      <div><Text>已捐 NT$ {(totalDonation || 0).toLocaleString()}</Text></div>
+                      <div><Text strong>{t("目標 NT$")} {targetAmount.toLocaleString()}</Text></div>
+                      <div><Text>{t("已捐 NT$")} {(totalDonation || 0).toLocaleString()}</Text></div>
                     </div>
                   </div>
                 </Col>
@@ -1832,13 +1834,13 @@ const Summary: React.FC = () => {
                       format={(percent) => (
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: 14, fontWeight: 'bold', color: '#52c41a' }}>{percent}%</div>
-                          <div style={{ fontSize: 10, color: '#666' }}>配對達成</div>
+                          <div style={{ fontSize: 10, color: '#666' }}>{t("配對達成")}</div>
                         </div>
                       )}
                       size={100}
                     />
                     <div style={{ marginTop: 8, fontSize: 11, lineHeight: 1.2 }}>
-                      <div><Text>公司配對</Text></div>
+                      <div><Text>{t("公司配對")}</Text></div>
                       <div><Text>NT$ {companyMatchAmount.toLocaleString()}</Text></div>
                     </div>
                   </div>
@@ -1855,7 +1857,7 @@ const Summary: React.FC = () => {
                         format={(percent) => (
                           <div style={{ textAlign: 'center' }}>
                             <div style={{ fontSize: 14, fontWeight: 'bold', color: '#fa8c16' }}>{percent}%</div>
-                            <div style={{ fontSize: 10, color: '#666' }}>額外贊助</div>
+                            <div style={{ fontSize: 10, color: '#666' }}>{t("額外贊助")}</div>
                           </div>
                         )}
                         size={100}
@@ -1873,12 +1875,12 @@ const Summary: React.FC = () => {
                       }}>
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: 14, fontWeight: 'bold', color: '#999' }}>0%</div>
-                          <div style={{ fontSize: 10, color: '#999' }}>未超標</div>
+                          <div style={{ fontSize: 10, color: '#999' }}>{t("未超標")}</div>
                         </div>
                       </div>
                     )}
                     <div style={{ marginTop: 8, fontSize: 11, lineHeight: 1.2 }}>
-                      <div><Text>執行長加碼</Text></div>
+                      <div><Text>{t("執行長加碼")}</Text></div>
                       <div><Text>NT$ {ivanSponsorAmount.toLocaleString()}</Text></div>
                     </div>
                   </div>
@@ -1888,7 +1890,7 @@ const Summary: React.FC = () => {
               {/* 總金額顯示 */}
               <div style={{ textAlign: 'center', marginTop: 20, padding: '12px', backgroundColor: '#f9f9f9', borderRadius: 8 }}>
                 <Text strong style={{ fontSize: 16 }}>
-                  總捐款金額 NT$ {totalDonationAmount.toLocaleString()}
+                  {t("總捐款金額 NT$")} {totalDonationAmount.toLocaleString()}
                 </Text>
               </div>
             </Card>
@@ -1903,7 +1905,7 @@ const Summary: React.FC = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
         style={{ marginBottom: 32 }}
       >
-        <Card title="活動歷程" style={{ borderRadius: 12 }}>
+        <Card title={t("活動歷程")} style={{ borderRadius: 12 }}>
           <Timeline
             mode="left"
             items={timelineItems}
@@ -1922,7 +1924,7 @@ const Summary: React.FC = () => {
           title={
             <Space>
               <RobotOutlined style={{ color: '#1890ff' }} />
-              AI 小助理的活動總結信
+              {t("AI 小助理的活動總結信")}
             </Space>
           }
           style={{ 
@@ -1974,7 +1976,7 @@ const Summary: React.FC = () => {
                   fontSize: '14px',
                   fontStyle: 'italic'
                 }}>
-                  來自 AI 小助理的一封信
+                  {t("來自 AI 小助理的一封信")}
                 </div>
                 
                 {/* 信件正文 */}
@@ -1997,8 +1999,8 @@ const Summary: React.FC = () => {
                   fontSize: '14px',
                   fontStyle: 'italic'
                 }}>
-                  <div>此致</div>
-                  <div style={{ marginTop: '8px' }}>BidForGood 全體同仁</div>
+                  <div>{t("此致")}</div>
+                  <div style={{ marginTop: '8px' }}>{t("BidForGood 全體同仁")}</div>
                   <div style={{ marginTop: '16px', color: '#1890ff' }}>
                     <img 
                       src={robotInitIcon} 
@@ -2010,7 +2012,7 @@ const Summary: React.FC = () => {
                         verticalAlign: 'middle'
                       }}
                     />
-                    AI 小助理
+                    {t("AI 小助理")}
                   </div>
                   <div style={{ marginTop: '8px', fontSize: '12px' }}>
                     2025/09/26
@@ -2022,7 +2024,7 @@ const Summary: React.FC = () => {
             // 預設內容（如果AI總結不可用）
             <div style={{ textAlign: 'center', color: '#666', padding: '40px' }}>
               <RobotOutlined style={{ fontSize: 48, marginBottom: 16, color: '#bbb' }} />
-              <div>AI 小助理正在準備總結信件中...</div>
+              <div>{t("AI 小助理正在準備總結信件中...")}</div>
             </div>
           )}
         </Card>

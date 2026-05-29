@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
 import { motion } from 'framer-motion';
 import RobotAvatarWithDialog from './RobotAvatarWithDialog';
 import HeartFace from "../assets/img/ic_heart_face.svg"
@@ -66,9 +67,10 @@ const ConfettiPiece: React.FC<{ delay: number; duration: number; x: number }> = 
 };
 
 // ====== 元件 ======
-const EggMiniGame: React.FC<EggMiniGameProps> = ({ 
+const EggMiniGame: React.FC<EggMiniGameProps> = ({
   isOpen
 }) => {
+  const { t } = useTranslation();
   const [showRobot, setShowRobot] = useState(false);
   const [robotTalking, setRobotTalking] = useState(false); // 何時開始講話
   const [achievedTime, setAchievedTime] = useState('');
@@ -80,7 +82,7 @@ const EggMiniGame: React.FC<EggMiniGameProps> = ({
   
   // 從 Redux 獲取用戶資訊
   const userProfile = useSelector((state: RootState) => state.user.profile);
-  const username = userProfile?.email?.split('@')[0] || '神秘探索者';
+  const username = userProfile?.email?.split('@')[0] || t("神秘探索者");
 
   // 觸發彩蛋並更新後端
   const handleEasterEggTrigger = async () => {
@@ -226,7 +228,7 @@ const EggMiniGame: React.FC<EggMiniGameProps> = ({
             color: '#333',
             marginBottom: 8
           }}>
-            恭喜你 {username}
+            {t("恭喜你")} {username}
           </div>
           <div style={{
             fontSize: 20,
@@ -240,13 +242,13 @@ const EggMiniGame: React.FC<EggMiniGameProps> = ({
             justifyContent: 'center',
             gap: 4
           }}>
-            🎉 恭喜你發現了
-            <img 
-              src={HeartFace} 
-              alt="HeartFace" 
-              style={{ width: 20, height: 20, verticalAlign: 'middle' }} 
+            🎉 {t("恭喜你發現了")}
+            <img
+              src={HeartFace}
+              alt="HeartFace"
+              style={{ width: 20, height: 20, verticalAlign: 'middle' }}
             />
-            愛心覺羅的隱藏彩蛋
+            {t("愛心覺羅的隱藏彩蛋")}
           </div>
         </motion.div>
 
@@ -309,17 +311,17 @@ const EggMiniGame: React.FC<EggMiniGameProps> = ({
                 silentImage={RobotSilent}
                 silentTalkingImage={RobotSilentTalking}
                 sentences={firstTalkDone ? [
-                  { content: '他剛剛翻了個白眼給我看🙄', type: 'silent' },
-                  { content: '別看他不說話，其實八卦全記得📂' },
-                  { content: '剛才那一下，他是在偷笑哦😏' },
-                  { content: '他用眼神暗示我閉嘴…我才不閉🤐', type: 'silent' },
-                  { content: '別被他裝安靜騙了，他超會計算時機' },
-                  { content: '他現在的表情是在說「哼」', type: 'silent' },
-                  { content: '十下彩蛋？別急，我在看他要不要理你👀' },
-                  { content: '他其實很怕被誇，會害羞躲一旁🙈' },
-                  { content: '他剛剛那個眼神是在嫌我話多', type: 'silent' },
-                  { content: '雖然他裝酷，但我知道他很喜歡你來找他💖' }
-                ] : [{ content: heartIntro }]}                
+                  { content: t('他剛剛翻了個白眼給我看🙄'), type: 'silent' },
+                  { content: t('別看他不說話，其實八卦全記得📂') },
+                  { content: t('剛才那一下，他是在偷笑哦😏') },
+                  { content: t('他用眼神暗示我閉嘴…我才不閉🤐'), type: 'silent' },
+                  { content: t('別被他裝安靜騙了，他超會計算時機') },
+                  { content: t('他現在的表情是在說「哼」'), type: 'silent' },
+                  { content: t('十下彩蛋？別急，我在看他要不要理你👀') },
+                  { content: t('他其實很怕被誇，會害羞躲一旁🙈') },
+                  { content: t('他剛剛那個眼神是在嫌我話多'), type: 'silent' },
+                  { content: t('雖然他裝酷，但我知道他很喜歡你來找他💖') }
+                ] : [{ content: heartIntro }]}
                 isTalking={robotTalking && !firstTalkDone}
                 size={80}
                 placement="top"
@@ -351,8 +353,8 @@ const EggMiniGame: React.FC<EggMiniGameProps> = ({
               lineHeight: 1.5
             }}
           >
-            感謝你的耐心探索！<br />
-            AI 小助理 和 愛心覺羅 會和你共同參與這個溫暖的BidForGood公益市集 :D
+            {t("感謝你的耐心探索！")}<br />
+            {t("AI 小助理 和 愛心覺羅 會和你共同參與這個溫暖的BidForGood公益市集 :D")}
           </motion.div>
         )}
       </motion.div>

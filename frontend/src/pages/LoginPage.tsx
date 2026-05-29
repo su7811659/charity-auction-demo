@@ -3,10 +3,12 @@ import { Button, Input, Form, Typography, Card, message, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import sessionService from "../services/sessionService";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [checkingLogin, setCheckingLogin] = useState(true); // 加入 loading 狀態
@@ -28,10 +30,10 @@ const LoginPage: React.FC = () => {
     try {
       const res = await axios.post("/api/admin/login", { secret });
       sessionService.setToken(res.data.token);
-      messageApi.success("登入成功！");
+      messageApi.success(t("登入成功！"));
       navigate("/admin/pending");
     } catch (err: any) {
-      messageApi.error("密碼錯誤！");
+      messageApi.error(t("密碼錯誤！"));
     }
   };
 
@@ -56,18 +58,18 @@ const LoginPage: React.FC = () => {
         }}
       >
         <Card style={{ width: 360 }}>
-          <Title level={3}>管理員登入</Title>
+          <Title level={3}>{t("管理員登入")}</Title>
           <Form layout="vertical" onFinish={onFinish}>
             <Form.Item
-              label="密碼"
+              label={t("密碼")}
               name="secret"
-              rules={[{ required: true, message: "請輸入管理員密碼" }]}
+              rules={[{ required: true, message: t("請輸入管理員密碼") }]}
             >
-              <Input.Password placeholder="請輸入密碼" />
+              <Input.Password placeholder={t("請輸入密碼")} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" block>
-                登入
+                {t("登入")}
               </Button>
             </Form.Item>
           </Form>

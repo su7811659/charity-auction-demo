@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, Table, Button, Tag, message, Modal, Statistic, Row, Col, Space, Typography, Empty, Alert, Avatar, Tooltip } from 'antd';
 import { ShoppingCartOutlined, ShopOutlined, CheckOutlined, DeleteOutlined, InfoCircleOutlined, CloudFilled, QuestionCircleOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 import onlineDealService, { OnlineDealWithProduct, OnlineDealStats } from '../../services/onlineDealService';
 import systemConfigService from '../../services/systemConfigService';
 import type { ColumnsType } from 'antd/es/table';
@@ -20,36 +22,37 @@ const { Title, Text, Paragraph } = Typography;
 // 隨機副標題文案
 const subtitles = [
   // 有趣
-  "線上交易大亂鬥，誰的留言最能打動賣家？",
-  "別只逛逛，線上交易才是真正的前戲！",
-  "一鍵送出請求，線上交易比你想像更刺激！",
+  i18n.t("線上交易大亂鬥，誰的留言最能打動賣家？"),
+  i18n.t("別只逛逛，線上交易才是真正的前戲！"),
+  i18n.t("一鍵送出請求，線上交易比你想像更刺激！"),
 
   // 專業
-  "線上交易流程數位化，管理更高效透明",
-  "即時追蹤線上交易進度，確保結算有依據",
-  "線上交易全紀錄，方便 ESG 後續對帳",
+  i18n.t("線上交易流程數位化，管理更高效透明"),
+  i18n.t("即時追蹤線上交易進度，確保結算有依據"),
+  i18n.t("線上交易全紀錄，方便 ESG 後續對帳"),
 
   // 文青
-  "線上交易，是物品新旅程的起點",
-  "讓物件透過線上交易找到下一位知己",
-  "線上交易，不只是轉手，更是緣分的橋樑",
+  i18n.t("線上交易，是物品新旅程的起點"),
+  i18n.t("讓物件透過線上交易找到下一位知己"),
+  i18n.t("線上交易，不只是轉手，更是緣分的橋樑"),
 
   // 搞笑
-  "線上交易就是現代相親，能不能成交全靠緣",
-  "小心！線上交易會讓你的購物額度瞬間蒸發",
-  "線上交易讓你提前過過癮，現場還能再搶一波！",
-  
-  "記得先瞄一眼下面的活動規則，少走冤枉路！",
-  "交易前先看規則，保證少踩坑多成交。",
-  "聰明人都會先讀規則，你也不例外吧？",
-  "別急著下手，活動規則藏著關鍵小細節。",
-  "規則說明在下面，先看完再出手更安心。",
-  "線上交易很簡單，前提是你先懂規則。",
-  "看規則 ≠ 麻煩，而是少掉很多麻煩。",
-  "下面的活動規則說明，就是你成功交易的秘訣！",
+  i18n.t("線上交易就是現代相親，能不能成交全靠緣"),
+  i18n.t("小心！線上交易會讓你的購物額度瞬間蒸發"),
+  i18n.t("線上交易讓你提前過過癮，現場還能再搶一波！"),
+
+  i18n.t("記得先瞄一眼下面的活動規則，少走冤枉路！"),
+  i18n.t("交易前先看規則，保證少踩坑多成交。"),
+  i18n.t("聰明人都會先讀規則，你也不例外吧？"),
+  i18n.t("別急著下手，活動規則藏著關鍵小細節。"),
+  i18n.t("規則說明在下面，先看完再出手更安心。"),
+  i18n.t("線上交易很簡單，前提是你先懂規則。"),
+  i18n.t("看規則 ≠ 麻煩，而是少掉很多麻煩。"),
+  i18n.t("下面的活動規則說明，就是你成功交易的秘訣！"),
 ];
 
 const UserOnlineDealsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [myRequests, setMyRequests] = useState<OnlineDealWithProduct[]>([]);
   const [receivedRequests, setReceivedRequests] = useState<OnlineDealWithProduct[]>([]);
   const [stats, setStats] = useState<OnlineDealStats | null>(null);
@@ -174,7 +177,7 @@ const UserOnlineDealsPage: React.FC = () => {
       setReceivedRequests(receivedRequestsWithStatus);
       setStats(statsData);
     } catch (error) {
-      message.error('載入資料失敗');
+      message.error(t('載入資料失敗'));
     } finally {
       setLoading(false);
     }
@@ -186,15 +189,15 @@ const UserOnlineDealsPage: React.FC = () => {
       switch (action) {
         case 'approve':
           result = await onlineDealService.approveRequest(dealId);
-          message.success(`已同意交易請求 - ${result.message}`);
+          message.success(t("已同意交易請求 - {{message}}", { message: result.message }));
           break;
         case 'reject':
           result = await onlineDealService.rejectRequest(dealId);
-          message.success(`已拒絕交易請求 - ${result.message}`);
+          message.success(t("已拒絕交易請求 - {{message}}", { message: result.message }));
           break;
         case 'cancel':
           result = await onlineDealService.cancelRequest(dealId);
-          message.success(`已取消交易請求 - ${result.message}`);
+          message.success(t("已取消交易請求 - {{message}}", { message: result.message }));
           break;
       }
       setModalVisible(false);
@@ -206,7 +209,7 @@ const UserOnlineDealsPage: React.FC = () => {
         manualCheck();
       }, 1000);
     } catch (error: any) {
-      message.error(error.response?.data?.detail || `${action === 'approve' ? '同意' : action === 'reject' ? '拒絕' : '取消'}交易請求失敗`);
+      message.error(error.response?.data?.detail || t("{{action}}交易請求失敗", { action: action === 'approve' ? t('同意') : action === 'reject' ? t('拒絕') : t('取消') }));
     }
   };
 
@@ -219,7 +222,7 @@ const UserOnlineDealsPage: React.FC = () => {
   // 我發出的請求表格欄位
   const myRequestColumns: ColumnsType<OnlineDealWithProduct> = [
     {
-      title: '商品名稱',
+      title: t('商品名稱'),
       dataIndex: 'product_name',
       key: 'product_name',
       render: (text, record) => (
@@ -236,19 +239,19 @@ const UserOnlineDealsPage: React.FC = () => {
       ),
     },
     {
-      title: '價格',
+      title: t('價格'),
       dataIndex: 'product_price',
       key: 'product_price',
       render: (price) => `NT$ ${price?.toLocaleString()}`,
     },
     {
-      title: '賣家',
+      title: t('賣家'),
       dataIndex: 'seller_nickname',
       key: 'seller_nickname',
-      render: (nickname, record) => nickname || record.seller_name || '未知賣家',
+      render: (nickname, record) => nickname || record.seller_name || t('未知賣家'),
     },
     {
-      title: '狀態',
+      title: t('狀態'),
       dataIndex: 'deal_status',
       key: 'status',
       render: (status) => (
@@ -258,13 +261,13 @@ const UserOnlineDealsPage: React.FC = () => {
       ),
     },
     {
-      title: '申請時間',
+      title: t('申請時間'),
       dataIndex: 'created_time',
       key: 'created_time',
       render: (time) => dayjs.utc(time).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm'),
     },
     {
-      title: '操作',
+      title: t('操作'),
       key: 'actions',
       render: (_, record) => (
         <Space>
@@ -273,16 +276,16 @@ const UserOnlineDealsPage: React.FC = () => {
             icon={<InfoCircleOutlined />}
             onClick={() => showModal(record, 'view')}
           >
-            詳情
+            {t("詳情")}
           </Button>
           {record.deal_status === 0 && (
-            <Button 
-              type="link" 
-              danger 
+            <Button
+              type="link"
+              danger
               icon={<DeleteOutlined />}
               onClick={() => showModal(record, 'cancel')}
             >
-              取消
+              {t("取消")}
             </Button>
           )}
         </Space>
@@ -292,11 +295,11 @@ const UserOnlineDealsPage: React.FC = () => {
 
   const getModalTitle = () => {
     switch (modalType) {
-      case 'approve': return '確認賣給這位買家';
-      case 'reject': return '拒絕交易請求';
-      case 'cancel': return '取消交易請求';
-      case 'view': return '交易請求詳情';
-      default: return '交易請求';
+      case 'approve': return t('確認賣給這位買家');
+      case 'reject': return t('拒絕交易請求');
+      case 'cancel': return t('取消交易請求');
+      case 'view': return t('交易請求詳情');
+      default: return t('交易請求');
     }
   };
 
@@ -352,7 +355,7 @@ const UserOnlineDealsPage: React.FC = () => {
             {displayUser.localPart}
           </Title>
           <Text type="secondary" style={{ fontSize: 14 }}>
-            申請時間：{dayjs.utc(selectedRequest.created_time).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')}
+            {t("申請時間：")}{dayjs.utc(selectedRequest.created_time).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')}
           </Text>
         </motion.div>
 
@@ -402,7 +405,7 @@ const UserOnlineDealsPage: React.FC = () => {
               
               <div style={{ marginBottom: 8 }}>
                 <Text strong style={{ color: '#1890ff', fontSize: 16 }}>
-                  💬 割愛小紙條
+                  {t("💬 割愛小紙條")}
                 </Text>
               </div>
               
@@ -434,7 +437,7 @@ const UserOnlineDealsPage: React.FC = () => {
               color: '#999'
             }}>
               <Text type="secondary">
-                🤐 買家沒有留下任何訊息
+                {t("🤐 買家沒有留下任何訊息")}
               </Text>
             </div>
           </motion.div>
@@ -455,12 +458,12 @@ const UserOnlineDealsPage: React.FC = () => {
             }} />
             <div style={{ textAlign: 'center' }}>
               <Text style={{ fontSize: 20, color: '#52c41a' }}>
-                恭喜！你們的商品成交了！
+                {t("恭喜！你們的商品成交了！")}
               </Text>
               <br/>
               <br/>
               <Text style={{ fontSize: 15, color: '#52c41a' }}>
-                記得用 MM 聯繫他然後進行商品交易的討論喔：）
+                {t("記得用 MM 聯繫他然後進行商品交易的討論喔：）")}
               </Text>
             </div>
           </motion.div>
@@ -484,7 +487,7 @@ const UserOnlineDealsPage: React.FC = () => {
             {/* 恭喜訊息 */}
             <div style={{ marginBottom: 20 }}>
               <Title level={4} style={{ color: '#52c41a', margin: 0 }}>
-                🎉 恭喜你成功購買了他的商品
+                {t("🎉 恭喜你成功購買了他的商品")}
               </Title>
             </div>
 
@@ -514,7 +517,7 @@ const UserOnlineDealsPage: React.FC = () => {
                   {sellerLocalPart}
                 </div>
                 <div style={{ fontSize: 14, color: '#666' }}>
-                  賣家
+                  {t("賣家")}
                 </div>
               </div>
             </div>
@@ -528,7 +531,7 @@ const UserOnlineDealsPage: React.FC = () => {
               color: '#52c41a'
             }}>
               <Text style={{ fontSize: 15, color: '#52c41a' }}>
-                📱 請透過 MM 聯繫他處理交易的事宜
+                {t("📱 請透過 MM 聯繫他處理交易的事宜")}
               </Text>
             </div>
           </motion.div>
@@ -544,11 +547,11 @@ const UserOnlineDealsPage: React.FC = () => {
             <Alert
               type={modalType === 'approve' ? 'info' : 'warning'}
               message={
-                modalType === 'approve' ? 
-                '🤝 確定要將商品賣給這位買家嗎？交易完成後商品將下架。' :
-                modalType === 'reject' ? 
-                '❌ 確定要拒絕這個交易請求嗎？' :
-                '🚫 確定要取消這個交易請求嗎？'
+                modalType === 'approve' ?
+                t('🤝 確定要將商品賣給這位買家嗎？交易完成後商品將下架。') :
+                modalType === 'reject' ?
+                t('❌ 確定要拒絕這個交易請求嗎？') :
+                t('🚫 確定要取消這個交易請求嗎？')
               }
               showIcon={false}
               style={{ borderRadius: 8 }}
@@ -688,7 +691,7 @@ const UserOnlineDealsPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            線上交易管理
+            {t("線上交易管理")}
           </Title>
         </motion.div>
         <motion.div
@@ -715,7 +718,7 @@ const UserOnlineDealsPage: React.FC = () => {
             onClick={() => setRulesModalVisible(true)}
             style={{ marginTop: 16 }}
           >
-            線上交易規則說明
+            {t("線上交易規則說明")}
           </Button>
         </motion.div>
       </motion.div>
@@ -730,15 +733,15 @@ const UserOnlineDealsPage: React.FC = () => {
           <Card style={{ marginBottom: 24, textAlign: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 16, fontWeight: 'bold', color: '#666' }}>
-              線上交易系統狀態：
+              {t("線上交易系統狀態：")}
             </span>
             <Tooltip
               title={(() => {
                 if (!systemConfig.online_deal_enabled) {
-                  return "系統管理員已停用線上交易功能，您仍可管理現有的商品購買申請";
+                  return t("系統管理員已停用線上交易功能，您仍可管理現有的商品購買申請");
                 }
                 if (!systemConfig.online_deal_available) {
-                  return "目前暫停接受新的商品購買申請，現有申請可正常處理";
+                  return t("目前暫停接受新的商品購買申請，現有申請可正常處理");
                 }
                 if (systemConfig.online_deal_begin_date && systemConfig.online_deal_end_date) {
                   const now = new Date();
@@ -746,10 +749,10 @@ const UserOnlineDealsPage: React.FC = () => {
                   const end = new Date(systemConfig.online_deal_end_date);
                   const inTimeRange = now >= start && now <= end;
                   if (!inTimeRange) {
-                    return `開放時間：${dayjs.utc(systemConfig.online_deal_begin_date).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')} ~ ${dayjs.utc(systemConfig.online_deal_end_date).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm')}`;
+                    return t("開放時間：{{start}} ~ {{end}}", { start: dayjs.utc(systemConfig.online_deal_begin_date).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm'), end: dayjs.utc(systemConfig.online_deal_end_date).tz('Asia/Taipei').format('YYYY/MM/DD HH:mm') });
                   }
                 }
-                return "用戶可以正常提出新的商品購買申請";
+                return t("用戶可以正常提出新的商品購買申請");
               })()}
               placement="bottom"
             >
@@ -770,10 +773,10 @@ const UserOnlineDealsPage: React.FC = () => {
               >
                 {(() => {
                   if (!systemConfig.online_deal_enabled) {
-                    return "🔒 功能停用";
+                    return t("🔒 功能停用");
                   }
                   if (!systemConfig.online_deal_available) {
-                    return "⏸️ 暫停申請";
+                    return t("⏸️ 暫停申請");
                   }
                   if (systemConfig.online_deal_begin_date && systemConfig.online_deal_end_date) {
                     const now = new Date();
@@ -782,13 +785,13 @@ const UserOnlineDealsPage: React.FC = () => {
                     const inTimeRange = now >= start && now <= end;
                     if (!inTimeRange) {
                       if (now < start) {
-                        return "⏰ 尚未開放";
+                        return t("⏰ 尚未開放");
                       } else {
-                        return "⏰ 已結束";
+                        return t("⏰ 已結束");
                       }
                     }
                   }
-                  return "🚀 正常開放";
+                  return t("🚀 正常開放");
                 })()}
               </Tag>
             </Tooltip>
@@ -819,7 +822,7 @@ const UserOnlineDealsPage: React.FC = () => {
           whileTap={{ scale: 0.98 }}
         >
           <ShoppingCartOutlined style={{ fontSize: 16 }} />
-          我發出的請求 ({myRequests.length})
+          {t("我發出的請求 ({{count}})", { count: myRequests.length })}
         </motion.button>
         <motion.button
           className={`toggle-option ${activeTab === "received-requests" ? "active" : ""}`}
@@ -828,7 +831,7 @@ const UserOnlineDealsPage: React.FC = () => {
           whileTap={{ scale: 0.98 }}
         >
           <ShopOutlined style={{ fontSize: 16 }} />
-          我收到的請求 ({receivedRequests.length})
+          {t("我收到的請求 ({{count}})", { count: receivedRequests.length })}
         </motion.button>
       </motion.div>
 
@@ -875,8 +878,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="總共發送的請求數" 
+                      <Statistic
+                        title={t("總共發送的請求數")}
                         value={stats.total_requests}
                         valueStyle={{ color: '#1890ff', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -892,8 +895,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="等待處理的請求數" 
+                      <Statistic
+                        title={t("等待處理的請求數")}
                         value={stats.pending_requests}
                         valueStyle={{ color: '#faad14', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -909,8 +912,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="被同意的請求數" 
+                      <Statistic
+                        title={t("被同意的請求數")}
                         value={stats.approved_requests}
                         valueStyle={{ color: '#52c41a', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -926,8 +929,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="被拒絕的請求數" 
+                      <Statistic
+                        title={t("被拒絕的請求數")}
                         value={stats.rejected_requests}
                         valueStyle={{ color: '#ff4d4f', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -943,8 +946,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="請求額度(可用 / 上限)" 
+                      <Statistic
+                        title={t("請求額度(可用 / 上限)")}
                         value={stats.available_slots} 
                         suffix={`/ ${stats.max_concurrent_deals}`}
                         valueStyle={{ color: '#722ed1', fontSize: 28, fontWeight: 'bold' }}
@@ -972,8 +975,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="收到請求的商品數" 
+                      <Statistic
+                        title={t("收到請求的商品數")}
                         value={groupRequestsByProduct(receivedRequests).length}
                         valueStyle={{ color: '#1890ff', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -989,8 +992,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="總收到的請求數" 
+                      <Statistic
+                        title={t("總收到的請求數")}
                         value={receivedRequests.length}
                         valueStyle={{ color: '#13c2c2', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -1006,8 +1009,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="待處理的請求數" 
+                      <Statistic
+                        title={t("待處理的請求數")}
                         value={receivedRequests.filter(req => req.deal_status === 0).length}
                         valueStyle={{ color: '#faad14', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -1023,8 +1026,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="已完成的請求數" 
+                      <Statistic
+                        title={t("已完成的請求數")}
                         value={receivedRequests.filter(req => req.deal_status === 1).length}
                         valueStyle={{ color: '#52c41a', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -1040,8 +1043,8 @@ const UserOnlineDealsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                       minWidth: 160
                     }}>
-                      <Statistic 
-                        title="已拒絕的請求數" 
+                      <Statistic
+                        title={t("已拒絕的請求數")}
                         value={receivedRequests.filter(req => req.deal_status === 3).length}
                         valueStyle={{ color: '#ff4d4f', fontSize: 28, fontWeight: 'bold' }}
                       />
@@ -1077,7 +1080,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 rowKey="id"
                 loading={loading}
                 locale={{
-                  emptyText: <Empty description="尚無交易請求" />
+                  emptyText: <Empty description={t("尚無交易請求")} />
                 }}
               />
             </motion.div>
@@ -1091,7 +1094,7 @@ const UserOnlineDealsPage: React.FC = () => {
             >
               {/* 新的分組顯示UI */}
               {receivedRequests.length === 0 ? (
-                <Empty description="尚無收到的請求" />
+                <Empty description={t("尚無收到的請求")} />
               ) : (
                 <div style={{ padding: 16 }}>
                   {groupRequestsByProduct(receivedRequests).map(productGroup => (
@@ -1122,11 +1125,11 @@ const UserOnlineDealsPage: React.FC = () => {
                                 {productGroup.product_name}
                               </h4>
                               <p style={{ margin: '4px 0 0 0', color: '#666', fontSize: 14 }}>
-                                ID: {productGroup.product_id} | 價格: NT$ {productGroup.product_price?.toLocaleString()}
+                                {t("ID: {{id}} | 價格: NT$ {{price}}", { id: productGroup.product_id, price: productGroup.product_price?.toLocaleString() })}
                               </p>
                             </div>
                             <Tag color="blue" style={{ fontSize: 14 }}>
-                              {productGroup.requests.length} 個請求
+                              {t("{{count}} 個請求", { count: productGroup.requests.length })}
                             </Tag>
                           </div>
                         </div>
@@ -1170,9 +1173,9 @@ const UserOnlineDealsPage: React.FC = () => {
                                   textOverflow: 'ellipsis',
                                   maxWidth: '200px'
                                 }}>
-                                  {request.buyer_comment ? 
-                                    `"${request.buyer_comment}"` : 
-                                    '無特別留言'
+                                  {request.buyer_comment ?
+                                    `"${request.buyer_comment}"` :
+                                    t('無特別留言')
                                   }
                                 </div>
                               </div>
@@ -1190,16 +1193,16 @@ const UserOnlineDealsPage: React.FC = () => {
                                     icon={<InfoCircleOutlined />}
                                     onClick={() => showModal(request, 'view')}
                                   >
-                                    詳細
+                                    {t("詳細")}
                                   </Button>
                                   {request.deal_status === 0 && (
-                                    <Button 
+                                    <Button
                                       size="small"
                                       type="primary"
                                       icon={<CheckOutlined />}
                                       onClick={() => showModal(request, 'approve')}
                                     >
-                                      賣給他
+                                      {t("賣給他")}
                                     </Button>
                                   )}
                                 </Space>
@@ -1228,19 +1231,19 @@ const UserOnlineDealsPage: React.FC = () => {
         }}
         footer={modalType === 'view' ? [
           <Button key="close" onClick={() => setModalVisible(false)}>
-            關閉
+            {t("關閉")}
           </Button>
         ] : [
           <Button key="cancel" onClick={() => setModalVisible(false)}>
-            取消
+            {t("取消")}
           </Button>,
-          <Button 
-            key="confirm" 
-            type="primary" 
+          <Button
+            key="confirm"
+            type="primary"
             danger={modalType === 'reject' || modalType === 'cancel'}
             onClick={() => selectedRequest && handleAction(modalType, selectedRequest.id)}
           >
-            確定
+            {t("確定")}
           </Button>
         ]}
         width={480}
@@ -1267,7 +1270,7 @@ const UserOnlineDealsPage: React.FC = () => {
               backgroundClip: 'text'
             }}
           >
-            📋 線上交易小規則
+            {t("📋 線上交易小規則")}
           </motion.div>
         }
         open={rulesModalVisible}
@@ -1292,7 +1295,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold'
               }}
             >
-              ✅ 我了解了
+              {t("✅ 我了解了")}
             </Button>
           </motion.div>
         ]}
@@ -1340,7 +1343,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(250, 140, 22, 0.3)'
               }}>
-                💡 核心理念
+                {t("💡 核心理念")}
               </div>
               
               <h3 style={{ 
@@ -1350,15 +1353,15 @@ const UserOnlineDealsPage: React.FC = () => {
                 marginBottom: 16,
                 marginTop: 8
               }}>
-                為什麼要有線上交易？
+                {t("為什麼要有線上交易？")}
               </h3>
-              
+
               <div style={{ lineHeight: 1.8, color: '#262626' }}>
                 <p style={{ fontSize: 16, marginBottom: 12, fontWeight: 500 }}>
-                  活動開始前，網站如果只是個「商品展示櫃」，是不是有點可惜？
+                  {t("活動開始前，網站如果只是個「商品展示櫃」，是不是有點可惜？")}
                 </p>
                 <p style={{ fontSize: 16, marginBottom: 16, color: '#fa8c16', fontWeight: 600 }}>
-                  我們希望這段時間就能熱起來——
+                  {t("我們希望這段時間就能熱起來——")}
                 </p>
                 <div style={{ 
                   background: 'rgba(255, 255, 255, 0.8)',
@@ -1367,9 +1370,9 @@ const UserOnlineDealsPage: React.FC = () => {
                   border: '1px solid #ffe7ba'
                 }}>
                   <ul style={{ paddingLeft: 24, margin: 0 }}>
-                    <li style={{ marginBottom: 8, fontSize: 15 }}>有大件或多件商品的同事，可以先透過線上媒合賣掉一些，不必活動當天扛著一堆東西。</li>
-                    <li style={{ marginBottom: 8, fontSize: 15 }}>讓大家在正式活動前，就有機會互相交流、互動。</li>
-                    <li style={{ fontSize: 15 }}>最重要的，現場還是要保有「搶購」的驚喜，所以購買額度會有限制，避免當天變空城。</li>
+                    <li style={{ marginBottom: 8, fontSize: 15 }}>{t("有大件或多件商品的同事，可以先透過線上媒合賣掉一些，不必活動當天扛著一堆東西。")}</li>
+                    <li style={{ marginBottom: 8, fontSize: 15 }}>{t("讓大家在正式活動前，就有機會互相交流、互動。")}</li>
+                    <li style={{ fontSize: 15 }}>{t("最重要的，現場還是要保有「搶購」的驚喜，所以購買額度會有限制，避免當天變空城。")}</li>
                   </ul>
                 </div>
               </div>
@@ -1403,7 +1406,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)'
               }}>
-                🛒 遊戲規則
+                {t("🛒 遊戲規則")}
               </div>
 
               <h3 style={{ 
@@ -1413,7 +1416,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 marginBottom: 16,
                 marginTop: 8
               }}>
-                怎麼玩？
+                {t("怎麼玩？")}
               </h3>
 
               <div style={{ lineHeight: 1.8, color: '#262626' }}>
@@ -1433,9 +1436,9 @@ const UserOnlineDealsPage: React.FC = () => {
                     alignItems: 'center',
                     gap: 8
                   }}>
-                    ⏰ 線上交易時間
+                    {t("⏰ 線上交易時間")}
                   </h4>
-                  <p style={{ margin: 0, fontSize: 15 }}>功能一開放，就可以開始送出交易請求，一直到活動前一天的 23:59。</p>
+                  <p style={{ margin: 0, fontSize: 15 }}>{t("功能一開放，就可以開始送出交易請求，一直到活動前一天的 23:59。")}</p>
                 </div>
                 
                 <div style={{ 
@@ -1454,10 +1457,10 @@ const UserOnlineDealsPage: React.FC = () => {
                     alignItems: 'center',
                     gap: 8
                   }}>
-                    📝 送出購買請求
+                    {t("📝 送出購買請求")}
                   </h4>
-                  <p style={{ marginBottom: 8, fontSize: 15 }}>每位同事活動前最多能同時參與 <span style={{ color: '#1890ff', fontWeight: 'bold' }}>{stats?.max_concurrent_deals || 2}</span> 件商品的請求。</p>
-                  <p style={{ margin: 0, fontSize: 15, fontStyle: 'italic', color: '#1890ff' }}>想買？就在你心儀商品的細節頁下留下一段你給賣家的「割愛小紙條」:)</p>
+                  <p style={{ marginBottom: 8, fontSize: 15 }}>{t("每位同事活動前最多能同時參與 ")}<span style={{ color: '#1890ff', fontWeight: 'bold' }}>{stats?.max_concurrent_deals || 2}</span>{t(" 件商品的請求。")}</p>
+                  <p style={{ margin: 0, fontSize: 15, fontStyle: 'italic', color: '#1890ff' }}>{t("想買？就在你心儀商品的細節頁下留下一段你給賣家的「割愛小紙條」:)")}</p>
                 </div>
                 
                 <div style={{ 
@@ -1475,11 +1478,11 @@ const UserOnlineDealsPage: React.FC = () => {
                     alignItems: 'center',
                     gap: 8
                   }}>
-                    🤝 成交方式
+                    {t("🤝 成交方式")}
                   </h4>
-                  <p style={{ marginBottom: 8, fontSize: 15 }}>賣家從眾多留言中選擇要成交的買家。</p>
-                  <p style={{ marginBottom: 8, fontSize: 15 }}>一旦選定，系統會顯示彼此姓名，接下來就請透過公司 MM 聊聊細節，<span style={{ color: '#fa8c16', fontWeight: 'bold' }}>(賣家要主動一點，畢竟是你同意這筆交易的!)</span></p>
-                  <p style={{ margin: 0, fontSize: 15 }}>決定付款方式和交貨時間（可以是活動當天，或雙方同意的時間）。</p>
+                  <p style={{ marginBottom: 8, fontSize: 15 }}>{t("賣家從眾多留言中選擇要成交的買家。")}</p>
+                  <p style={{ marginBottom: 8, fontSize: 15 }}>{t("一旦選定，系統會顯示彼此姓名，接下來就請透過公司 MM 聊聊細節，")}<span style={{ color: '#fa8c16', fontWeight: 'bold' }}>{t("(賣家要主動一點，畢竟是你同意這筆交易的!)")}</span></p>
+                  <p style={{ margin: 0, fontSize: 15 }}>{t("決定付款方式和交貨時間（可以是活動當天，或雙方同意的時間）。")}</p>
                 </div>
               </div>
             </div>
@@ -1512,7 +1515,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(82, 196, 26, 0.3)'
               }}>
-                🎟 額度計算
+                {t("🎟 額度計算")}
               </div>
 
               <h3 style={{ 
@@ -1522,7 +1525,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 marginBottom: 16,
                 marginTop: 8
               }}>
-                購買請求額度怎麼算？
+                {t("購買請求額度怎麼算？")}
               </h3>
 
               <div style={{ 
@@ -1533,13 +1536,13 @@ const UserOnlineDealsPage: React.FC = () => {
               }}>
                 <ul style={{ paddingLeft: 24, margin: 0, lineHeight: 1.8 }}>
                   <li style={{ marginBottom: 12, fontSize: 15 }}>
-                    <span style={{ color: '#fa8c16', fontWeight: 'bold' }}>送出購買請求</span> → 請求額度暫時鎖定。
+                    <span style={{ color: '#fa8c16', fontWeight: 'bold' }}>{t("送出購買請求")}</span>{t(" → 請求額度暫時鎖定。")}
                   </li>
                   <li style={{ marginBottom: 12, fontSize: 15 }}>
-                    <span style={{ color: '#1890ff', fontWeight: 'bold' }}>如果你撤回，或賣家選了別人</span> → 請求額度立刻釋回。
+                    <span style={{ color: '#1890ff', fontWeight: 'bold' }}>{t("如果你撤回，或賣家選了別人")}</span>{t(" → 請求額度立刻釋回。")}
                   </li>
                   <li style={{ fontSize: 15 }}>
-                    <span style={{ color: '#52c41a', fontWeight: 'bold' }}>如果你被選中</span> → 恭喜！這次請求額度就算真的用掉了。
+                    <span style={{ color: '#52c41a', fontWeight: 'bold' }}>{t("如果你被選中")}</span>{t(" → 恭喜！這次請求額度就算真的用掉了。")}
                   </li>
                 </ul>
               </div>
@@ -1573,7 +1576,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(235, 47, 150, 0.3)'
               }}>
-                👩‍💻 賣家須知
+                {t("👩‍💻 賣家須知")}
               </div>
 
               <h3 style={{ 
@@ -1583,7 +1586,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 marginBottom: 16,
                 marginTop: 8
               }}>
-                賣家要注意
+                {t("賣家要注意")}
               </h3>
 
               <div style={{ 
@@ -1593,8 +1596,8 @@ const UserOnlineDealsPage: React.FC = () => {
                 border: '1px solid #ffc2d4'
               }}>
                 <ul style={{ paddingLeft: 24, margin: 0, lineHeight: 1.8 }}>
-                  <li style={{ marginBottom: 12, fontSize: 15 }}>記得常常上來看看，有沒有人對你的商品送出請求。</li>
-                  <li style={{ fontSize: 15 }}>盡早決定是否要成交，讓買家不用乾等。</li>
+                  <li style={{ marginBottom: 12, fontSize: 15 }}>{t("記得常常上來看看，有沒有人對你的商品送出請求。")}</li>
+                  <li style={{ fontSize: 15 }}>{t("盡早決定是否要成交，讓買家不用乾等。")}</li>
                 </ul>
               </div>
             </div>
@@ -1627,7 +1630,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(114, 46, 209, 0.3)'
               }}>
-                💰 捐款機制
+                {t("💰 捐款機制")}
               </div>
 
               <h3 style={{ 
@@ -1637,7 +1640,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 marginBottom: 16,
                 marginTop: 8
               }}>
-                關於捐款
+                {t("關於捐款")}
               </h3>
 
               <div style={{ 
@@ -1648,11 +1651,11 @@ const UserOnlineDealsPage: React.FC = () => {
                 lineHeight: 1.8,
                 color: '#262626'
               }}>
-                <p style={{ marginBottom: 12, fontSize: 15 }}>每件商品上架時就已經設定了固定的捐款比例。</p>
+                <p style={{ marginBottom: 12, fontSize: 15 }}>{t("每件商品上架時就已經設定了固定的捐款比例。")}</p>
                 <p style={{ marginBottom: 16, fontSize: 15, color: '#fa8c16', fontWeight: 'bold' }}>
-                  注意，線上交易的金流完全是買家與賣家私下處理，不經過系統，但 ESG 小組會依系統媒合紀錄算出應捐金額。
+                  {t("注意，線上交易的金流完全是買家與賣家私下處理，不經過系統，但 ESG 小組會依系統媒合紀錄算出應捐金額。")}
                 </p>
-                <p style={{ marginBottom: 16, fontSize: 15 }}>活動結束後一週內，ESG 小組會通知你結算，並把這筆應捐金額和你活動當天的實際收入相抵：</p>
+                <p style={{ marginBottom: 16, fontSize: 15 }}>{t("活動結束後一週內，ESG 小組會通知你結算，並把這筆應捐金額和你活動當天的實際收入相抵：")}</p>
                 <div style={{ 
                   background: 'linear-gradient(135deg, #f0f5ff 0%, #f8faff 100%)',
                   borderRadius: 8,
@@ -1661,10 +1664,10 @@ const UserOnlineDealsPage: React.FC = () => {
                 }}>
                   <ul style={{ paddingLeft: 20, margin: 0 }}>
                     <li style={{ marginBottom: 8, fontSize: 15 }}>
-                      如果 <span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>線上應捐 &gt; 現場收入</span> → 活動後需要補差額。
+                      {t("如果 ")}<span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>{t("線上應捐 > 現場收入")}</span>{t(" → 活動後需要補差額。")}
                     </li>
                     <li style={{ fontSize: 15 }}>
-                      如果 <span style={{ color: '#52c41a', fontWeight: 'bold' }}>線上應捐 &lt; 現場收入</span> → 活動後會把多出的收益撥還給你。
+                      {t("如果 ")}<span style={{ color: '#52c41a', fontWeight: 'bold' }}>{t("線上應捐 < 現場收入")}</span>{t(" → 活動後會把多出的收益撥還給你。")}
                     </li>
                   </ul>
                 </div>
@@ -1698,7 +1701,7 @@ const UserOnlineDealsPage: React.FC = () => {
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(250, 84, 28, 0.3)'
               }}>
-                📌 重要提醒
+                {t("📌 重要提醒")}
               </div>
 
               <div style={{ 
@@ -1725,7 +1728,7 @@ const UserOnlineDealsPage: React.FC = () => {
                     lineHeight: 1.8,
                     color: '#262626'
                   }}>
-                    為了讓活動現場保持熱度，ESG 小組會依實際情況調整購買額度，甚至暫停或關閉線上交易功能，一切以保有活動的驚喜感為原則。
+                    {t("為了讓活動現場保持熱度，ESG 小組會依實際情況調整購買額度，甚至暫停或關閉線上交易功能，一切以保有活動的驚喜感為原則。")}
                   </div>
                 </div>
               </div>

@@ -24,6 +24,7 @@ import type {
 import dayjs from "dayjs";
 import * as XLSX from "xlsx";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { getCurrentUserEmail } from "../../utils/authUtils";
@@ -45,6 +46,7 @@ const cardStyle: React.CSSProperties = {
 };
 
 const UserProductsPage = () => {
+  const { t } = useTranslation();
   const [myProducts, setMyProducts] = useState<Product[]>([]);
   const [purchasedProducts, setPurchasedProducts] = useState<ProductForBuyer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -65,31 +67,31 @@ const UserProductsPage = () => {
   const renderCondition = (condition: number) => {
     switch (condition) {
       case 1:
-        return "全新";
+        return t("全新");
       case 2:
-        return "九成新";
+        return t("九成新");
       case 3:
-        return "五成新";
+        return t("五成新");
       case 4:
-        return "低於五成新";
+        return t("低於五成新");
       default:
-        return "未知狀態";
+        return t("未知狀態");
     }
   };
 
   const renderStatus = (product: Product) => {
-    if (product.is_approve) return <Tag color="green">審核通過</Tag>;
-    if (product.is_rejected) return <Tag color="red">否決</Tag>;
-    return <Tag color="gold">審核中</Tag>;
+    if (product.is_approve) return <Tag color="green">{t("審核通過")}</Tag>;
+    if (product.is_rejected) return <Tag color="red">{t("否決")}</Tag>;
+    return <Tag color="gold">{t("審核中")}</Tag>;
   };
 
   const renderProductStatus = (status: number) => {
     const statusMap = [
-      { text: "尚未到貨", color: "default" },
-      { text: "已到貨待成交", color: "processing" },
-      { text: "已成交", color: "success" },
+      { text: t("尚未到貨"), color: "default" },
+      { text: t("已到貨待成交"), color: "processing" },
+      { text: t("已成交"), color: "success" },
     ];
-    const { text, color } = statusMap[status] || { text: "未知", color: "default" };
+    const { text, color } = statusMap[status] || { text: t("未知"), color: "default" };
     return <Tag color={color}>{text}</Tag>;
   };
 
@@ -113,15 +115,15 @@ const UserProductsPage = () => {
     const gap = Math.max(next - amount, 0);
 
     if (amount === 0) {
-      return `還沒開始？世界正在等你第一件商品登場！✨`;
+      return t("還沒開始？世界正在等你第一件商品登場！✨");
     }
     if (amount % step === 0 && amount !== 0) {
-      return `哇～捐款金額剛好踩到一個漂亮整數！不愧是「數字美學大師」👏`;
+      return t("哇～捐款金額剛好踩到一個漂亮整數！不愧是「數字美學大師」👏");
     }
     if (gap <= 50) {
-      return `快衝破新紀錄啦！只差 ${gap.toLocaleString()} 元，感覺再上一件商品就能看到奇蹟～🔥`;
+      return t("快衝破新紀錄啦！只差 {{gap}} 元，感覺再上一件商品就能看到奇蹟～🔥", { gap: gap.toLocaleString() });
     }
-    return `目前累積 ${amount.toLocaleString()} 元💖，已經超帥了！再多上傳一點點，愛心能量就更澎湃～`;
+    return t("目前累積 {{amount}} 元💖，已經超帥了！再多上傳一點點，愛心能量就更澎湃～", { amount: amount.toLocaleString() });
   };
 
 
@@ -141,24 +143,24 @@ const UserProductsPage = () => {
 
     // 以 AOA 方式輸出，三個空白欄用空字串代表（不會出現欄位名稱）。
     const header = [
-      "商品編號",
-      "商品名稱",
-      "商品售價",
-      "捐贈比例",
-      "捐贈金額",
-      "賣家收入",
-      "買家",
-      "成交狀態",
+      t("商品編號"),
+      t("商品名稱"),
+      t("商品售價"),
+      t("捐贈比例"),
+      t("捐贈金額"),
+      t("賣家收入"),
+      t("買家"),
+      t("成交狀態"),
       "", // 空白欄1
       "", // 空白欄2
       "", // 空白欄3
-      "賣家總收入",
-      "線上成交追繳捐贈款",
-      "最終結算",
+      t("賣家總收入"),
+      t("線上成交追繳捐贈款"),
+      t("最終結算"),
     ];
 
     const summaryRow = [
-      "彙總", // 商品編號欄放彙總標記
+      t("彙總"), // 商品編號欄放彙總標記
       "",
       "",
       "",
@@ -180,7 +182,7 @@ const UserProductsPage = () => {
       p.donation_amount ?? 0,
       p.seller_income ?? 0,
       p.buyer_name ?? "-",
-      p.is_online_deal ? "線上成交" : "現場成交",
+      p.is_online_deal ? t("線上成交") : t("現場成交"),
       "", "", "", // 三個空白欄
       "", // 賣家總收入（只在彙總列顯示）
       "", // 線上成交追繳捐贈款（只在彙總列顯示）
@@ -190,7 +192,7 @@ const UserProductsPage = () => {
     const aoa = [header, summaryRow, ...rows];
     const worksheet = XLSX.utils.aoa_to_sheet(aoa);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "成交明細");
+    XLSX.utils.book_append_sheet(workbook, worksheet, t("成交明細"));
     
     // 使用用戶 email 作為文件名（多層 fallback）
     const tokenEmail = getCurrentUserEmail() || '';
@@ -200,61 +202,61 @@ const UserProductsPage = () => {
     } catch {}
     const directEmail = localStorage.getItem('user_email') || '';
     const userEmail = tokenEmail || storedEmail || directEmail || 'unknown';
-    const fileName = `${userEmail}_商品成交明細.xlsx`;
-    
+    const fileName = `${userEmail}_${t("商品成交明細")}.xlsx`;
+
     XLSX.writeFile(workbook, fileName);
-    message.success("已下載 Excel 成交明細");
+    message.success(t("已下載 Excel 成交明細"));
   };
 
   const sellerColumns: ColumnsType<Product> = [
-    { title: "商品編號", dataIndex: "id", align: "center" },
-    { title: "商品名稱", dataIndex: "product_name", align: "center" },
-    { title: "商品定價", dataIndex: "price", align: "center", render: (v) => `$${v}` },
-    { title: "賣家暱稱", dataIndex: "seller_nickname", align: "center" },
+    { title: t("商品編號"), dataIndex: "id", align: "center" },
+    { title: t("商品名稱"), dataIndex: "product_name", align: "center" },
+    { title: t("商品定價"), dataIndex: "price", align: "center", render: (v) => `$${v}` },
+    { title: t("賣家暱稱"), dataIndex: "seller_nickname", align: "center" },
     {
-      title: "商品狀態",
+      title: t("商品狀態"),
       dataIndex: "product_status",
       render: renderProductStatus,
       align: "center"
     },
     {
-      title: "成交狀態",
+      title: t("成交狀態"),
       align: "center",
       render: (_, record) => {
         if (record.product_status !== 2) {
           return <Tag color="default">-</Tag>;
         } else if (record.is_online_deal) {
-          return <Tag color="blue">線上成交</Tag>;
+          return <Tag color="blue">{t("線上成交")}</Tag>;
         } else {
-          return <Tag color="green">現場成交</Tag>;
+          return <Tag color="green">{t("現場成交")}</Tag>;
         }
       }
     },
     {
-      title: "上傳時間",
+      title: t("上傳時間"),
       dataIndex: "created_at",
       align: "center",
-      render: (t) => dayjs.utc(t).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm"),
+      render: (time) => dayjs.utc(time).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm"),
     },
-    { title: "審核狀態", align: "center", render: (_, p) => renderStatus(p) },
-    { title: "收入", dataIndex: "seller_income", align: "center", render: (v) => (v != null ? `$${v}` : "-") },
-    { title: "捐贈比例", dataIndex: "donation_ratio", align: "center", render: (r) => `${r}%` },
-    { title: "捐贈金額", dataIndex: "donation_amount", align: "center", render: (v) => (v != null ? `$${v}` : "-") },
+    { title: t("審核狀態"), align: "center", render: (_, p) => renderStatus(p) },
+    { title: t("收入"), dataIndex: "seller_income", align: "center", render: (v) => (v != null ? `$${v}` : "-") },
+    { title: t("捐贈比例"), dataIndex: "donation_ratio", align: "center", render: (r) => `${r}%` },
+    { title: t("捐贈金額"), dataIndex: "donation_amount", align: "center", render: (v) => (v != null ? `$${v}` : "-") },
     {
-      title: "詳情",
+      title: t("詳情"),
       align: "center",
       render: (_, record) => (
-        <Button type="link" onClick={() => showDetail(record)}>查看</Button>
+        <Button type="link" onClick={() => showDetail(record)}>{t("查看")}</Button>
       ),
     },
   ];
 
   const buyerColumns: ColumnsType<ProductForBuyer> = [
-    { title: "商品名稱", dataIndex: "product_name", align: "center" },
-    { title: "賣家暱稱", dataIndex: "seller_nickname", align: "center" },
-    { 
-      title: "賣家Email", 
-      dataIndex: "seller_name", 
+    { title: t("商品名稱"), dataIndex: "product_name", align: "center" },
+    { title: t("賣家暱稱"), dataIndex: "seller_nickname", align: "center" },
+    {
+      title: t("賣家Email"),
+      dataIndex: "seller_name",
       align: "center",
       render: (email) => (
         <span style={{ 
@@ -270,18 +272,18 @@ const UserProductsPage = () => {
       )
     },
     {
-      title: "購買時間",
+      title: t("購買時間"),
       dataIndex: "created_at",
       align: "center",
-      render: (t) => dayjs.utc(t).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm"),
+      render: (time) => dayjs.utc(time).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm"),
     },
-    { title: "價格", dataIndex: "price", render: (v) => `$${v}`, align: "center" },
-    { title: "留言數", dataIndex: "comment_count", align: "center" },
+    { title: t("價格"), dataIndex: "price", render: (v) => `$${v}`, align: "center" },
+    { title: t("留言數"), dataIndex: "comment_count", align: "center" },
     {
-      title: "詳情",
+      title: t("詳情"),
       align: "center",
       render: (_, record) => (
-        <Button type="link" onClick={() => showDetail(record)}>查看</Button>
+        <Button type="link" onClick={() => showDetail(record)}>{t("查看")}</Button>
       ),
     },
   ];
@@ -305,12 +307,12 @@ const UserProductsPage = () => {
 
   // 新增隨機副標題列表
   const subtitles = [
-    "讓每個商品都找到最適合的主人",
-    "用心經營，打造專屬的小商店",
-    "這裡記錄著你的買賣故事",
-    "管理商品，創造價值",
-    "每筆交易都是一段美好的緣份",
-    "用愛心串起買賣雙方的橋樑",
+    t("讓每個商品都找到最適合的主人"),
+    t("用心經營，打造專屬的小商店"),
+    t("這裡記錄著你的買賣故事"),
+    t("管理商品，創造價值"),
+    t("每筆交易都是一段美好的緣份"),
+    t("用愛心串起買賣雙方的橋樑"),
   ];
 
   // 隨機選擇副標題
@@ -494,7 +496,7 @@ const UserProductsPage = () => {
               textAlign: "center",
             }}
           >
-            我的商品管理
+            {t("我的商品管理")}
           </Title>
         </motion.div>
         <motion.div
@@ -542,7 +544,7 @@ const UserProductsPage = () => {
               whileTap={{ scale: 0.98 }}
             >
               <AppstoreFilled style={{ fontSize: 16 }} />
-              我上架的商品
+              {t("我上架的商品")}
             </motion.button>
             <motion.button
               className={`toggle-option ${selectedTab === "buyer" ? "active" : ""}`}
@@ -551,7 +553,7 @@ const UserProductsPage = () => {
               whileTap={{ scale: 0.98 }}
             >
               <ShoppingFilled style={{ fontSize: 16 }} />
-              我購買的商品
+              {t("我購買的商品")}
             </motion.button>
           </motion.div>
 
@@ -603,7 +605,7 @@ const UserProductsPage = () => {
                     borderRadius: "8px"
                   }}
                 >
-                  📊 下載成交明細
+                  {t("📊 下載成交明細")}
                 </Button>
               </motion.div>
 
@@ -621,7 +623,7 @@ const UserProductsPage = () => {
                     }}
                   >
                     <div style={{ fontSize: "18px", color: "#6c757d", marginBottom: "8px" }}>
-                      我的捐贈總額
+                      {t("我的捐贈總額")}
                     </div>
                     <div style={{ fontSize: "36px", fontWeight: 800, color: "#495057", letterSpacing: 0.5 }}>
                       ${totalDonation.toLocaleString()}
@@ -638,13 +640,13 @@ const UserProductsPage = () => {
                 <Col xs={24} sm={12} md={8}>
                   <Card style={{ textAlign: "center", borderRadius: 12, boxShadow: '0 6px 16px rgba(0,0,0,0.06)' }}>
                     <div style={{ fontSize: "14px", color: "#6c757d", marginBottom: "8px" }}>
-                      💰 現場成交收入
+                      {t("💰 現場成交收入")}
                     </div>
                     <div style={{ fontSize: "26px", fontWeight: 800, color: "#28a745", letterSpacing: 0.5 }}>
                       ${totalIncome.toLocaleString()}
                     </div>
                     <div style={{ fontSize: "12px", color: "#6c757d", marginTop: "4px" }}>
-                      系統代收金額
+                      {t("系統代收金額")}
                     </div>
                   </Card>
                 </Col>
@@ -652,13 +654,13 @@ const UserProductsPage = () => {
                 <Col xs={24} sm={12} md={8}>
                   <Card style={{ textAlign: "center", borderRadius: 12, boxShadow: '0 6px 16px rgba(0,0,0,0.06)' }}>
                     <div style={{ fontSize: "14px", color: "#6c757d", marginBottom: "8px" }}>
-                      📱 線上成交應繳款
+                      {t("📱 線上成交應繳款")}
                     </div>
                     <div style={{ fontSize: "26px", fontWeight: 800, color: "#dc3545", letterSpacing: 0.5 }}>
                       ${onlineDonationOwed.toLocaleString()}
                     </div>
                     <div style={{ fontSize: "12px", color: "#6c757d", marginTop: "4px" }}>
-                      需追繳捐贈款
+                      {t("需追繳捐贈款")}
                     </div>
                   </Card>
                 </Col>
@@ -666,7 +668,7 @@ const UserProductsPage = () => {
                 <Col xs={24} sm={12} md={8}>
                   <Card style={{ textAlign: "center", borderRadius: 12, boxShadow: '0 6px 16px rgba(0,0,0,0.06)' }}>
                     <div style={{ fontSize: "14px", color: "#6c757d", marginBottom: "8px" }}>
-                      {finalBalance >= 0 ? "🎉 ESG將給您" : "⚠️ ESG將向您追繳"}
+                      {finalBalance >= 0 ? t("🎉 ESG將給您") : t("⚠️ ESG將向您追繳")}
                     </div>
                     <div style={{ 
                       fontSize: "26px", 
@@ -677,7 +679,7 @@ const UserProductsPage = () => {
                       ${Math.abs(finalBalance).toLocaleString()}
                     </div>
                     <div style={{ fontSize: "12px", color: "#6c757d", marginTop: "4px" }}>
-                      最終結算金額
+                      {t("最終結算金額")}
                     </div>
                   </Card>
                 </Col>
@@ -713,15 +715,15 @@ const UserProductsPage = () => {
               <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
                 <Col span={24}>
                   <Card style={{ textAlign: "center", borderRadius: 12, boxShadow: '0 6px 16px rgba(0,0,0,0.06)' }}>
-                    <div style={{ fontSize: 14, color: "#6c757d", marginBottom: 8 }}>總花費</div>
+                    <div style={{ fontSize: 14, color: "#6c757d", marginBottom: 8 }}>{t("總花費")}</div>
                     <div style={{ fontSize: 32, fontWeight: 800, color: "#495057", letterSpacing: 0.5 }}>
                       ${totalSpent.toLocaleString()}
                     </div>
                     <div style={{ fontSize: 12, color: "#6c757d", marginTop: 6 }}>
-                      已購買 {purchasedProducts.length} 件
+                      {t("已購買 {{count}} 件", { count: purchasedProducts.length })}
                       {purchasedProducts.length > 0 && (
                         <>
-                          ，平均每件 $
+                          {t("，平均每件 $")}
                           {Math.round(totalSpent / purchasedProducts.length).toLocaleString()}
                         </>
                       )}
@@ -749,7 +751,7 @@ const UserProductsPage = () => {
               paddingRight: 32
             }}
           >
-            關閉
+            {t("關閉")}
           </Button>
         }
         width={1000}
@@ -770,7 +772,7 @@ const UserProductsPage = () => {
               marginBottom: 32,
               paddingBottom: 24
             }}>
-              <Title level={4} style={{ margin: 0 }}>商品詳情</Title>
+              <Title level={4} style={{ margin: 0 }}>{t("商品詳情")}</Title>
             </div>
 
             <Row gutter={[32, 32]}>
@@ -784,7 +786,7 @@ const UserProductsPage = () => {
                   {selectedProduct.image_url ? (
                     <img
                       src={selectedProduct.image_url}
-                      alt="商品圖片"
+                      alt={t("商品圖片")}
                       style={{ 
                         width: '100%',
                         height: '300px',
@@ -801,7 +803,7 @@ const UserProductsPage = () => {
                       justifyContent: 'center',
                       color: '#999'
                     }}>
-                      無商品圖片
+                      {t("無商品圖片")}
                     </div>
                   )}
                 </div>
@@ -835,7 +837,7 @@ const UserProductsPage = () => {
                       backgroundColor: '#f8f9fa',
                       borderRadius: 12
                     }}>
-                      <div style={{ color: '#666', marginBottom: 4 }}>商品狀況</div>
+                      <div style={{ color: '#666', marginBottom: 4 }}>{t("商品狀況")}</div>
                       <div style={{ fontSize: 16 }}>{renderCondition(selectedProduct.condition)}</div>
                     </div>
                   </Col>
@@ -845,7 +847,7 @@ const UserProductsPage = () => {
                       backgroundColor: '#f8f9fa',
                       borderRadius: 12
                     }}>
-                      <div style={{ color: '#666', marginBottom: 4 }}>商品狀態</div>
+                      <div style={{ color: '#666', marginBottom: 4 }}>{t("商品狀態")}</div>
                       <div>{renderProductStatus(selectedProduct.product_status)}</div>
                     </div>
                   </Col>
@@ -863,7 +865,7 @@ const UserProductsPage = () => {
                       <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
                         {selectedProduct.comment_count}
                       </div>
-                      <div style={{ color: '#666' }}>留言數</div>
+                      <div style={{ color: '#666' }}>{t("留言數")}</div>
                     </div>
                   </Col>
                   <Col span={8}>
@@ -876,7 +878,7 @@ const UserProductsPage = () => {
                       <div style={{ fontSize: 24, fontWeight: 'bold', color: '#f57c00' }}>
                         {selectedProduct.like_count}
                       </div>
-                      <div style={{ color: '#666' }}>按讚數</div>
+                      <div style={{ color: '#666' }}>{t("按讚數")}</div>
                     </div>
                   </Col>
                   <Col span={8}>
@@ -889,7 +891,7 @@ const UserProductsPage = () => {
                       <div style={{ fontSize: 24, fontWeight: 'bold', color: '#43a047' }}>
                         {dayjs.utc(selectedProduct.created_at).tz("Asia/Taipei").format("YYYY-MM-DD")}
                       </div>
-                      <div style={{ color: '#666' }}>上傳日期</div>
+                      <div style={{ color: '#666' }}>{t("上傳日期")}</div>
                     </div>
                   </Col>
                 </Row>
@@ -903,7 +905,7 @@ const UserProductsPage = () => {
                       fontWeight: 'bold',
                       color: '#333'
                     }}>
-                      交易資訊
+                      {t("交易資訊")}
                     </div>
                     <Row gutter={[16, 16]}>
                       <Col span={12}>
@@ -912,7 +914,7 @@ const UserProductsPage = () => {
                           backgroundColor: '#E8F5E9',
                           borderRadius: 12
                         }}>
-                          <div style={{ color: '#2E7D32' }}>收入</div>
+                          <div style={{ color: '#2E7D32' }}>{t("收入")}</div>
                           <div style={{ fontSize: 18, fontWeight: 'bold' }}>
                             ${(selectedProduct as Product).seller_income ?? '-'}
                           </div>
@@ -924,7 +926,7 @@ const UserProductsPage = () => {
                           backgroundColor: '#FFF3E0',
                           borderRadius: 12
                         }}>
-                          <div style={{ color: '#EF6C00' }}>捐贈金額</div>
+                          <div style={{ color: '#EF6C00' }}>{t("捐贈金額")}</div>
                           <div style={{ fontSize: 18, fontWeight: 'bold' }}>
                             ${(selectedProduct as Product).donation_amount ?? '-'}
                           </div>
@@ -940,11 +942,11 @@ const UserProductsPage = () => {
                           alignItems: 'center'
                         }}>
                           <div>
-                            <div style={{ color: '#666' }}>捐贈比例</div>
+                            <div style={{ color: '#666' }}>{t("捐贈比例")}</div>
                             <div style={{ fontSize: 16 }}>{(selectedProduct as Product).donation_ratio}%</div>
                           </div>
                           <div>
-                            <div style={{ color: '#666' }}>審核狀態</div>
+                            <div style={{ color: '#666' }}>{t("審核狀態")}</div>
                             <div>{renderStatus(selectedProduct as Product)}</div>
                           </div>
                         </div>
@@ -962,7 +964,7 @@ const UserProductsPage = () => {
                       color: '#333',
                       marginBottom: 12
                     }}>
-                      商品描述
+                      {t("商品描述")}
                     </div>
                     <div style={{ 
                       background: '#f8f9fa',

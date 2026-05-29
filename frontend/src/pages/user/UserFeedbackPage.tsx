@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Form, Input, Tag, Spin, Typography, Switch, Space, Tooltip, Empty, Select } from 'antd';
 import { MessageFilled, BulbOutlined, BgColorsOutlined, BugOutlined, SmileOutlined, QuestionCircleOutlined, CheckOutlined, CommentOutlined, ClockCircleOutlined, CheckCircleOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import axiosInstance from '../../utils/axiosInstance';
@@ -11,6 +12,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const UserFeedbackPage: React.FC = () => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [anonymous, setAnonymous] = useState(false);
@@ -24,15 +26,15 @@ const UserFeedbackPage: React.FC = () => {
   // 固定的隨機文案（只在組件初始化時設定一次）
   const [randomPhrase] = useState(() => {
     const phrases = [
-      "你的一句話，可能就是我們改變的起點。",
-      "願每段回饋，都成為我們一起寫的使用者之書。",
-      "謝謝你願意說，我們會好好聽。",
-      "平台是我們的共筆，你的建議就是一筆溫柔的墨水。",
-      "用回饋灌溉想像，讓這裡長出更多可能。",
-      "你不是使用者，你是一起讓這裡變更好的共創者。",
-      "偷偷說，我們其實超在乎你的想法。",
-      "哎呀～你終於來講真心話了對吧？",
-      "這裡沒有意見箱，只有我們豎起的耳朵🐰",
+      t("你的一句話，可能就是我們改變的起點。"),
+      t("願每段回饋，都成為我們一起寫的使用者之書。"),
+      t("謝謝你願意說，我們會好好聽。"),
+      t("平台是我們的共筆，你的建議就是一筆溫柔的墨水。"),
+      t("用回饋灌溉想像，讓這裡長出更多可能。"),
+      t("你不是使用者，你是一起讓這裡變更好的共創者。"),
+      t("偷偷說，我們其實超在乎你的想法。"),
+      t("哎呀～你終於來講真心話了對吧？"),
+      t("這裡沒有意見箱，只有我們豎起的耳朵🐰"),
     ];
     return phrases[Math.floor(Math.random() * phrases.length)];
   });
@@ -49,36 +51,36 @@ const UserFeedbackPage: React.FC = () => {
 
   // 回饋類型選項
   const feedbackTypes = [
-    { value: 'feature', label: '功能建議', color: '#1890ff', icon: BulbOutlined },
-    { value: 'style', label: '樣式建議', color: '#52c41a', icon: BgColorsOutlined },
-    { value: 'bug', label: '有BUG啦', color: '#faad14', icon: BugOutlined },
-    { value: 'experience', label: '使用心得', color: '#eb2f96', icon: SmileOutlined },
-    { value: 'other', label: '其他', color: '#8c8c8c', icon: QuestionCircleOutlined },
+    { value: 'feature', label: t('功能建議'), color: '#1890ff', icon: BulbOutlined },
+    { value: 'style', label: t('樣式建議'), color: '#52c41a', icon: BgColorsOutlined },
+    { value: 'bug', label: t('有BUG啦'), color: '#faad14', icon: BugOutlined },
+    { value: 'experience', label: t('使用心得'), color: '#eb2f96', icon: SmileOutlined },
+    { value: 'other', label: t('其他'), color: '#8c8c8c', icon: QuestionCircleOutlined },
   ];
 
   // 回饋類型映射（用於顯示從後端返回的類型）
   const feedbackTypeMap: Record<string, any> = {
-    'feature': { label: '功能建議', color: '#1890ff', icon: BulbOutlined },
-    'style': { label: '樣式建議', color: '#52c41a', icon: BgColorsOutlined },
-    'bug': { label: '有BUG啦', color: '#faad14', icon: BugOutlined },
-    'experience': { label: '使用心得', color: '#eb2f96', icon: SmileOutlined },
-    'other': { label: '其他', color: '#8c8c8c', icon: QuestionCircleOutlined },
-    '功能建議': { label: '功能建議', color: '#1890ff', icon: BulbOutlined },
-    '樣式建議': { label: '樣式建議', color: '#52c41a', icon: BgColorsOutlined },
-    '有BUG啦': { label: '有BUG啦', color: '#faad14', icon: BugOutlined },
-    '使用心得': { label: '使用心得', color: '#eb2f96', icon: SmileOutlined },
-    '其他': { label: '其他', color: '#8c8c8c', icon: QuestionCircleOutlined },
-    '系統測試': { label: '系統測試', color: '#722ed1', icon: BugOutlined }
+    'feature': { label: t('功能建議'), color: '#1890ff', icon: BulbOutlined },
+    'style': { label: t('樣式建議'), color: '#52c41a', icon: BgColorsOutlined },
+    'bug': { label: t('有BUG啦'), color: '#faad14', icon: BugOutlined },
+    'experience': { label: t('使用心得'), color: '#eb2f96', icon: SmileOutlined },
+    'other': { label: t('其他'), color: '#8c8c8c', icon: QuestionCircleOutlined },
+    '功能建議': { label: t('功能建議'), color: '#1890ff', icon: BulbOutlined },
+    '樣式建議': { label: t('樣式建議'), color: '#52c41a', icon: BgColorsOutlined },
+    '有BUG啦': { label: t('有BUG啦'), color: '#faad14', icon: BugOutlined },
+    '使用心得': { label: t('使用心得'), color: '#eb2f96', icon: SmileOutlined },
+    '其他': { label: t('其他'), color: '#8c8c8c', icon: QuestionCircleOutlined },
+    '系統測試': { label: t('系統測試'), color: '#722ed1', icon: BugOutlined }
   };
 
   // 根據回饋類型顯示不同的 placeholder
   const getPlaceholderByType = (type: string) => {
     const placeholders = {
-      'feature': '💡 有什麼功能是你希望我們加上的嗎？不管多天馬行空都可以說說看～',
-      'style': ' 哪些設計讓你有點小卡？像是顏色、排版、按鈕樣式，都歡迎建議！',
-      'bug': '🐛 發現怪怪的地方了嗎？請幫我們記錄一下發生在哪、你做了什麼、出了什麼錯～',
-      'experience': '😊 用起來感覺如何？也許是某次很暖的互動、或讓你會心一笑的小細節？',
-      'other': '💭 想聊聊別的嗎？關於網站、活動，甚至只是想講個笑話也行！'
+      'feature': t('💡 有什麼功能是你希望我們加上的嗎？不管多天馬行空都可以說說看～'),
+      'style': t(' 哪些設計讓你有點小卡？像是顏色、排版、按鈕樣式，都歡迎建議！'),
+      'bug': t('🐛 發現怪怪的地方了嗎？請幫我們記錄一下發生在哪、你做了什麼、出了什麼錯～'),
+      'experience': t('😊 用起來感覺如何？也許是某次很暖的互動、或讓你會心一笑的小細節？'),
+      'other': t('💭 想聊聊別的嗎？關於網站、活動，甚至只是想講個笑話也行！')
     };
     
     return placeholders[type as keyof typeof placeholders] || placeholders.other;
@@ -204,21 +206,21 @@ const UserFeedbackPage: React.FC = () => {
   const getSuccessMessage = () => {
     if (anonymous) {
       const messages = [
-        `感謝 ${selectedAnonymousName} 的寶貴回饋！您的神秘力量將讓平台變得更美好 ✨`,
-        `${selectedAnonymousName} 的意見已收到！您的匿名善行將造福更多人 🌟`,
-        `收到來自 ${selectedAnonymousName} 的珍貴建議！神秘英雄的聲音我們聽到了 🦸‍♀️`,
-        `${selectedAnonymousName} 出手相助！您的回饋將成為改進的動力 ⚡`,
-        `感謝 ${selectedAnonymousName} 的無私分享！匿名天使的關愛溫暖人心 💫`
+        t("感謝 {{name}} 的寶貴回饋！您的神秘力量將讓平台變得更美好 ✨", { name: selectedAnonymousName }),
+        t("{{name}} 的意見已收到！您的匿名善行將造福更多人 🌟", { name: selectedAnonymousName }),
+        t("收到來自 {{name}} 的珍貴建議！神秘英雄的聲音我們聽到了 🦸‍♀️", { name: selectedAnonymousName }),
+        t("{{name}} 出手相助！您的回饋將成為改進的動力 ⚡", { name: selectedAnonymousName }),
+        t("感謝 {{name}} 的無私分享！匿名天使的關愛溫暖人心 💫", { name: selectedAnonymousName })
       ];
       return messages[Math.floor(Math.random() * messages.length)];
     } else {
       const userName = userProfile?.email?.split('@')[0] || '您';
       const messages = [
-        `感謝 ${userName} 的回饋！我們會認真處理您的意見並儘快回覆 💙`,
-        `${userName}，您的建議已收到！我們將用心回應您的每個想法 🌈`,
-        `感謝 ${userName} 的寶貴意見！期待與您一起讓平台更棒 🚀`,
-        `${userName}，您的聲音很重要！我們會仔細研究並回覆您 📝`,
-        `收到 ${userName} 的回饋了！您的參與讓我們持續進步 🌸`
+        t("感謝 {{name}} 的回饋！我們會認真處理您的意見並儘快回覆 💙", { name: userName }),
+        t("{{name}}，您的建議已收到！我們將用心回應您的每個想法 🌈", { name: userName }),
+        t("感謝 {{name}} 的寶貴意見！期待與您一起讓平台更棒 🚀", { name: userName }),
+        t("{{name}}，您的聲音很重要！我們會仔細研究並回覆您 📝", { name: userName }),
+        t("收到 {{name}} 的回饋了！您的參與讓我們持續進步 🌸", { name: userName })
       ];
       return messages[Math.floor(Math.random() * messages.length)];
     }
@@ -255,7 +257,7 @@ const UserFeedbackPage: React.FC = () => {
       setUserFeedbacks(response.data.feedbacks || []);
     } catch (error) {
       console.error('獲取回饋記錄失敗:', error);
-      messageApi.error('無法載入回饋記錄');
+      messageApi.error(t('無法載入回饋記錄'));
     } finally {
       setFeedbacksLoading(false);
     }
@@ -294,11 +296,11 @@ const UserFeedbackPage: React.FC = () => {
         // 重新載入回饋記錄
         fetchUserFeedbacks();
       } else {
-        messageApi.warning('回饋提交成功，但儲存時發生問題，我們已記錄您的意見。');
+        messageApi.warning(t('回饋提交成功，但儲存時發生問題，我們已記錄您的意見。'));
       }
     } catch (error) {
       console.error('Submit feedback error:', error);
-      messageApi.error('提交失敗，請稍後再試。');
+      messageApi.error(t('提交失敗，請稍後再試。'));
     } finally {
       setLoading(false);
     }
@@ -354,7 +356,7 @@ const UserFeedbackPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            回饋信箱
+            {t("回饋信箱")}
           </Title>
         </motion.div>
         <motion.div
@@ -398,21 +400,21 @@ const UserFeedbackPage: React.FC = () => {
                   anonymous
                     ? (
                       <div>
-                        <div><strong>匿名提交</strong></div>
-                        <div>• 不顯示真實姓名</div>
-                        <div style={{ color: '#faad14' }}>• 無法收到開發者的回覆通知</div>
+                        <div><strong>{t("匿名提交")}</strong></div>
+                        <div>{t("• 不顯示真實姓名")}</div>
+                        <div style={{ color: '#faad14' }}>{t("• 無法收到開發者的回覆通知")}</div>
                         <div style={{ fontSize: '11px', marginTop: '4px', color: '#999' }}>
-                          建議使用實名模式以獲得個人化回覆
+                          {t("建議使用實名模式以獲得個人化回覆")}
                         </div>
                       </div>
                     )
                     : (
                       <div>
-                        <div><strong>實名提交</strong></div>
-                        <div>• 以真實姓名提交回饋</div>
-                        <div style={{ color: '#52c41a' }}>• 可以收到開發者的個人化回覆</div>
+                        <div><strong>{t("實名提交")}</strong></div>
+                        <div>{t("• 以真實姓名提交回饋")}</div>
+                        <div style={{ color: '#52c41a' }}>{t("• 可以收到開發者的個人化回覆")}</div>
                         <div style={{ fontSize: '11px', marginTop: '4px', color: '#999' }}>
-                          推薦使用，方便後續聯繫與回覆
+                          {t("推薦使用，方便後續聯繫與回覆")}
                         </div>
                       </div>
                     )
@@ -445,14 +447,14 @@ const UserFeedbackPage: React.FC = () => {
                       gap: '6px'
                     }}>
                       {anonymous ? '🙈 ' : '🙉 '}
-                      {anonymous ? '匿名模式' : '實名模式'}
+                      {anonymous ? t('匿名模式') : t('實名模式')}
                     </span>
                   </motion.div>
                   <Switch 
                     checked={anonymous} 
                     onChange={setAnonymous}
-                    checkedChildren="匿名"
-                    unCheckedChildren="實名"
+                    checkedChildren={t("匿名")}
+                    unCheckedChildren={t("實名")}
                     style={{
                       background: anonymous ? '#ffffff20' : '#00000020'
                     }}
@@ -468,7 +470,7 @@ const UserFeedbackPage: React.FC = () => {
                   color: '#000',
                   letterSpacing: '0.5px'
                 }}>
-                  姓名
+                  {t("姓名")}
                 </span>
               }
               name="name"
@@ -482,7 +484,7 @@ const UserFeedbackPage: React.FC = () => {
                   style={{ 
                     borderRadius: "8px",
                   }}
-                  placeholder="選擇您的神秘身份"
+                  placeholder={t("選擇您的神秘身份")}
                 >
                   {anonymousNames.map(name => (
                     <Option key={name} value={name}>
@@ -494,7 +496,7 @@ const UserFeedbackPage: React.FC = () => {
                 </Select>
               ) : (
                 <Input 
-                  placeholder={userProfile?.email?.split('@')[0] || "您的姓名"}
+                  placeholder={userProfile?.email?.split('@')[0] || t("您的姓名")}
                   value={userProfile?.email?.split('@')[0] || ""}
                   size="large"
                   style={{ 
@@ -529,7 +531,7 @@ const UserFeedbackPage: React.FC = () => {
                 }}
               >
                 <span>🎭</span>
-                <span>已選擇身份：{selectedAnonymousName}</span>
+                <span>{t("已選擇身份：")}{selectedAnonymousName}</span>
               </motion.div>
             </Form.Item>
 
@@ -541,11 +543,11 @@ const UserFeedbackPage: React.FC = () => {
                   color: '#000',
                   letterSpacing: '0.5px'
                 }}>
-                  回饋類型
+                  {t("回饋類型")}
                 </span>
               }
-              name="feedbackType" 
-              rules={[{ required: true, message: '請選擇回饋類型' }]}
+              name="feedbackType"
+              rules={[{ required: true, message: t('請選擇回饋類型') }]}
             >
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
                 {feedbackTypes.map(type => (
@@ -570,15 +572,15 @@ const UserFeedbackPage: React.FC = () => {
                   color: '#000',
                   letterSpacing: '0.5px'
                 }}>
-                  回饋內容
+                  {t("回饋內容")}
                 </span>
               }
-              name="feedback" 
-              rules={[{ required: true, message: '請輸入您的回饋內容' }]}
+              name="feedback"
+              rules={[{ required: true, message: t('請輸入您的回饋內容') }]}
             >
-              <TextArea 
-                rows={6} 
-                placeholder={selectedFeedbackType ? getPlaceholderByType(selectedFeedbackType) : "請先選擇回饋類型，我們會提供相應的建議範例 😊"}
+              <TextArea
+                rows={6}
+                placeholder={selectedFeedbackType ? getPlaceholderByType(selectedFeedbackType) : t("請先選擇回饋類型，我們會提供相應的建議範例 😊")}
                 style={{ borderRadius: "8px" }}
               />
             </Form.Item>
@@ -597,7 +599,7 @@ const UserFeedbackPage: React.FC = () => {
                   minWidth: "120px"
                 }}
               >
-                {loading ? '提交中...' : '提交回饋'}
+                {loading ? t('提交中...') : t('提交回饋')}
               </Button>
             </Form.Item>
           </Form>
@@ -615,9 +617,9 @@ const UserFeedbackPage: React.FC = () => {
           title={
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <FileTextOutlined style={{ fontSize: '18px', color: '#1890ff' }} />
-              <span style={{ fontSize: '18px', fontWeight: 'bold' }}>我的回饋記錄</span>
+              <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{t("我的回饋記錄")}</span>
               {userFeedbacks.length > 0 && (
-                <Tag color="blue">{userFeedbacks.length} 筆記錄</Tag>
+                <Tag color="blue">{t("{{count}} 筆記錄", { count: userFeedbacks.length })}</Tag>
               )}
             </div>
           }
@@ -629,11 +631,11 @@ const UserFeedbackPage: React.FC = () => {
           {feedbacksLoading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
               <Spin size="large" />
-              <div style={{ marginTop: '16px', color: '#666' }}>載入回饋記錄中...</div>
+              <div style={{ marginTop: '16px', color: '#666' }}>{t("載入回饋記錄中...")}</div>
             </div>
           ) : userFeedbacks.length === 0 ? (
-            <Empty 
-              description="尚無回饋記錄"
+            <Empty
+              description={t("尚無回饋記錄")}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               style={{ padding: '40px' }}
             />
@@ -702,7 +704,7 @@ const UserFeedbackPage: React.FC = () => {
                           {hasReply && (
                             <Tag color="success" style={{ margin: 0, borderRadius: '12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                               <CheckCircleOutlined style={{ fontSize: '10px' }} />
-                              已處理
+                              {t("已處理")}
                             </Tag>
                           )}
                         </div>
@@ -725,7 +727,7 @@ const UserFeedbackPage: React.FC = () => {
                           gap: '6px'
                         }}>
                           <CommentOutlined style={{ color: '#1890ff' }} />
-                          我的回饋
+                          {t("我的回饋")}
                         </div>
                         <div style={{
                           background: '#fff',
@@ -757,7 +759,7 @@ const UserFeedbackPage: React.FC = () => {
                             gap: '6px'
                           }}>
                             <CheckCircleOutlined style={{ color: '#52c41a' }} />
-                            開發團隊回覆
+                            {t("開發團隊回覆")}
                           </div>
                           <div style={{
                             background: '#fff',
@@ -784,7 +786,7 @@ const UserFeedbackPage: React.FC = () => {
                               borderRadius: '4px',
                               border: '1px solid #b7eb8f'
                             }}>
-                              官方回覆
+                              {t("官方回覆")}
                             </div>
                             <div style={{ paddingRight: '60px' }}>
                               {feedback.developer_reply}
@@ -803,7 +805,7 @@ const UserFeedbackPage: React.FC = () => {
                             gap: '6px'
                           }}>
                             <ClockCircleOutlined style={{ color: '#d46b08' }} />
-                            等待回覆
+                            {t("等待回覆")}
                           </div>
                           <div style={{
                             background: '#fff7e6',
@@ -820,7 +822,7 @@ const UserFeedbackPage: React.FC = () => {
                             gap: '8px'
                           }}>
                             <EditOutlined style={{ marginRight: '4px', color: '#d46b08' }} />
-                            開發團隊正在認真處理您的回饋，請耐心等候...
+                            {t("開發團隊正在認真處理您的回饋，請耐心等候...")}
                           </div>
                         </div>
                       )}

@@ -9,6 +9,7 @@ import {
 import { Layout, Menu, theme, Skeleton  } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { RootState } from "../store/store";
 import { useSelector } from 'react-redux';
 import useScroll from "../hooks/useScroll";
@@ -17,6 +18,7 @@ import ScrollToTopButton from "../components/ScrollToTopButton";
 const { Sider, Content } = Layout;
 
 const UserDashboardLayout: React.FC = () => {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const { isAtBottom, scrollToTop } = useScroll({
     container: containerRef,
@@ -72,19 +74,19 @@ const UserDashboardLayout: React.FC = () => {
       {
         key: "profile",
         icon: <UserOutlined />,
-        label: "我的資料設定",
+        label: t("我的資料設定"),
         path: "/user/profile",
       },
       {
         key: "products",
         icon: <AppstoreOutlined />,
-        label: "我的商品管理",
+        label: t("我的商品管理"),
         path: "/user/products",
       },
       {
         key: "cart",
         icon: <HeartFilled />,
-        label: "我的收藏",
+        label: t("我的收藏"),
         path: "/user/cart",
       },
     ];
@@ -104,7 +106,7 @@ const UserDashboardLayout: React.FC = () => {
         baseItems.push({
           key: "online-deals",
           icon: <CloudFilled />,
-          label: "線上交易",
+          label: t("線上交易"),
           path: "/user/online-deals",
         });
       }
@@ -113,7 +115,7 @@ const UserDashboardLayout: React.FC = () => {
     baseItems.push({
       key: "feedback",
       icon: <MessageFilled />,
-      label: "回饋信箱",
+      label: t("回饋信箱"),
       path: "/user/feedback",
     });
 

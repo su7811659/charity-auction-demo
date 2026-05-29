@@ -5,6 +5,7 @@ import ReactionList from "./ReactionList";
 import ReactionPopup from "./ReactionPopup";
 import { getCommentReactions, createCommentReaction, deleteCommentReaction } from "../services/reactionService";
 import { getCurrentUserEmail } from "../utils/authUtils";
+import { useTranslation } from "react-i18next";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -18,6 +19,7 @@ interface CommentListProps {
 }
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => {
+  const { t } = useTranslation();
   const [commentReactions, setCommentReactions] = useState<{ [key: number]: CommentReaction[] }>({});
   const [userReactions, setUserReactions] = useState<{ [key: number]: string[] }>({});
   const [reactionCounts, setReactionCounts] = useState<{ [key: number]: ReactionCount[] }>({});
@@ -341,7 +343,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
       background: "#f9f9f9",
       borderRadius: "8px"
     }}>
-      目前沒有留言，來當第一個留言的人吧！ 💬
+      {t("目前沒有留言，來當第一個留言的人吧！ 💬")}
     </div>
   );
 

@@ -4,22 +4,24 @@ import { getLikedProducts, unlikeProduct } from "../../services/productService";
 import { Product } from "../../types/productResponse";
 import ProductCard from "../../components/ProductCard";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { HeartFilled } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
 
 const UserCartPage: React.FC = () => {
+  const { t } = useTranslation();
   const [likedProducts, setLikedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // 隨機文案列表
   const phrases = [
-    "那些一眼心動的，是你不肯放手的溫柔。",
-    "收藏，不只是商品，更是一段曾經心動的故事。",
-    "每一件喜歡的物品，都悄悄記下了你的偏愛。",
-    "時間偷不走的，是你曾經為之一亮的眼神。",
-    "願你珍藏的不只是物品，還有那一瞬的悸動。",
-    "我們用一點點喜歡，偷偷標記生活中閃亮的角落。",
+    t("那些一眼心動的，是你不肯放手的溫柔。"),
+    t("收藏，不只是商品，更是一段曾經心動的故事。"),
+    t("每一件喜歡的物品，都悄悄記下了你的偏愛。"),
+    t("時間偷不走的，是你曾經為之一亮的眼神。"),
+    t("願你珍藏的不只是物品，還有那一瞬的悸動。"),
+    t("我們用一點點喜歡，偷偷標記生活中閃亮的角落。"),
   ];
 
   // 隨機選擇文案
@@ -91,7 +93,7 @@ const UserCartPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            我的收藏
+            {t("我的收藏")}
           </Title>
         </motion.div>
         <motion.div
@@ -127,9 +129,9 @@ const UserCartPage: React.FC = () => {
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={
               <span style={{ color: "#666", fontSize: "16px" }}>
-                你還沒有收藏任何商品
+                {t("你還沒有收藏任何商品")}
                 <br />
-                不妨到商品頁面多多探索唷 ✨
+                {t("不妨到商品頁面多多探索唷 ✨")}
               </span>
             }
           />
@@ -138,7 +140,7 @@ const UserCartPage: React.FC = () => {
             style={{ marginTop: "24px" }}
             onClick={() => (window.location.href = "/products")}
           >
-            去探索商品
+            {t("去探索商品")}
           </Button>
         </motion.div>
       ) : (

@@ -13,10 +13,12 @@ import {
 } from "@ant-design/icons";
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import useScroll from "../hooks/useScroll";
+import { useTranslation } from "react-i18next";
 
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout: React.FC = () => {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,22 +51,22 @@ const AdminLayout: React.FC = () => {
               {
                 key: "/admin/pending",
                 icon: <ClockCircleOutlined />,
-                label: <Link to="/admin/pending">商品審核</Link>,
+                label: <Link to="/admin/pending">{t("商品審核")}</Link>,
               },
               {
                 key: "/admin/products",
                 icon: <ShoppingCartOutlined />,
-                label: <Link to="/admin/products">商品管理</Link>,
+                label: <Link to="/admin/products">{t("商品管理")}</Link>,
               },
               {
                 key: "/admin/donations",
                 icon: <HeartOutlined />,
-                label: <Link to="/admin/donations">個人捐贈管理</Link>,
+                label: <Link to="/admin/donations">{t("個人捐贈管理")}</Link>,
               },
               {
                 key: "/admin/system-config",
                 icon: <SettingOutlined />,
-                label: <Link to="/admin/system-config">系統配置</Link>,
+                label: <Link to="/admin/system-config">{t("系統配置")}</Link>,
               },
             ]}
           />
@@ -77,15 +79,15 @@ const AdminLayout: React.FC = () => {
                 {
                   key: "/",
                   icon: <HomeOutlined />,
-                  label: <Link to="/">回使用者首頁</Link>,
+                  label: <Link to="/">{t("回使用者首頁")}</Link>,
                 },
                 {
                   key: "logout",
                   icon: <LogoutOutlined />,
-                  label: "登出",
+                  label: t("登出"),
                   onClick: () => {
                     localStorage.removeItem("adminToken");
-                    message.success("已登出");
+                    message.success(t("已登出"));
                     navigate("/login");
                   },
                 },

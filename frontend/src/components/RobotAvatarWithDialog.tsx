@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Image, Popover } from "antd";
 import ReactMarkdown from 'react-markdown';
 import { typewriter } from "../utils/typewriter";
@@ -98,6 +99,7 @@ const RobotAvatarWithDialog: React.FC<RobotAvatarWithDialogProps> = ({
   popoverZIndex = 9,
   skipTalkAnimation = false,
 }) => {
+  const { t } = useTranslation();
   const [internalImage, setInternalImage] = useState(idleImage);
   const image = imageOverride ?? internalImage;
   const setImage = setImageOverride ?? setInternalImage;
@@ -311,7 +313,7 @@ const RobotAvatarWithDialog: React.FC<RobotAvatarWithDialogProps> = ({
                 lineHeight: 1.4,
                 backdropFilter: 'blur(4px)'
               }}
-            >閉嘴</button>
+            >{t("閉嘴")}</button>
           )}
           <div ref={(el) => { bubbleElRef.current = el; }} style={{
             maxHeight: bubbleMaxHeight,

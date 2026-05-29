@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { Input, Spin, Empty, message } from "antd";
+import { useTranslation } from "react-i18next";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchProducts } from "../store/productSlice";
 import { Product } from "../types/productResponse";
 import SellerProductTable from "../components/SellerProductTable";
+import i18n from "../i18n";
 import * as XLSX from "xlsx";
 
 // 匯出 CSV 工具
@@ -26,8 +28,8 @@ const exportToXlsx = (products: Product[]) => {
       賣家收益: Math.round(revenue),
       須追繳金額: Math.round(needToCollect),
       買家名稱: p.buyer_name,
-      賣家名稱: p.seller_name || "未知",
-      線上交易: p.is_online_deal ? "是" : "否",
+      賣家名稱: p.seller_name || i18n.t("未知"),
+      線上交易: p.is_online_deal ? i18n.t("是") : i18n.t("否"),
     };
   });
 
@@ -62,7 +64,7 @@ const exportToXlsx = (products: Product[]) => {
       totalOnlineDealSales += p.price;
     }
 
-    const seller = p.seller_name || "未知";
+    const seller = p.seller_name || i18n.t("未知");
     if (!sellerMap.has(seller)) {
       sellerMap.set(seller, { 
         count: 0, 
@@ -123,14 +125,15 @@ const exportToXlsx = (products: Product[]) => {
   wsSeller["!cols"] = Array(10).fill({ wch: 16 }); // 賣家彙總增加兩欄（最終計算結果、是否簽收）
   wsOverall["!cols"] = Array(7).fill({ wch: 18 });
 
-  XLSX.utils.book_append_sheet(wb, wsProduct, "商品明細");
-  XLSX.utils.book_append_sheet(wb, wsSeller, "賣家彙總");
-  XLSX.utils.book_append_sheet(wb, wsOverall, "整體統計");
+  XLSX.utils.book_append_sheet(wb, wsProduct, i18n.t("商品明細"));
+  XLSX.utils.book_append_sheet(wb, wsSeller, i18n.t("賣家彙總"));
+  XLSX.utils.book_append_sheet(wb, wsOverall, i18n.t("整體統計"));
 
-  XLSX.writeFile(wb, "商品報表.xlsx");
+  XLSX.writeFile(wb, i18n.t("商品報表.xlsx"));
 };
 
 const SellerProductList = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
 
@@ -146,7 +149,7 @@ const SellerProductList = () => {
   const handleSearch = () => {
     const trimmed = searchInput.trim();
     if (!trimmed) {
-      message.warning("請輸入賣家email或 :all 查看全部");
+      message.warning(t("請輸入賣家email或 :all 查看全部"));
       return;
     }
     if (trimmed === ":all") {
@@ -184,12 +187,12 @@ const SellerProductList = () => {
 
   return (
     <div>
-      <h2 style={{ textAlign: "center" }}>查詢賣家商品</h2>
+      <h2 style={{ textAlign: "center" }}>{t("查詢賣家商品")}</h2>
 
       <div style={{ textAlign: "center", marginBottom: 16 }}>
         <Input.Search
-          placeholder="輸入賣家email（輸入 :all 可列出全部）"
-          enterButton="查詢"
+          placeholder={t("輸入賣家email（輸入 :all 可列出全部）")}
+          enterButton={t("查詢")}
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onSearch={handleSearch}
@@ -198,28 +201,28 @@ const SellerProductList = () => {
       </div>
 
       <div style={{ fontSize: 13, color: "#888", marginBottom: 12, textAlign: "center" }}>
-        🔎 當前條件：{sellerName ? `搜尋賣家「${sellerName}」` : "顯示所有商品"}
+        🔎 {t("當前條件：")}{sellerName ? `${t("搜尋賣家")}「${sellerName}」` : t("顯示所有商品")}
       </div>
 
       {apiStatus && (
         <div style={{ marginBottom: 12, fontSize: 12, color: "#888", textAlign: "center" }}>
-          API 狀態：{apiStatus.status} {apiStatus.error && `(錯誤: ${apiStatus.error})`}
+          {t("API 狀態：")}{apiStatus.status} {apiStatus.error && `(${t("錯誤")}: ${apiStatus.error})`}
         </div>
       )}
 
       {loading ? (
-        <Spin tip="載入中..." />
+        <Spin tip={t("載入中...")} />
       ) : filteredList.length === 0 ? (
-        <Empty description="找不到商品" />
+        <Empty description={t("找不到商品")} />
       ) : (
         <>
           <div style={{ textAlign: "center", fontSize: 16, lineHeight: 2.0, marginBottom: 8 }}>
-            <strong>目前顯示 {filteredList.length} 筆商品 (線上交易: {onlineDealCount} 筆)</strong>
+            <strong>{t("目前顯示")} {filteredList.length} {t("筆商品 (線上交易:")} {onlineDealCount} {t("筆)")}</strong>
             <div style={{ marginBottom: 12, fontSize: 16, lineHeight: 2.0 }}>
-              💵 <b>總販售額：</b>${totalSales.toFixed(0)}&emsp;
-              🎁 <b>捐贈總額：</b>${totalDonation.toFixed(0)}&emsp;
-              💰 <b>賣家收益：</b>${totalRevenue.toFixed(0)}&emsp;
-              ⚠️ <b>須追繳：</b>${totalNeedToCollect.toFixed(0)}&emsp;
+              💵 <b>{t("總販售額：")}</b>${totalSales.toFixed(0)}&emsp;
+              🎁 <b>{t("捐贈總額：")}</b>${totalDonation.toFixed(0)}&emsp;
+              💰 <b>{t("賣家收益：")}</b>${totalRevenue.toFixed(0)}&emsp;
+              ⚠️ <b>{t("須追繳：")}</b>${totalNeedToCollect.toFixed(0)}&emsp;
               <button
                 onClick={() => exportToXlsx(filteredList)}
                 style={{
@@ -233,7 +236,7 @@ const SellerProductList = () => {
                   borderRadius: 4,
                 }}
               >
-                ⬇ 匯出財務報表
+                ⬇ {t("匯出財務報表")}
               </button>
             </div>
           </div>

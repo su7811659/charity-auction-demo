@@ -30,6 +30,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 import EasterEggGame from "../../components/EasterEggGame";
 import icHeartFace from "../../assets/img/ic_heart_face.svg";
 
@@ -202,8 +204,8 @@ const getSortOrderColors = (sortOrder: string | number | null | undefined) => {
 const achievementDefinitions = [
   {
     id: 'first_upload',
-    name: '等等！我還沒上傳啊',
-    description: '完成 1 次的商品上傳',
+    name: i18n.t('等等！我還沒上傳啊'),
+    description: i18n.t('完成 1 次的商品上傳'),
     icon: achive01,
     shadowIcon: achive01Shadow,
     defaultTarget: 1
@@ -211,79 +213,79 @@ const achievementDefinitions = [
   {
     id: 'first_purchase_request',
     name: 'Shut Up And Take My Money',
-    description: '送出一次商品購買請求',
+    description: i18n.t('送出一次商品購買請求'),
     icon: achive02,
     shadowIcon: achive02Shadow,
     defaultTarget: 1
   },
   {
     id: 'profile_change',
-    name: '換臉一新',
-    description: '成功更換過一次大頭貼',
+    name: i18n.t('換臉一新'),
+    description: i18n.t('成功更換過一次大頭貼'),
     icon: achive03,
     shadowIcon: achive03Shadow,
     defaultTarget: 1
   },
   {
     id: 'first_purchase',
-    name: 'BuyGood便當',
-    description: '成功購買一件商品',
+    name: i18n.t('BuyGood便當'),
+    description: i18n.t('成功購買一件商品'),
     icon: achive04,
     shadowIcon: achive04Shadow,
     defaultTarget: 1
   },
   {
     id: 'good_karma',
-    name: '我積善意',
-    description: '上傳 3 件捐贈比例達 60% 商品 或 購買 1 樣有善意循環光球的商品',
+    name: i18n.t('我積善意'),
+    description: i18n.t('上傳 3 件捐贈比例達 60% 商品 或 購買 1 樣有善意循環光球的商品'),
     icon: achive05,
     shadowIcon: achive05Shadow,
     defaultTarget: 1
   },
   {
     id: 'five_comments',
-    name: '五則天',
-    description: '個人留言數達 5 則',
+    name: i18n.t('五則天'),
+    description: i18n.t('個人留言數達 5 則'),
     icon: achive06,
     shadowIcon: achive06Shadow,
     defaultTarget: 5
   },
   {
     id: 'seller_master',
-    name: '賣客阿Sir',
-    description: '成功售出你持有的 3 樣商品',
+    name: i18n.t('賣客阿Sir'),
+    description: i18n.t('成功售出你持有的 3 樣商品'),
     icon: achive07,
     shadowIcon: achive07Shadow,
     defaultTarget: 3
   },
   {
     id: 'five_likes',
-    name: '五藏廟',
-    description: '收藏商品達 5 項',
+    name: i18n.t('五藏廟'),
+    description: i18n.t('收藏商品達 5 項'),
     icon: achive08,
     shadowIcon: achive08Shadow,
     defaultTarget: 5
   },
   {
     id: 'feedback_master',
-    name: '饋咖',
-    description: '到回饋信箱進行 2 次實名回饋',
+    name: i18n.t('饋咖'),
+    description: i18n.t('到回饋信箱進行 2 次實名回饋'),
     icon: achive09,
     shadowIcon: achive09Shadow,
     defaultTarget: 2
   },
   {
     id: 'ai_annoying',
-    name: 'AI小助理的煩人精',
-    description: '40？',
+    name: i18n.t('AI小助理的煩人精'),
+    description: i18n.t('40？'),
     icon: achive10,
     shadowIcon: achive10Shadow,
     defaultTarget: 40
   },
   {
     id: 'platinum_trophy',
-    name: 'BidForGood公益市集白金獎盃',
-    description: '全成就達成',
+    name: i18n.t('BidForGood公益市集白金獎盃'),
+    description: i18n.t('全成就達成'),
     icon: achive11,
     shadowIcon: achive11Shadow,
     defaultTarget: 10
@@ -292,17 +294,17 @@ const achievementDefinitions = [
 
 // 成就祝賀詞映射
 const achievementCongratulations: { [key: string]: string } = {
-  'first_upload': '上傳第一件商品！你這操作比達叔上車還快，連星爺都來不及吐槽你！',
-  'first_purchase_request': '第一次送出購買請求！這聲『Shut Up And Take My Money!』喊得比夜市殺價大媽還有誠意！',
-  'profile_change': '哎呀～你的臉已經更新完畢！果X爺爺和X油妹妹親手幫你換的，換完直接讓你再度有力量拯救世界！',
-  'first_purchase': '你買到的商品都比我吃到的便當還多！看來你的購物魂早就超越了我的飯量～',
-  'good_karma': '：「啊啊啊啊啊～我、我真的沒有想上傳那麼多啊！只是手滑了三次啦！！不過這樣應該能得到禰X子的讚賞吧？！我超怕的，可是我還是做到了～！！！」',
-  'five_comments': '：「吾乃五則天也！汝在留言區已留五則文，氣度堪比朕臨朝批奏，字字皆是聖旨，眾人不得不服！」',
-  'seller_master': '：「You have sold three items. Just like I once said—『I shall return.』而你，也證明了：買家會再回來！Soldier，幹得好！」',
-  'five_likes': '廟公：「哎呦～有緣人啊，你已收藏五件寶物啦！這裡就是你的五藏廟，寶貝都放得妥妥的，神明都要幫你看顧著呢～保庇保庇！」',
-  'feedback_master': '兩次回饋達成！謝謝你用真心回饋，把這份溫暖傳回給市集，我們都感受到了。',
-  'ai_annoying': '你居然戳了小助理 40 次！他都快 PTSD了，結果還是忍不住誇你一句：『你真是全台最溫柔的煩人精』！',
-  'platinum_trophy': '「全成就解鎖！你已經完整體驗了這個市集的一切。謝謝你參加本次 BidForGood 公益市集活動，你的每一步都讓善意放大並讓這個活動更有意義。=)」'
+  'first_upload': i18n.t('上傳第一件商品！你這操作比達叔上車還快，連星爺都來不及吐槽你！'),
+  'first_purchase_request': i18n.t('第一次送出購買請求！這聲『Shut Up And Take My Money!』喊得比夜市殺價大媽還有誠意！'),
+  'profile_change': i18n.t('哎呀～你的臉已經更新完畢！果X爺爺和X油妹妹親手幫你換的，換完直接讓你再度有力量拯救世界！'),
+  'first_purchase': i18n.t('你買到的商品都比我吃到的便當還多！看來你的購物魂早就超越了我的飯量～'),
+  'good_karma': i18n.t('：「啊啊啊啊啊～我、我真的沒有想上傳那麼多啊！只是手滑了三次啦！！不過這樣應該能得到禰X子的讚賞吧？！我超怕的，可是我還是做到了～！！！」'),
+  'five_comments': i18n.t('：「吾乃五則天也！汝在留言區已留五則文，氣度堪比朕臨朝批奏，字字皆是聖旨，眾人不得不服！」'),
+  'seller_master': i18n.t('：「You have sold three items. Just like I once said—『I shall return.』而你，也證明了：買家會再回來！Soldier，幹得好！」'),
+  'five_likes': i18n.t('廟公：「哎呦～有緣人啊，你已收藏五件寶物啦！這裡就是你的五藏廟，寶貝都放得妥妥的，神明都要幫你看顧著呢～保庇保庇！」'),
+  'feedback_master': i18n.t('兩次回饋達成！謝謝你用真心回饋，把這份溫暖傳回給市集，我們都感受到了。'),
+  'ai_annoying': i18n.t('你居然戳了小助理 40 次！他都快 PTSD了，結果還是忍不住誇你一句：『你真是全台最溫柔的煩人精』！'),
+  'platinum_trophy': i18n.t('「全成就解鎖！你已經完整體驗了這個市集的一切。謝謝你參加本次 BidForGood 公益市集活動，你的每一步都讓善意放大並讓這個活動更有意義。=)」')
 };
 
 // 成就背景色彩映射
@@ -365,13 +367,13 @@ const achievementColors: { [key: string]: { primary: string; secondary: string; 
 };
 
 const mmStyleOptions = [
-  { label: "海水藍", value: 0 },
-  { label: "天空藍", value: 1 },
-  { label: "青草綠", value: 2 },
-  { label: "活力黃", value: 3 },
-  { label: "熱情紅", value: 4 },
-  { label: "皇家紫", value: 5 },
-  { label: "典雅黑", value: 6 },
+  { label: i18n.t("海水藍"), value: 0 },
+  { label: i18n.t("天空藍"), value: 1 },
+  { label: i18n.t("青草綠"), value: 2 },
+  { label: i18n.t("活力黃"), value: 3 },
+  { label: i18n.t("熱情紅"), value: 4 },
+  { label: i18n.t("皇家紫"), value: 5 },
+  { label: i18n.t("典雅黑"), value: 6 },
 ];
 
 // 我們不需要額外的主題配置，直接使用 mmStyleOptions
@@ -384,6 +386,7 @@ const ThemeRadio = ({ option, checked, onClick, isOriginal }: {
   onClick: () => void,
   isOriginal?: boolean
 }) => {
+  const { t } = useTranslation();
   // 計算更深的顏色
   const getDarkerColor = (color: string) => {
     // 如果是 hex 顏色，轉換為更深的版本
@@ -486,7 +489,7 @@ const ThemeRadio = ({ option, checked, onClick, isOriginal }: {
           whiteSpace: 'nowrap'
         }}
       >
-        原始
+        {t("原始")}
       </motion.div>
     )}
     
@@ -519,6 +522,7 @@ const ThemeRadio = ({ option, checked, onClick, isOriginal }: {
 
 // 善意循環成就的特殊進度顯示組件
 const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achievement }) => {
+  const { t } = useTranslation();
   const [goodKarmaDetails, setGoodKarmaDetails] = useState<{
     sellerCount: number;
     buyerCount: number;
@@ -580,7 +584,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
     return (
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <Spin size="small" />
-        <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>載入進度詳情...</div>
+        <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>{t("載入進度詳情...")}</div>
       </div>
     );
   }
@@ -588,7 +592,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
   if (!goodKarmaDetails) {
     return (
       <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-        無法載入詳細進度
+        {t("無法載入詳細進度")}
       </div>
     );
   }
@@ -607,7 +611,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
         textAlign: 'center',
         color: '#666'
       }}>
-        達成以下任一條件即可解鎖成就
+        {t("達成以下任一條件即可解鎖成就")}
       </div>
 
       {/* 條件1: 作為賣家 */}
@@ -627,7 +631,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
           fontWeight: '500'
         }}>
           <span style={{ color: sellerCompleted ? '#52c41a' : '#666' }}>
-            🛒 作為賣家：上傳捐贈比例≥60%的商品
+            {t("🛒 作為賣家：上傳捐贈比例≥60%的商品")}
           </span>
           <span style={{ color: sellerCompleted ? '#52c41a' : '#1890ff' }}>
             {Math.min(sellerCount, sellerTarget)} / {sellerTarget}
@@ -649,7 +653,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
             color: '#52c41a',
             textAlign: 'center'
           }}>
-            ✓ 條件達成！
+            {t("✓ 條件達成！")}
           </div>
         )}
       </div>
@@ -671,7 +675,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
           fontWeight: '500'
         }}>
           <span style={{ color: buyerCompleted ? '#52c41a' : '#666' }}>
-            💝 作為買家：購買捐贈比例≥60%的商品
+            {t("💝 作為買家：購買捐贈比例≥60%的商品")}
           </span>
           <span style={{ color: buyerCompleted ? '#52c41a' : '#1890ff' }}>
             {Math.min(buyerCount, buyerTarget)} / {buyerTarget}
@@ -693,7 +697,7 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
             color: '#52c41a',
             textAlign: 'center'
           }}>
-            ✓ 條件達成！
+            {t("✓ 條件達成！")}
           </div>
         )}
       </div>
@@ -705,13 +709,14 @@ const GoodKarmaProgressDisplay: React.FC<{ achievement: Achievement }> = ({ achi
         color: '#666',
         fontStyle: 'italic'
       }}>
-        {achievementUnlocked ? '🎉 成就已解鎖！' : '繼續努力，即將解鎖！'}
+        {achievementUnlocked ? t('🎉 成就已解鎖！') : t('繼續努力，即將解鎖！')}
       </div>
     </div>
   );
 };
 
 const UserProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const profile = useSelector((state: RootState) => state.user.profile);
   const [messageApi, contextHolder] = message.useMessage();
@@ -763,18 +768,18 @@ const UserProfilePage: React.FC = () => {
   // 固定的隨機副標題（只在組件初始化時設定一次）
   const [randomSubtitle] = useState(() => {
     const subtitles = [
-      "編輯個人資料，享受更順暢的使用體驗。",
-      "更新你的資訊，讓我們更懂你。",
-      "完善設定，讓平台更貼近你的需求。",
-      "個人化選項，打造舒適的使用環境。",
-      "這是屬於你的編碼，獨一無二的存在證明。",
-      "別小看這頁，它封印著你的真名與命運。",
-      "設定完成的那刻，你將覺醒真正的力量。",
-      "在這裡，傳說中的主角誕生了。",
-      "每一筆設定，都是你風格的延伸。",
-      "讓資料不只是資料，而是故事的一部分。",
-      "慢慢填寫，為自己留下一點軌跡。",
-      "從這裡開始，打造一個只屬於你的角落。",
+      t("編輯個人資料，享受更順暢的使用體驗。"),
+      t("更新你的資訊，讓我們更懂你。"),
+      t("完善設定，讓平台更貼近你的需求。"),
+      t("個人化選項，打造舒適的使用環境。"),
+      t("這是屬於你的編碼，獨一無二的存在證明。"),
+      t("別小看這頁，它封印著你的真名與命運。"),
+      t("設定完成的那刻，你將覺醒真正的力量。"),
+      t("在這裡，傳說中的主角誕生了。"),
+      t("每一筆設定，都是你風格的延伸。"),
+      t("讓資料不只是資料，而是故事的一部分。"),
+      t("慢慢填寫，為自己留下一點軌跡。"),
+      t("從這裡開始，打造一個只屬於你的角落。"),
     ];
     return subtitles[Math.floor(Math.random() * subtitles.length)];
   });
@@ -915,7 +920,7 @@ const UserProfilePage: React.FC = () => {
         ]);
         
       } catch (error) {
-        messageApi.error("載入個人資料失敗");
+        messageApi.error(t("載入個人資料失敗"));
         setLoading(false);
       }
     };
@@ -1012,7 +1017,7 @@ const UserProfilePage: React.FC = () => {
               
               img.onerror = () => {
                 console.error('預覽圖片載入失敗');
-                messageApi.error('圖片處理失敗，請重試');
+                messageApi.error(t('圖片處理失敗，請重試'));
                 setAvatarUploading(false);
               };
               
@@ -1057,7 +1062,7 @@ const UserProfilePage: React.FC = () => {
       });
 
       dispatch(updateUserProfile(updated));
-      messageApi.success("資料更新成功");
+      messageApi.success(t("資料更新成功"));
 
       // 如果頭像有變更，強制檢查 profile_change 成就
       if (hasAvatarChanged) {
@@ -1094,7 +1099,7 @@ const UserProfilePage: React.FC = () => {
       setLocalAvatarFile(null);
       setLocalAvatarUrl(undefined);
     } catch {
-      messageApi.error("更新失敗");
+      messageApi.error(t("更新失敗"));
     } finally {
       setUploading(false);
     }
@@ -1182,7 +1187,7 @@ const UserProfilePage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            我的資料設定
+            {t("我的資料設定")}
           </Title>
         </motion.div>
         <motion.div
@@ -1245,7 +1250,7 @@ const UserProfilePage: React.FC = () => {
               style={{ marginBottom: '32px' }}
             >
               <Title level={4} style={{ marginBottom: '16px' }}>
-                大頭貼設定
+                {t("大頭貼設定")}
               </Title>
             
             <Space direction="vertical" size="middle" style={{ width: '100%' }}>
@@ -1300,14 +1305,14 @@ const UserProfilePage: React.FC = () => {
                         const isValidType = isJpeg || isPng;
                         
                         if (!isValidType) {
-                          messageApi.error('只能上傳 JPG/PNG 格式的圖片！');
+                          messageApi.error(t('只能上傳 JPG/PNG 格式的圖片！'));
                           console.error('不支援的檔案類型:', file.type, '檔案名:', file.name);
                           return false;
                         }
                         
                         const isLt4M = file.size / 1024 / 1024 < 4;
                         if (!isLt4M) {
-                          messageApi.error('圖片大小必須小於 4MB！');
+                          messageApi.error(t('圖片大小必須小於 4MB！'));
                           return false;
                         }
                         
@@ -1367,7 +1372,7 @@ const UserProfilePage: React.FC = () => {
                             }
                           }}
                         >
-                          <span>{uploadButtonLoading ? '處理中...' : '選擇圖片'}</span>
+                          <span>{uploadButtonLoading ? t('處理中...') : t('選擇圖片')}</span>
                         </Button>
                       </motion.div>
                     </Upload>
@@ -1413,7 +1418,7 @@ const UserProfilePage: React.FC = () => {
                           }
                         }}
                       >
-                        移除頭像
+                        {t("移除頭像")}
                       </Button>
                     </motion.div>
                     
@@ -1484,7 +1489,7 @@ const UserProfilePage: React.FC = () => {
                             }
                           }}
                         >
-                          取消變更
+                          {t("取消變更")}
                         </Button>
                       </motion.div>
                     </motion.div>
@@ -1507,7 +1512,7 @@ const UserProfilePage: React.FC = () => {
             style={{ marginBottom: '32px' }}
           >
             <Title level={4} style={{ marginBottom: '16px' }}>
-              Not MM 留言板主題
+              {t("Not MM 留言板主題")}
             </Title>
             
             <div style={{ 
@@ -1564,7 +1569,7 @@ const UserProfilePage: React.FC = () => {
           >
             <Typography.Title level={4} style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
               <SettingOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-              商品搜尋偏好設定
+              {t("商品搜尋偏好設定")}
             </Typography.Title>
             
             <Row gutter={[24, 24]}>
@@ -1590,7 +1595,7 @@ const UserProfilePage: React.FC = () => {
                 >
                   <div style={{ fontSize: 14, marginBottom: 12, display: 'flex', alignItems: 'center' }}>
                     <ShoppingCartOutlined style={{ marginRight: 8 }} />
-                    預設商品狀態篩選
+                    {t("預設商品狀態篩選")}
                   </div>
                   <Select
                     style={{ 
@@ -1600,7 +1605,7 @@ const UserProfilePage: React.FC = () => {
                       borderRadius: '8px'
                     }}
                     variant="outlined"
-                    placeholder="選擇預設狀態篩選"
+                    placeholder={t("選擇預設狀態篩選")}
                     value={defaultProductStatus === 4 ? undefined : defaultProductStatus}
                     onChange={(value) => {
                       setDefaultProductStatus(value || 4);
@@ -1609,19 +1614,19 @@ const UserProfilePage: React.FC = () => {
                   >
                     <Select.Option value={0}>
                       <ClockCircleOutlined style={{ marginRight: '8px', color: '#faad14' }} />
-                      尚未到貨
+                      {t("尚未到貨")}
                     </Select.Option>
                     <Select.Option value={1}>
                       <CheckCircleOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
-                      已到貨
+                      {t("已到貨")}
                     </Select.Option>
                     <Select.Option value={2}>
                       <TrophyOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                      已成交
+                      {t("已成交")}
                     </Select.Option>
                     <Select.Option value={3}>
                       <ShoppingCartOutlined style={{ marginRight: '8px', color: '#ff4d4f' }} />
-                      尚未成交
+                      {t("尚未成交")}
                     </Select.Option>
                   </Select>
                 </motion.div>
@@ -1649,7 +1654,7 @@ const UserProfilePage: React.FC = () => {
                 >
                   <div style={{ fontSize: 14, marginBottom: 12, display: 'flex', alignItems: 'center' }}>
                     <SortAscendingOutlined style={{ marginRight: 8 }} />
-                    預設排序方式
+                    {t("預設排序方式")}
                   </div>
                   <Select
                     style={{ 
@@ -1659,7 +1664,7 @@ const UserProfilePage: React.FC = () => {
                       borderRadius: '8px'
                     }}
                     variant="outlined"
-                    placeholder="選擇預設排序方式"
+                    placeholder={t("選擇預設排序方式")}
                     value={defaultSortOrder}
                     dropdownStyle={{
                       backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -1671,31 +1676,31 @@ const UserProfilePage: React.FC = () => {
                   >
                     <Select.Option value={0}>
                       <PushpinOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                      商品編號優先
+                      {t("商品編號優先")}
                     </Select.Option>
                     <Select.Option value={1}>
                       <RocketOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
-                      新上架優先
+                      {t("新上架優先")}
                     </Select.Option>
                     <Select.Option value={2}>
                       <RiseOutlined style={{ marginRight: '8px', color: '#faad14' }} />
-                      價格低到高
+                      {t("價格低到高")}
                     </Select.Option>
                     <Select.Option value={3}>
                       <FallOutlined style={{ marginRight: '8px', color: '#f5222d' }} />
-                      價格高到低
+                      {t("價格高到低")}
                     </Select.Option>
                     <Select.Option value={4}>
                       <HeartOutlined style={{ marginRight: '8px', color: '#eb2f96' }} />
-                      最多收藏
+                      {t("最多收藏")}
                     </Select.Option>
                     <Select.Option value={5}>
                       <CommentOutlined style={{ marginRight: '8px', color: '#722ed1' }} />
-                      討論度最高
+                      {t("討論度最高")}
                     </Select.Option>
                     <Select.Option value={6}>
                       <EyeOutlined style={{ marginRight: '8px', color: '#13c2c2' }} />
-                      最高點閱
+                      {t("最高點閱")}
                     </Select.Option>
                   </Select>
                 </motion.div>
@@ -1718,7 +1723,7 @@ const UserProfilePage: React.FC = () => {
               }}
             >
               <Typography.Text style={{ fontSize: '12px', color: '#52c41a' }}>
-                💡 設定後，進入商品列表頁面時會自動套用您的偏好設定
+                {t("💡 設定後，進入商品列表頁面時會自動套用您的偏好設定")}
               </Typography.Text>
             </motion.div>
           </motion.div>
@@ -1736,7 +1741,7 @@ const UserProfilePage: React.FC = () => {
             style={{ marginBottom: '32px' }}
           >
             <Title level={4} style={{ marginBottom: '16px' }}>
-              帳號資訊
+              {t("帳號資訊")}
             </Title>
             
             <Row gutter={[24, 24]}>
@@ -1758,8 +1763,8 @@ const UserProfilePage: React.FC = () => {
                     color: 'white'
                   }}
                 >
-                  <div style={{ fontSize: 14, marginBottom: 8 }}>使用者帳號</div>
-                  <div style={{ fontSize: 18, fontWeight: "bold" }}>{profile?.email || "未知"}</div>
+                  <div style={{ fontSize: 14, marginBottom: 8 }}>{t("使用者帳號")}</div>
+                  <div style={{ fontSize: 18, fontWeight: "bold" }}>{profile?.email || t("未知")}</div>
                 </motion.div>
               </Col>
               {/* 第二個：帳號建立時間 */}
@@ -1780,11 +1785,11 @@ const UserProfilePage: React.FC = () => {
                     color: 'white'
                   }}
                 >
-                  <div style={{ fontSize: 14, marginBottom: 8 }}>帳號建立時間</div>
+                  <div style={{ fontSize: 14, marginBottom: 8 }}>{t("帳號建立時間")}</div>
                   <div style={{ fontSize: 18, fontWeight: "bold" }}>
                     {profile?.created_at
                       ? dayjs.utc(profile.created_at).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss")
-                      : "未知"}
+                      : t("未知")}
                   </div>
                 </motion.div>
               </Col>
@@ -1811,19 +1816,19 @@ const UserProfilePage: React.FC = () => {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
                     <RobotOutlined style={{ marginRight: 8, fontSize: 16 }} />
-                    <span style={{ fontSize: 14 }}>AI改寫使用狀態</span>
+                    <span style={{ fontSize: 14 }}>{t("AI改寫使用狀態")}</span>
                   </div>
                   {loadingAiQuota ? (
-                    <div style={{ fontSize: 16, fontWeight: "bold" }}>載入中...</div>
+                    <div style={{ fontSize: 16, fontWeight: "bold" }}>{t("載入中...")}</div>
                   ) : aiQuotaStatus ? (
                     <>
                       <div style={{ fontSize: 18, fontWeight: "bold", marginBottom: 4 }}>
-                        今日已使用 {aiQuotaStatus.used}/{aiQuotaStatus.total} 次
+                        {t("今日已使用 {{used}}/{{total}} 次", { used: aiQuotaStatus.used, total: aiQuotaStatus.total })}
                       </div>
                       <div style={{ fontSize: 12, opacity: 0.9 }}>
-                        {aiQuotaStatus.remaining > 0 
-                          ? `還可使用 ${aiQuotaStatus.remaining} 次` 
-                          : "今日配額已用完"}
+                        {aiQuotaStatus.remaining > 0
+                          ? t("還可使用 {{remaining}} 次", { remaining: aiQuotaStatus.remaining })
+                          : t("今日配額已用完")}
                       </div>
                       {/* 進度條 */}
                       <div style={{
@@ -1843,7 +1848,7 @@ const UserProfilePage: React.FC = () => {
                       </div>
                     </>
                   ) : (
-                    <div style={{ fontSize: 16, fontWeight: "bold" }}>無法載入</div>
+                    <div style={{ fontSize: 16, fontWeight: "bold" }}>{t("無法載入")}</div>
                   )}
                 </motion.div>
               </Col>
@@ -1892,15 +1897,15 @@ const UserProfilePage: React.FC = () => {
                     }
                   }}
                 >
-                  <div style={{ fontSize: 14, marginBottom: 8 }}>彩蛋狀態</div>
+                  <div style={{ fontSize: 14, marginBottom: 8 }}>{t("彩蛋狀態")}</div>
                   <div style={{ fontSize: 18, fontWeight: "bold" }}>
-                    {profile?.easter_egg ? "已觸發 🎊" : "尚未觸發"}
+                    {profile?.easter_egg ? t("已觸發 🎊") : t("尚未觸發")}
                   </div>
                   {profile?.easter_egg && (
                     <div style={{ fontSize: 12, marginTop: 4 }}>
                       {profile.easter_egg_triggered_time
                         ? dayjs.utc(profile.easter_egg_triggered_time).tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss")
-                        : "未知"}
+                        : t("未知")}
                     </div>
                   )}
                   {profile?.easter_egg && (
@@ -1908,9 +1913,9 @@ const UserProfilePage: React.FC = () => {
                       fontSize: 10, 
                       marginTop: 6, 
                       opacity: 0.8,
-                      fontStyle: 'italic' 
+                      fontStyle: 'italic'
                     }}>
-                      點擊重溫彩蛋體驗
+                      {t("點擊重溫彩蛋體驗")}
                     </div>
                   )}
                   
@@ -1966,7 +1971,7 @@ const UserProfilePage: React.FC = () => {
             style={{ marginBottom: '32px' }}
           >
             <Title level={4} style={{ marginBottom: '16px' }}>
-              我的成就
+              {t("我的成就")}
             </Title>
             
             
@@ -2284,7 +2289,7 @@ const UserProfilePage: React.FC = () => {
                   }
                 }}
               >
-                {uploading ? '儲存中...' : '儲存設定'}
+                {uploading ? t('儲存中...') : t('儲存設定')}
               </Button>
             </motion.div>
           </motion.div>
@@ -2300,14 +2305,14 @@ const UserProfilePage: React.FC = () => {
           setPendingPreviewUrl(null); // 清掉預覽，避免未套用狀態下改變畫面
         }}
         onOk={handleCropAndSave}
-        okText="套用頭像"
-        cancelText="取消"
+        okText={t("套用頭像")}
+        cancelText={t("取消")}
         destroyOnClose
         width={600}
         bodyStyle={{ padding: 32 }}
       >
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Title level={4} style={{ marginBottom: 24, textAlign: "center" }}>編輯頭像</Title>
+          <Title level={4} style={{ marginBottom: 24, textAlign: "center" }}>{t("編輯頭像")}</Title>
       {(pendingPreviewUrl || localAvatarUrl || profile?.avatar_url) && (
             <div style={{ 
               boxShadow: "0 10px 20px rgba(0,0,0,0.1)", 
@@ -2330,7 +2335,7 @@ const UserProfilePage: React.FC = () => {
           )}
           <Space direction="vertical" style={{ width: "100%", marginTop: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontWeight: "bold", fontSize: 16 }}>縮放調整</span>
+              <span style={{ fontWeight: "bold", fontSize: 16 }}>{t("縮放調整")}</span>
               <span>{scale.toFixed(2)}x</span>
             </div>
             <Slider 
@@ -2404,7 +2409,7 @@ const UserProfilePage: React.FC = () => {
               marginBottom: '24px'
             }}
           >
-            {selectedAchievement?.unlocked ? selectedAchievement.name : '神秘成就'}
+            {selectedAchievement?.unlocked ? selectedAchievement.name : t('神秘成就')}
           </motion.div>
 
           {/* 成就圖標區域 */}
@@ -2455,7 +2460,7 @@ const UserProfilePage: React.FC = () => {
             >
               <AntImage
                 src={selectedAchievement?.unlocked ? selectedAchievement.icon : (selectedAchievement?.shadowIcon || '')}
-                alt="成就圖標"
+                alt={t("成就圖標")}
                 preview={{
                   mask: false, // 隱藏 hover 時的 preview 文字
                   maskStyle: { backgroundColor: 'transparent' }
@@ -2499,7 +2504,7 @@ const UserProfilePage: React.FC = () => {
                 marginBottom: '12px',
                 color: '#8c8c8c'
               }}>
-                達成條件
+                {t("達成條件")}
               </div>
               <div style={{ 
                 fontSize: '14px', 
@@ -2511,7 +2516,7 @@ const UserProfilePage: React.FC = () => {
                 borderRadius: '8px',
                 border: '1px solid rgba(0, 0, 0, 0.1)'
               }}>
-                {selectedAchievement?.description || '神秘的成就條件...'}
+                {selectedAchievement?.description || t('神秘的成就條件...')}
               </div>
             </motion.div>
           )}
@@ -2538,7 +2543,7 @@ const UserProfilePage: React.FC = () => {
                     fontSize: '14px',
                     fontWeight: '500'
                   }}>
-                    <span style={{ color: '#666' }}>進度</span>
+                    <span style={{ color: '#666' }}>{t("進度")}</span>
                     <span style={{ color: '#1890ff' }}>
                       {Math.min(selectedAchievement.progress || 0, selectedAchievement.target || 1)} / {selectedAchievement.target || 1}
                     </span>
@@ -2569,7 +2574,7 @@ const UserProfilePage: React.FC = () => {
                         textAlign: 'center'
                       }}
                     >
-                      <span style={{ fontWeight: '500' }}>還需要：</span>
+                      <span style={{ fontWeight: '500' }}>{t("還需要：")}</span>
                       <span style={{ color: '#1890ff', fontWeight: '600', marginLeft: '4px' }}>
                         {(selectedAchievement.target || 1) - (selectedAchievement.progress || 0)}
                       </span>
@@ -2624,7 +2629,7 @@ const UserProfilePage: React.FC = () => {
                 >
                   🏆
                 </motion.span>
-                <span style={{ color: achievementColors[selectedAchievement.id]?.accent || '#52c41a' }}>✓ 成就已達成！</span>
+                <span style={{ color: achievementColors[selectedAchievement.id]?.accent || '#52c41a' }}>{t("✓ 成就已達成！")}</span>
               </motion.div>
               
               <motion.div 
@@ -2638,7 +2643,7 @@ const UserProfilePage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.2 }}
               >
-                {achievementCongratulations[selectedAchievement.id] || '恭喜你解鎖了這個成就！'}
+                {achievementCongratulations[selectedAchievement.id] || t('恭喜你解鎖了這個成就！')}
               </motion.div>
             </motion.div>
           ) : (
@@ -2665,7 +2670,7 @@ const UserProfilePage: React.FC = () => {
                 gap: '8px'
               }}>
                 <span style={{ fontSize: '16px' }}>🔒</span>
-                尚未解鎖
+                {t("尚未解鎖")}
               </div>
             </motion.div>
           )}
@@ -2690,7 +2695,7 @@ const UserProfilePage: React.FC = () => {
                 color: 'white'
               }}
             >
-              關閉
+              {t("關閉")}
             </Button>
           </motion.div>
         </div>

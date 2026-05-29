@@ -19,11 +19,13 @@ import {
   updateProduct,
 } from "../services/productService";
 import { Product } from "../types/productResponse";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 const pageSize = 10;
 
 const ProductManagementPage: React.FC = () => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
@@ -48,7 +50,7 @@ const ProductManagementPage: React.FC = () => {
           offset: (page - 1) * pageSize,
         },
         () => {
-          messageApi.error("無法載入商品資料");
+          messageApi.error(t("無法載入商品資料"));
           return { items: [], total: 0 };
         }
       );
@@ -112,12 +114,12 @@ const ProductManagementPage: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await deleteProduct(id, () => {
-        messageApi.error("刪除失敗");
+        messageApi.error(t("刪除失敗"));
       });
-      messageApi.success("刪除成功");
+      messageApi.success(t("刪除成功"));
       fetchData(searchFilters, currentPage);
     } catch {
-      messageApi.error("刪除失敗");
+      messageApi.error(t("刪除失敗"));
     }
   };
 
@@ -127,13 +129,13 @@ const ProductManagementPage: React.FC = () => {
         product.id,
         { productStatus: 1 },
         () => {
-          messageApi.error("更新為到貨失敗");
+          messageApi.error(t("更新為到貨失敗"));
         }
       );
-      messageApi.success("商品狀態已更新為已到貨");
+      messageApi.success(t("商品狀態已更新為已到貨"));
       fetchData(searchFilters, currentPage);
     } catch {
-      messageApi.error("更新失敗");
+      messageApi.error(t("更新失敗"));
     }
   };
 
@@ -151,11 +153,11 @@ const ProductManagementPage: React.FC = () => {
   const handleDealSubmit = async () => {
     const trimmedName = buyerName.trim();
     if (!trimmedName) {
-      messageApi.warning("請輸入買家名稱");
+      messageApi.warning(t("請輸入買家名稱"));
       return;
     }
     if (trimmedName.includes("@")) {
-      messageApi.error("請勿輸入 email 格式，只需要填入買家名稱即可");
+      messageApi.error(t("請勿輸入 email 格式，只需要填入買家名稱即可"));
       return;
     }
 
@@ -174,13 +176,13 @@ const ProductManagementPage: React.FC = () => {
 
     try {
       await dealProduct(product.id, buyerEmail, () => {
-        messageApi.error("成交失敗");
+        messageApi.error(t("成交失敗"));
       });
-      messageApi.success(`商品 ${product.product_name} 成交成功`);
+      messageApi.success(`${t("商品")} ${product.product_name} ${t("成交成功")}`);
       setDealModalVisible(false);
       fetchData(searchFilters, currentPage);
     } catch {
-      messageApi.error("成交失敗");
+      messageApi.error(t("成交失敗"));
     }
   };
 
@@ -188,32 +190,32 @@ const ProductManagementPage: React.FC = () => {
   const validateBuyerName = (name: string): { isValid: boolean; message: string } => {
     // 檢查是否包含空格
     if (name.includes(" ")) {
-      return { isValid: false, message: "買家名稱不可包含空格" };
+      return { isValid: false, message: t("買家名稱不可包含空格") };
     }
 
     // 檢查是否包含中文字元
     const chineseRegex = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/;
     if (chineseRegex.test(name)) {
-      return { isValid: false, message: "買家名稱不可包含中文字元，請使用英文字母、數字或底線" };
+      return { isValid: false, message: t("買家名稱不可包含中文字元，請使用英文字母、數字或底線") };
     }
 
     // 檢查是否只包含合法字元（英文字母、數字、底線、點號、連字號）
     const validCharRegex = /^[a-zA-Z0-9._-]+$/;
     if (!validCharRegex.test(name)) {
-      return { isValid: false, message: "買家名稱只能包含英文字母、數字、底線(_)、點號(.)或連字號(-)" };
+      return { isValid: false, message: t("買家名稱只能包含英文字母、數字、底線(_)、點號(.)或連字號(-)") };
     }
 
     // 檢查長度限制
     if (name.length < 2) {
-      return { isValid: false, message: "買家名稱至少需要2個字元" };
+      return { isValid: false, message: t("買家名稱至少需要2個字元") };
     }
     if (name.length > 30) {
-      return { isValid: false, message: "買家名稱不可超過30個字元" };
+      return { isValid: false, message: t("買家名稱不可超過30個字元") };
     }
 
     // 檢查是否以底線或連字號開頭或結尾
     if (name.startsWith("_") || name.startsWith("-") || name.endsWith("_") || name.endsWith("-")) {
-      return { isValid: false, message: "買家名稱不可以底線或連字號開頭或結尾" };
+      return { isValid: false, message: t("買家名稱不可以底線或連字號開頭或結尾") };
     }
 
     return { isValid: true, message: "" };
@@ -224,55 +226,55 @@ const ProductManagementPage: React.FC = () => {
   }, [currentPage]);
 
   const columns = [
-    { title: "ID", dataIndex: "id" },
-    { title: "商品名稱", dataIndex: "product_name" },
-    { title: "賣家 Email", dataIndex: "seller_name" },
-    { title: "賣家暱稱", dataIndex: "seller_nickname" },
-    { title: "價格", dataIndex: "price" },
+    { title: t("ID"), dataIndex: "id" },
+    { title: t("商品名稱"), dataIndex: "product_name" },
+    { title: t("賣家 Email"), dataIndex: "seller_name" },
+    { title: t("賣家暱稱"), dataIndex: "seller_nickname" },
+    { title: t("價格"), dataIndex: "price" },
     {
-      title: "買家",
+      title: t("買家"),
       dataIndex: "buyer_name",
       render: (_: any, record: Product) => {
         return record.product_status === 2 ? record.buyer_name || "-" : "-";
       },
     },
     {
-      title: "商品狀態",
+      title: t("商品狀態"),
       dataIndex: "product_status",
       render: (val: number) => {
-        if (val === 0) return "尚未到貨";
-        if (val === 1) return "已到貨待成交";
-        if (val === 2) return "已成交";
+        if (val === 0) return t("尚未到貨");
+        if (val === 1) return t("已到貨待成交");
+        if (val === 2) return t("已成交");
         return "-";
       },
     },
     {
-      title: "審核狀態",
+      title: t("審核狀態"),
       render: (_: any, record: Product) => {
-        if (record.is_approve) return "✅ 已通過";
-        if (record.is_rejected) return "❌ 否決";
-        return "⏳ 未審核";
+        if (record.is_approve) return t("✅ 已通過");
+        if (record.is_rejected) return t("❌ 否決");
+        return t("⏳ 未審核");
       },
     },
     {
-      title: "操作",
+      title: t("操作"),
       render: (_: any, record: Product) => (
         <Space>
-          <Button onClick={() => handleDetailClick(record)}>詳細</Button>
+          <Button onClick={() => handleDetailClick(record)}>{t("詳細")}</Button>
           <Popconfirm
-            title="確定要刪除這個商品嗎？"
-            description={`商品：「${record.product_name}」將永久刪除`}
-            okText="確定"
-            cancelText="取消"
+            title={t("確定要刪除這個商品嗎？")}
+            description={`${t("商品：「")}${record.product_name}${t("」將永久刪除")}`}
+            okText={t("確定")}
+            cancelText={t("取消")}
             onConfirm={() => handleDelete(record.id)}
           >
-            <Button danger>刪除</Button>
+            <Button danger>{t("刪除")}</Button>
           </Popconfirm>
           {!record.is_rejected && record.product_status === 0 && (
-            <Button onClick={() => handleMarkArrived(record)}>到貨</Button>
+            <Button onClick={() => handleMarkArrived(record)}>{t("到貨")}</Button>
           )}
           {!record.is_rejected && record.product_status === 1 && (
-            <Button type="primary" onClick={() => handleDealClick(record)}>成交</Button>
+            <Button type="primary" onClick={() => handleDealClick(record)}>{t("成交")}</Button>
           )}
         </Space>
       ),
@@ -282,8 +284,8 @@ const ProductManagementPage: React.FC = () => {
   return (
     <div style={{ padding: 20 }}>
       {contextHolder}
-      <Title level={3}>商品管理列表</Title>
-      <p>可依條件搜尋、到貨與成交操作，支援刪除。</p>
+      <Title level={3}>{t("商品管理列表")}</Title>
+      <p>{t("可依條件搜尋、到貨與成交操作，支援刪除。")}</p>
 
       <Form
         layout="inline"
@@ -292,36 +294,36 @@ const ProductManagementPage: React.FC = () => {
         style={{ marginBottom: 16, flexWrap: "wrap" }}
       >
         <Form.Item name="seller_name">
-          <Input placeholder="賣家 Email" />
+          <Input placeholder={t("賣家 Email")} />
         </Form.Item>
         <Form.Item name="seller_nickname">
-          <Input placeholder="賣家暱稱" />
+          <Input placeholder={t("賣家暱稱")} />
         </Form.Item>
         <Form.Item name="strquery">
-          <Input placeholder="商品名稱關鍵字" />
+          <Input placeholder={t("商品名稱關鍵字")} />
         </Form.Item>
         <Form.Item name="product_status">
-          <Select placeholder="商品狀態" allowClear style={{ width: 160 }}>
-            <Select.Option value={0}>尚未到貨</Select.Option>
-            <Select.Option value={1}>已到貨待成交</Select.Option>
-            <Select.Option value={2}>已成交</Select.Option>
+          <Select placeholder={t("商品狀態")} allowClear style={{ width: 160 }}>
+            <Select.Option value={0}>{t("尚未到貨")}</Select.Option>
+            <Select.Option value={1}>{t("已到貨待成交")}</Select.Option>
+            <Select.Option value={2}>{t("已成交")}</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="approval_status">
-          <Select placeholder="審核狀態" allowClear style={{ width: 160 }}>
-            <Select.Option value="approved">✅ 已通過</Select.Option>
-            <Select.Option value="pending">⏳ 未審核</Select.Option>
-            <Select.Option value="rejected">❌ 已否決</Select.Option>
+          <Select placeholder={t("審核狀態")} allowClear style={{ width: 160 }}>
+            <Select.Option value="approved">{t("✅ 已通過")}</Select.Option>
+            <Select.Option value="pending">{t("⏳ 未審核")}</Select.Option>
+            <Select.Option value="rejected">{t("❌ 已否決")}</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="min_price">
-          <Input type="number" placeholder="最低價" />
+          <Input type="number" placeholder={t("最低價")} />
         </Form.Item>
         <Form.Item name="max_price">
-          <Input type="number" placeholder="最高價" />
+          <Input type="number" placeholder={t("最高價")} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">搜尋</Button>
+          <Button type="primary" htmlType="submit">{t("搜尋")}</Button>
         </Form.Item>
       </Form>
 
@@ -344,12 +346,12 @@ const ProductManagementPage: React.FC = () => {
 
       <Modal
         open={dealModalVisible}
-        title="商品成交"
+        title={t("商品成交")}
         footer={null}
         onCancel={() => setDealModalVisible(false)}
       >
         <Input
-          placeholder="請輸入買家英文姓名，例如：john_doe"
+          placeholder={t("請輸入買家英文姓名，例如：john_doe")}
           value={buyerName}
           onChange={(e) => setBuyerName(e.target.value)}
           style={{ marginBottom: 12 }}
@@ -367,26 +369,26 @@ const ProductManagementPage: React.FC = () => {
           if (buyerName.includes("@")) {
             return (
               <Typography.Text type="danger" style={{ display: 'block', marginBottom: 8 }}>
-                請勿輸入 email 格式，只需填入買家名稱
+                {t("請勿輸入 email 格式，只需填入買家名稱")}
               </Typography.Text>
             );
           }
           return (
             <Typography.Text type="success" style={{ display: 'block', marginBottom: 8 }}>
-              ✓ 格式正確，將自動補全為：{buyerName.trim()}@example.com
+              {t("✓ 格式正確，將自動補全為：")}{buyerName.trim()}@example.com
             </Typography.Text>
           );
         })()}
         
         <Popconfirm
-          title="確認成交"
+          title={t("確認成交")}
           description={
             <>
-              確定要將商品成交給 <strong>{buyerName.trim()}@example.com</strong> 嗎？
+              {t("確定要將商品成交給")} <strong>{buyerName.trim()}@example.com</strong> {t("嗎？")}
             </>
           }
-          okText="確認成交"
-          cancelText="取消"
+          okText={t("確認成交")}
+          cancelText={t("取消")}
           onConfirm={handleDealSubmit}
           disabled={(() => {
             const trimmed = buyerName.trim();
@@ -407,18 +409,18 @@ const ProductManagementPage: React.FC = () => {
               return !validation.isValid;
             })()}
           >
-            提交成交
+            {t("提交成交")}
           </Button>
         </Popconfirm>
       </Modal>
 
       <Modal
         open={detailModalVisible}
-        title="商品詳細資訊"
+        title={t("商品詳細資訊")}
         width={800}
         footer={[
           <Button key="close" onClick={() => setDetailModalVisible(false)}>
-            關閉
+            {t("關閉")}
           </Button>
         ]}
         onCancel={() => setDetailModalVisible(false)}
@@ -444,56 +446,56 @@ const ProductManagementPage: React.FC = () => {
             
             {/* 基本資訊 */}
             <div style={{ marginBottom: 16 }}>
-              <Title level={4} style={{ margin: '0 0 12px 0' }}>基本資訊</Title>
+              <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("基本資訊")}</Title>
               <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px' }}>
-                <strong>商品編號：</strong>
+                <strong>{t("商品編號：")}</strong>
                 <span>{selectedProduct.id}</span>
-                
-                <strong>商品名稱：</strong>
+
+                <strong>{t("商品名稱：")}</strong>
                 <span>{selectedProduct.product_name}</span>
-                
-                <strong>價格：</strong>
+
+                <strong>{t("價格：")}</strong>
                 <span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>NT$ {selectedProduct.price?.toLocaleString()}</span>
-                
-                <strong>商品狀況：</strong>
+
+                <strong>{t("商品狀況：")}</strong>
                 <span>
-                  {selectedProduct.condition === 1 ? '全新' : 
-                   selectedProduct.condition === 2 ? '二手(良好)' : 
-                   selectedProduct.condition === 3 ? '二手(普通)' : 
-                   selectedProduct.condition === 4 ? '二手(不佳)' : '未知'}
+                  {selectedProduct.condition === 1 ? t('全新') :
+                   selectedProduct.condition === 2 ? t('二手(良好)') :
+                   selectedProduct.condition === 3 ? t('二手(普通)') :
+                   selectedProduct.condition === 4 ? t('二手(不佳)') : t('未知')}
                 </span>
-                
-                <strong>商品狀態：</strong>
-                <span style={{ 
-                  color: selectedProduct.product_status === 0 ? '#faad14' : 
-                         selectedProduct.product_status === 1 ? '#1890ff' : '#52c41a' 
+
+                <strong>{t("商品狀態：")}</strong>
+                <span style={{
+                  color: selectedProduct.product_status === 0 ? '#faad14' :
+                         selectedProduct.product_status === 1 ? '#1890ff' : '#52c41a'
                 }}>
-                  {selectedProduct.product_status === 0 ? '尚未到貨' : 
-                   selectedProduct.product_status === 1 ? '已到貨待成交' : '已成交'}
+                  {selectedProduct.product_status === 0 ? t('尚未到貨') :
+                   selectedProduct.product_status === 1 ? t('已到貨待成交') : t('已成交')}
                 </span>
-                
-                <strong>審核狀態：</strong>
+
+                <strong>{t("審核狀態：")}</strong>
                 <span>
-                  {selectedProduct.is_approve ? '✅ 已通過' : 
-                   selectedProduct.is_rejected ? '❌ 否決' : '⏳ 未審核'}
+                  {selectedProduct.is_approve ? t('✅ 已通過') :
+                   selectedProduct.is_rejected ? t('❌ 否決') : t('⏳ 未審核')}
                 </span>
-                
-                <strong>捐贈比例：</strong>
+
+                <strong>{t("捐贈比例：")}</strong>
                 <span>{selectedProduct.donation_ratio}%</span>
-                
-                <strong>建立時間：</strong>
+
+                <strong>{t("建立時間：")}</strong>
                 <span>{new Date(selectedProduct.created_at).toLocaleString('zh-TW')}</span>
               </div>
             </div>
 
             {/* 賣家資訊 */}
             <div style={{ marginBottom: 16 }}>
-              <Title level={4} style={{ margin: '0 0 12px 0' }}>賣家資訊</Title>
+              <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("賣家資訊")}</Title>
               <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px' }}>
-                <strong>賣家帳號：</strong>
+                <strong>{t("賣家帳號：")}</strong>
                 <span>{selectedProduct.seller_name}</span>
-                
-                <strong>賣家暱稱：</strong>
+
+                <strong>{t("賣家暱稱：")}</strong>
                 <span>{selectedProduct.seller_nickname}</span>
               </div>
             </div>
@@ -501,18 +503,18 @@ const ProductManagementPage: React.FC = () => {
             {/* 交易資訊 */}
             {(selectedProduct.buyer_name || selectedProduct.seller_income !== undefined || selectedProduct.donation_amount !== undefined) && (
               <div style={{ marginBottom: 16 }}>
-                <Title level={4} style={{ margin: '0 0 12px 0' }}>交易資訊</Title>
+                <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("交易資訊")}</Title>
                 <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px' }}>
                   {selectedProduct.buyer_name && (
                     <>
-                      <strong>買家：</strong>
+                      <strong>{t("買家：")}</strong>
                       <span>{selectedProduct.buyer_name}</span>
                     </>
                   )}
                   
                   {selectedProduct.seller_income !== undefined && (
                     <>
-                      <strong>賣家收入：</strong>
+                      <strong>{t("賣家收入：")}</strong>
                       <span style={{ color: '#52c41a', fontWeight: 'bold' }}>
                         NT$ {selectedProduct.seller_income.toLocaleString()}
                       </span>
@@ -521,7 +523,7 @@ const ProductManagementPage: React.FC = () => {
                   
                   {selectedProduct.donation_amount !== undefined && (
                     <>
-                      <strong>捐贈金額：</strong>
+                      <strong>{t("捐贈金額：")}</strong>
                       <span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>
                         NT$ {selectedProduct.donation_amount.toLocaleString()}
                       </span>
@@ -530,8 +532,8 @@ const ProductManagementPage: React.FC = () => {
                   
                   {selectedProduct.is_online_deal !== undefined && (
                     <>
-                      <strong>線上交易：</strong>
-                      <span>{selectedProduct.is_online_deal ? '是' : '否'}</span>
+                      <strong>{t("線上交易：")}</strong>
+                      <span>{selectedProduct.is_online_deal ? t('是') : t('否')}</span>
                     </>
                   )}
                 </div>
@@ -541,11 +543,11 @@ const ProductManagementPage: React.FC = () => {
             {/* AI 分析 */}
             {(selectedProduct.ai_rating || selectedProduct.ai_comment || selectedProduct.ai_fit_owner) && (
               <div style={{ marginBottom: 16 }}>
-                <Title level={4} style={{ margin: '0 0 12px 0' }}>AI 分析</Title>
+                <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("AI 分析")}</Title>
                 <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px' }}>
                   {selectedProduct.ai_rating && (
                     <>
-                      <strong>AI 評分：</strong>
+                      <strong>{t("AI 評分：")}</strong>
                       <span style={{ color: '#1890ff', fontWeight: 'bold' }}>
                         {selectedProduct.ai_rating}/10
                       </span>
@@ -554,14 +556,14 @@ const ProductManagementPage: React.FC = () => {
                   
                   {selectedProduct.ai_fit_owner && (
                     <>
-                      <strong>適合對象：</strong>
+                      <strong>{t("適合對象：")}</strong>
                       <span>{selectedProduct.ai_fit_owner}</span>
                     </>
                   )}
                   
                   {selectedProduct.ai_comment && (
                     <>
-                      <strong>AI 評語：</strong>
+                      <strong>{t("AI 評語：")}</strong>
                       <div style={{ 
                         background: '#f6f6f6', 
                         padding: '12px', 
@@ -579,17 +581,17 @@ const ProductManagementPage: React.FC = () => {
 
             {/* 互動統計 */}
             <div style={{ marginBottom: 16 }}>
-              <Title level={4} style={{ margin: '0 0 12px 0' }}>互動統計</Title>
+              <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("互動統計")}</Title>
               <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px' }}>
-                <strong>按讚數：</strong>
+                <strong>{t("按讚數：")}</strong>
                 <span>{selectedProduct.like_count}</span>
-                
-                <strong>留言數：</strong>
+
+                <strong>{t("留言數：")}</strong>
                 <span>{selectedProduct.comment_count}</span>
-                
+
                 {selectedProduct.view_count !== undefined && (
                   <>
-                    <strong>瀏覽數：</strong>
+                    <strong>{t("瀏覽數：")}</strong>
                     <span>{selectedProduct.view_count}</span>
                   </>
                 )}
@@ -599,7 +601,7 @@ const ProductManagementPage: React.FC = () => {
             {/* 商品描述 */}
             {selectedProduct.description && (
               <div>
-                <Title level={4} style={{ margin: '0 0 12px 0' }}>商品描述</Title>
+                <Title level={4} style={{ margin: '0 0 12px 0' }}>{t("商品描述")}</Title>
                 <div style={{ 
                   background: '#f6f6f6', 
                   padding: '16px', 

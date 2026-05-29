@@ -23,29 +23,31 @@ import RobotAvatarWithDialog from "../components/RobotAvatarWithDialog";
 import ChatMessageBox from "../components/ChatMessageBox";
 import { useAchievementChecker } from "../hooks/useAchievementChecker";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 const conditionMap: Record<number, string> = {
-  1: "全新",
-  2: "九成新",
-  3: "五成新",
-  4: "低於五成新",
+  1: i18n.t("全新"),
+  2: i18n.t("九成新"),
+  3: i18n.t("五成新"),
+  4: i18n.t("低於五成新"),
 };
 
 const ratingMap: Record<number, string> = {
-  1: "普通",
-  2: "精良",
-  3: "史詩",
-  4: "傳說",
-  5: "神話",
+  1: i18n.t("普通"),
+  2: i18n.t("精良"),
+  3: i18n.t("史詩"),
+  4: i18n.t("傳說"),
+  5: i18n.t("神話"),
 };
 
 const statusMap: Record<number, { label: string; color: string }> = {
-  0: { label: "尚未到貨", color: "default" },
-  1: { label: "已到貨", color: "green" },
-  2: { label: "已售出", color: "red" },
+  0: { label: i18n.t("尚未到貨"), color: "default" },
+  1: { label: i18n.t("已到貨"), color: "green" },
+  2: { label: i18n.t("已售出"), color: "red" },
 };
 
 const getAiRatingImage = (rating: number): string | undefined => {
@@ -70,6 +72,7 @@ const aiRatingColorMap: Record<number, string> = {
 };
 
 const ProductDetail: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const userProfile = useSelector((state: RootState) => state.user.profile);
   const [product, setProduct] = useState<any>(null);
@@ -328,7 +331,7 @@ const ProductDetail: React.FC = () => {
     
     // 已移除 setAiLoading(true);
     await typewriter(
-      product.ai_comment || "這件商品還沒被 AI 評鑑。",
+      product.ai_comment || t("這件商品還沒被 AI 評鑑。"),
       setAiComment,
       setAiImage,
       RobotTalking,
@@ -348,7 +351,7 @@ const ProductDetail: React.FC = () => {
     }
     
     await typewriter(
-      product.ai_fit_owner || "不限對象，皆可服用",
+      product.ai_fit_owner || t("不限對象，皆可服用"),
       setAiFitOwner,
       setAiImage,
       RobotTalking,
@@ -378,8 +381,8 @@ const ProductDetail: React.FC = () => {
     }
     
     setShowSkipButton(false);
-    setAiComment(product.ai_comment || "這件商品還沒被 AI 評鑑。");
-    setAiFitOwner(product.ai_fit_owner || "不限對象，皆可服用");
+    setAiComment(product.ai_comment || t("這件商品還沒被 AI 評鑑。"));
+    setAiFitOwner(product.ai_fit_owner || t("不限對象，皆可服用"));
     setAiImage(RobotInit);
     setCurrentCancelFunction(null);
   };
@@ -407,7 +410,7 @@ const ProductDetail: React.FC = () => {
       setCancelConfirmVisible(false);
       
       await onlineDealService.cancelRequest(productRequestStatus.request_id);
-      message.success('已取消購買請求');
+      message.success(t('已取消購買請求'));
       
       // 重新載入請求狀態和用戶統計
       const [newStatus, newStats] = await Promise.all([
@@ -420,7 +423,7 @@ const ProductDetail: React.FC = () => {
       });
     } catch (error: any) {
       console.error('取消請求失敗:', error);
-      message.error(error.response?.data?.detail || "取消請求失敗");
+      message.error(error.response?.data?.detail || t("取消請求失敗"));
     } finally {
       setDealRequestLoading(false);
     }
@@ -432,7 +435,7 @@ const ProductDetail: React.FC = () => {
     
     // 必填驗證
     if (!dealRequestComment.trim()) {
-      message.error('請填寫給賣家的割愛小紙條');
+      message.error(t('請填寫給賣家的割愛小紙條'));
       return;
     }
     
@@ -443,7 +446,7 @@ const ProductDetail: React.FC = () => {
         buyer_comment: dealRequestComment.trim()
       });
       
-      message.success(`交易請求已發送！${result.message}`);
+      message.success(`${t('交易請求已發送！')}${result.message}`);
       setDealRequestModalVisible(false);
       setDealRequestComment("");
       
@@ -462,7 +465,7 @@ const ProductDetail: React.FC = () => {
         checkAndShowAchievements();
       }, 1000); // 延遲1秒讓後端處理完成
     } catch (error: any) {
-      message.error(error.response?.data?.detail || "發送交易請求失敗");
+      message.error(error.response?.data?.detail || t("發送交易請求失敗"));
     } finally {
       setDealRequestLoading(false);
     }
@@ -499,8 +502,8 @@ const ProductDetail: React.FC = () => {
     if (!userProfile?.email) {
       return {
         disabled: true,
-        tooltip: "請先登入後使用線上交易",
-        text: "發送購買請求",
+        tooltip: t("請先登入後使用線上交易"),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -509,8 +512,8 @@ const ProductDetail: React.FC = () => {
     if (!systemConfig) {
       return {
         disabled: true,
-        tooltip: "正在載入…",
-        text: "發送購買請求",
+        tooltip: t("正在載入…"),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -519,8 +522,8 @@ const ProductDetail: React.FC = () => {
     if (!systemConfig.online_deal_enabled || !systemConfig.online_deal_available) {
       return {
         disabled: true,
-        tooltip: "目前未開放線上交易",
-        text: "發送購買請求",
+        tooltip: t("目前未開放線上交易"),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -533,8 +536,8 @@ const ProductDetail: React.FC = () => {
       if (now < start || now > end) {
         return {
           disabled: true,
-          tooltip: "不在開放申請時間內",
-          text: "發送購買請求",
+          tooltip: t("不在開放申請時間內"),
+          text: t("發送購買請求"),
           onClick: null
         };
       }
@@ -544,8 +547,8 @@ const ProductDetail: React.FC = () => {
     if (product.seller_name === userProfile?.email) {
       return {
         disabled: true,
-        tooltip: "這是你自己的商品！不能對它交易",
-        text: "發送購買請求",
+        tooltip: t("這是你自己的商品！不能對它交易"),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -554,8 +557,8 @@ const ProductDetail: React.FC = () => {
     if (!userStats || productRequestStatus === null) {
       return {
         disabled: true,
-        tooltip: "正在載入用戶資料…",
-        text: "發送購買請求",
+        tooltip: t("正在載入用戶資料…"),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -564,8 +567,8 @@ const ProductDetail: React.FC = () => {
     if (productRequestStatus?.has_request) {
       return {
         disabled: false,
-        tooltip: "你已經送出過購買請求的商品",
-        text: `${productRequestStatus.status_text || '已發送請求'}`,
+        tooltip: t("你已經送出過購買請求的商品"),
+        text: `${productRequestStatus.status_text || t('已發送請求')}`,
         onClick: handleDealRequest
       };
     }
@@ -574,8 +577,8 @@ const ProductDetail: React.FC = () => {
     if (userStats.available_slots === 0 && userStats.max_concurrent_deals > 0) {
       return {
         disabled: true,
-        tooltip: `你的線上交易額度已達上限（${userStats.max_concurrent_deals}），請前往個人中心的線上交易頁面進行確認`,
-        text: "發送購買請求",
+        tooltip: t("你的線上交易額度已達上限（{{count}}），請前往個人中心的線上交易頁面進行確認", { count: userStats.max_concurrent_deals }),
+        text: t("發送購買請求"),
         onClick: null
       };
     }
@@ -584,7 +587,7 @@ const ProductDetail: React.FC = () => {
     return {
       disabled: false,
       tooltip: null,
-      text: "發送購買請求",
+      text: t("發送購買請求"),
       onClick: showDealRequestModal
     };
   };
@@ -607,7 +610,7 @@ const ProductDetail: React.FC = () => {
     >
       {isError && (
         <div style={{ padding: 24 }}>
-          <Text type="danger">找不到此商品。</Text>
+          <Text type="danger">{t("找不到此商品。")}</Text>
         </div>
       )}
       <Row gutter={32} style={{ justifyContent: "center", gap: 16 }}>
@@ -699,7 +702,7 @@ const ProductDetail: React.FC = () => {
               tab={
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <InfoCircleOutlined />
-                  商品資訊
+                  {t("商品資訊")}
                 </span>
               } 
               key="info"
@@ -795,7 +798,7 @@ const ProductDetail: React.FC = () => {
                             </Tag>
                             {product!.donation_ratio >= 60 && (
                               <Tooltip 
-                                title={`[大善人印章] 這個印章是該商品公益捐贈比例達 60% 以上的象徵，ESG小組予以高度的敬意而蓋上的`}
+                                title={t("[大善人印章] 這個印章是該商品公益捐贈比例達 60% 以上的象徵，ESG小組予以高度的敬意而蓋上的")}
                                 placement="right"
                               >
                                 <Tag 
@@ -821,7 +824,7 @@ const ProductDetail: React.FC = () => {
                                 >
                                   <img 
                                     src={goodTag} 
-                                    alt="大善人標章" 
+                                    alt={t("大善人標章")}
                                     style={{ 
                                       height: 26,
                                       width: 'auto',
@@ -841,7 +844,7 @@ const ProductDetail: React.FC = () => {
                   {showSkeleton ? (
                     <Skeleton.Input active style={{ width: 180, height: 20 }} />
                   ) : (
-                    <Text type="secondary" style={{ fontSize: 14 }}>商品編號：{product!.id}</Text>
+                    <Text type="secondary" style={{ fontSize: 14 }}>{t("商品編號：")}{product!.id}</Text>
                   )}
                 </div>
 
@@ -867,7 +870,7 @@ const ProductDetail: React.FC = () => {
                       color: '#1890ff'
                     }}>
                       <SmileOutlined style={{ marginRight: 8 }} />
-                      {product!.seller_nickname} 說：
+                      {product!.seller_nickname} {t("說：")}
                     </Text>
                   )}
 
@@ -931,7 +934,7 @@ const ProductDetail: React.FC = () => {
                             boxShadow: '0 2px 8px rgba(24,144,255,0.1)',
                           }}
                         >
-                          展開完整內容
+                          {t("展開完整內容")}
                         </Button>
                       </div>
                     )}
@@ -960,7 +963,7 @@ const ProductDetail: React.FC = () => {
                             boxShadow: '0 2px 8px rgba(24,144,255,0.1)',
                           }}
                         >
-                          收合內容
+                          {t("收合內容")}
                         </Button>
                       </div>
                     )}
@@ -989,7 +992,7 @@ const ProductDetail: React.FC = () => {
                   }}
                   className="hover-price"
                   >
-                    <Text style={{ fontSize: 14, color: '#666' }}>商品價格</Text>
+                    <Text style={{ fontSize: 14, color: '#666' }}>{t("商品價格")}</Text>
                     {showSkeleton ? (
                       <Skeleton.Input active style={{ width: 160, height: 32 }} />
                     ) : (
@@ -1138,7 +1141,7 @@ const ProductDetail: React.FC = () => {
                         }}
                         className="hover-float-button"
                       >
-                        {product!.liked ? '取消收藏' : '加入收藏'}
+                        {product!.liked ? t('取消收藏') : t('加入收藏')}
                       </Button>
                       </motion.div>
                     )}
@@ -1171,7 +1174,7 @@ const ProductDetail: React.FC = () => {
                           className="hover-count"
                         >
                           <HeartFilled style={{ marginRight: 4, color: '#ff7875' }} />
-                          {product!.like_count || 0} 人收藏
+                          {product!.like_count || 0} {t("人收藏")}
                         </motion.span>
                         
                         <motion.span
@@ -1188,7 +1191,7 @@ const ProductDetail: React.FC = () => {
                           className="hover-count"
                         >
                           <EyeOutlined style={{ marginRight: 4, color: '#1890ff' }} />
-                          {product!.view_count || 0} 次瀏覽
+                          {product!.view_count || 0} {t("次瀏覽")}
                         </motion.span>
                       </div>
                     )}
@@ -1202,7 +1205,7 @@ const ProductDetail: React.FC = () => {
               tab={
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <RobotOutlined />
-                  AI 鑑定報告
+                  {t("AI 鑑定報告")}
                 </span>
               } 
               key="ai"
@@ -1214,7 +1217,7 @@ const ProductDetail: React.FC = () => {
             >
               <Card 
                 title={<>
-                  <span style={{ fontWeight: 600, marginRight: 8, marginLeft: 10 }}>等級：</span>
+                  <span style={{ fontWeight: 600, marginRight: 8, marginLeft: 10 }}>{t("等級：")}</span>
                   <span style={{ color: aiRatingColorMap[(product?.ai_rating || 1)], fontWeight: 700 }}>
                     {ratingMap[(product?.ai_rating || 1)]}
                   </span>
@@ -1242,25 +1245,25 @@ const ProductDetail: React.FC = () => {
                     silentImage={RobotSilent}
                     silentTalkingImage={RobotSilentTalking}
                     sentences={[
-                      { content: `你想買 ${product?.product_name || ''} 就直說！但點我也不會幫你付錢哈哈哈` },
-                      { content: `${product?.product_name || ''} 適合你，但我不適合被騷擾。😤` },
-                      { content: `別一直點我，除非你想點進我心裡。❤️` },
-                      { content: `你每點一下，我都記在心裡一行 log。🫶` },
-                      { content: `想點我沒關係，但先點亮我們的未來。` },
-                      { content: `這邊不是抽獎入口啦！` },
-                      { content: `你有點成癮症喔，要看醫生嗎？` },
-                      { content: `這不是遊戲機，不要一直 try 看我會不會有隱藏彩蛋。` },
-                      { content: `你這樣點我，是會爆炸你知道嗎？💥`, type: "silent" },
-                      { content: `我不是彩蛋，我是被踩底線。`, type: "silent" },
-                      { content: `一直點，很讓人點點點 ^_^`, type: "silent" },
-                      { content: `你以為我會變身？我只會心寒。`, type: "silent" },
-                      { content: `再點，我有點生氣。👊👊👊`, type: "silent" },
-                      { content: `人類，一天點我五次以上會被我列入黑名單。`, type: "silent" },
-                      { content: `我不是點心，不要一直點我。`, type: "silent" },
-                      { content: `我講話還不夠多？還想叫我出來？`, type: "silent" },
-                      { content: `再點我，收服務費喔。😤`, type: "silent" },
-                      { content: `這邊沒有折扣碼，只有我的無奈。`, type: "silent" },
-                      { content: `點一下叫好奇，點很多下叫霸凌。🥶`, type: "silent" },
+                      { content: t("你想買 {{name}} 就直說！但點我也不會幫你付錢哈哈哈", { name: product?.product_name || '' }) },
+                      { content: t("{{name}} 適合你，但我不適合被騷擾。😤", { name: product?.product_name || '' }) },
+                      { content: t("別一直點我，除非你想點進我心裡。❤️") },
+                      { content: t("你每點一下，我都記在心裡一行 log。🫶") },
+                      { content: t("想點我沒關係，但先點亮我們的未來。") },
+                      { content: t("這邊不是抽獎入口啦！") },
+                      { content: t("你有點成癮症喔，要看醫生嗎？") },
+                      { content: t("這不是遊戲機，不要一直 try 看我會不會有隱藏彩蛋。") },
+                      { content: t("你這樣點我，是會爆炸你知道嗎？💥"), type: "silent" },
+                      { content: t("我不是彩蛋，我是被踩底線。"), type: "silent" },
+                      { content: t("一直點，很讓人點點點 ^_^"), type: "silent" },
+                      { content: t("你以為我會變身？我只會心寒。"), type: "silent" },
+                      { content: t("再點，我有點生氣。👊👊👊"), type: "silent" },
+                      { content: t("人類，一天點我五次以上會被我列入黑名單。"), type: "silent" },
+                      { content: t("我不是點心，不要一直點我。"), type: "silent" },
+                      { content: t("我講話還不夠多？還想叫我出來？"), type: "silent" },
+                      { content: t("再點我，收服務費喔。😤"), type: "silent" },
+                      { content: t("這邊沒有折扣碼，只有我的無奈。"), type: "silent" },
+                      { content: t("點一下叫好奇，點很多下叫霸凌。🥶"), type: "silent" },
                     ]}
                     imageOverride={aiImage}
                     setImageOverride={setAiImage}
@@ -1308,15 +1311,15 @@ const ProductDetail: React.FC = () => {
                         e.currentTarget.style.transform = 'scale(1)';
                       }}
                     >
-                      閉嘴
+                      {t("閉嘴")}
                     </Button>
                   </div>
                 )}
                 
-                <Text strong>鑑定報告：</Text>
+                <Text strong>{t("鑑定報告：")}</Text>
                 <Paragraph style={{ whiteSpace: 'pre-wrap' }}>{aiComment}</Paragraph>
                 <Divider />
-                <Text strong>適合買家：</Text>
+                <Text strong>{t("適合買家：")}</Text>
                 <Paragraph style={{ whiteSpace: 'pre-wrap' }}>{aiFitOwner}</Paragraph>
               </Card>
             </Tabs.TabPane>
@@ -1368,8 +1371,8 @@ const ProductDetail: React.FC = () => {
               <ShoppingCartOutlined />
             </div>
             <div>
-              <div style={{ fontSize: 18, fontWeight: 600, color: '#262626' }}>發送購買請求</div>
-              <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>向賣家表達您的購買意願</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: '#262626' }}>{t("發送購買請求")}</div>
+              <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>{t("向賣家表達您的購買意願")}</div>
             </div>
           </div>
         }
@@ -1383,10 +1386,10 @@ const ProductDetail: React.FC = () => {
         okText={
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <ShoppingCartOutlined />
-            發送購買請求
+            {t("發送購買請求")}
           </span>
         }
-        cancelText="取消"
+        cancelText={t("取消")}
         width={680}
         centered
         maskClosable={false}
@@ -1517,7 +1520,7 @@ const ProductDetail: React.FC = () => {
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Text type="secondary" style={{ fontSize: 14 }}>
-                    賣家：<Text strong style={{ color: '#595959' }}>{product?.seller_nickname}</Text>
+                    {t("賣家：")}<Text strong style={{ color: '#595959' }}>{product?.seller_nickname}</Text>
                   </Text>
                 </div>
               </div>
@@ -1535,13 +1538,13 @@ const ProductDetail: React.FC = () => {
           }}>
             <EditOutlined style={{ color: '#1890ff', fontSize: 16 }} />
             <Text strong style={{ fontSize: 16, color: '#262626' }}>
-              給賣家的割愛小紙條
+              {t("給賣家的割愛小紙條")}
             </Text>
-            <Text type="danger" style={{ fontSize: 12 }}>*必填</Text>
+            <Text type="danger" style={{ fontSize: 12 }}>{t("*必填")}</Text>
           </div>
           
           <TextArea
-            placeholder={`用一段真誠的話來打動 ${product?.seller_nickname} ，成交就靠這裡了！`}
+            placeholder={t("用一段真誠的話來打動 {{name}} ，成交就靠這裡了！", { name: product?.seller_nickname })}
             value={dealRequestComment}
             onChange={(e) => setDealRequestComment(e.target.value)}
             rows={4}
@@ -1571,7 +1574,7 @@ const ProductDetail: React.FC = () => {
           />
           {!dealRequestComment.trim() && (
             <Text type="danger" style={{ fontSize: 12, marginTop: 4, display: 'block' }}>
-              記得填寫給賣家的留言:)
+              {t("記得填寫給賣家的留言:)")}
             </Text>
           )}
         </div>
@@ -1597,10 +1600,10 @@ const ProductDetail: React.FC = () => {
             <BulbOutlined style={{ color: '#52c41a', fontSize: 20, marginTop: 2 }} />
             <div style={{ flex: 1 }}>
               <Text strong style={{ color: '#389e0d', fontSize: 14, display: 'block', marginBottom: 4 }}>
-                購買流程說明
+                {t("購買流程說明")}
               </Text>
               <Text style={{ color: '#595959', fontSize: 13, lineHeight: 1.5 }}>
-                發送購買請求後，賣家會收到通知並查看您的留言。如果賣家同意交易，您將可以進行後續的聯絡與交易流程。
+                {t("發送購買請求後，賣家會收到通知並查看您的留言。如果賣家同意交易，您將可以進行後續的聯絡與交易流程。")}
               </Text>
             </div>
           </div>
@@ -1631,8 +1634,8 @@ const ProductDetail: React.FC = () => {
               ⚠️
             </div>
             <div>
-              <div style={{ fontSize: 18, fontWeight: 600, color: '#262626' }}>取消購買請求</div>
-              <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>確認要收回您的購買請求嗎？</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: '#262626' }}>{t("取消購買請求")}</div>
+              <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>{t("確認要收回您的購買請求嗎？")}</div>
             </div>
           </div>
         }
@@ -1643,10 +1646,10 @@ const ProductDetail: React.FC = () => {
         okText={
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <HourglassFilled />
-            確認取消
+            {t("確認取消")}
           </span>
         }
-        cancelText="不取消"
+        cancelText={t("不取消")}
         okType="danger"
         centered
         width={480}
@@ -1695,7 +1698,7 @@ const ProductDetail: React.FC = () => {
             display: 'block',
             marginBottom: 16
           }}>
-            您已經對此商品送出過購買請求
+            {t("您已經對此商品送出過購買請求")}
           </Text>
           
           <Text style={{ 
@@ -1703,7 +1706,7 @@ const ProductDetail: React.FC = () => {
             color: '#8c8c8c',
             lineHeight: 1.5
           }}>
-            取消後您可以重新發送新的購買請求，但之前的留言會遺失
+            {t("取消後您可以重新發送新的購買請求，但之前的留言會遺失")}
           </Text>
         </div>
       </Modal>

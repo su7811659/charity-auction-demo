@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface CommentFormProps {
   onSubmit: (content: string) => Promise<void>;
@@ -6,13 +7,14 @@ interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({ onSubmit, loading }) => {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) {
-      setError("留言內容不可空白");
+      setError(t("留言內容不可空白"));
       return;
     }
     setError("");
@@ -37,7 +39,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit, loading }) => {
           backgroundColor: "#ffffff",
           color: "#333333"
         }}
-        placeholder="寫下你的留言..."
+        placeholder={t("寫下你的留言...")}
         disabled={loading}
       />
       {error && <div style={{ color: "red", marginBottom: 8, fontSize: "14px" }}>{error}</div>}
@@ -55,7 +57,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit, loading }) => {
           opacity: loading ? 0.6 : 1
         }}
       >
-        {loading ? "送出中..." : "送出留言"}
+        {loading ? t("送出中...") : t("送出留言")}
       </button>
     </form>
   );

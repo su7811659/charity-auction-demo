@@ -4,9 +4,11 @@
  */
 
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import { TrophyOutlined } from '@ant-design/icons';
 import { markAchievementNotificationShown } from '../services/achievementService';
 import { clearSessionNotificationCache } from '../hooks/useAchievementChecker';
+import i18n from "../i18n";
 
 /**
  * 重新排列所有現有通知的位置
@@ -38,9 +40,10 @@ interface AchievementNotificationProps {
   onClose?: () => void;
 }
 
-const AchievementNotification: React.FC<AchievementNotificationProps> = ({ 
+const AchievementNotification: React.FC<AchievementNotificationProps> = ({
   achievement
 }) => {
+  const { t } = useTranslation();
   console.log('🎨 AchievementNotification 組件渲染，數據:', achievement);
   
   return (
@@ -98,7 +101,7 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
             marginBottom: '4px'
           }}
         >
-          🎉 成就解鎖！
+          🎉 {t("成就解鎖！")}
         </div>
         
         <div
@@ -262,7 +265,7 @@ export const showAchievementNotification = (achievement: Achievement) => {
   
   // 創建標題
   const title = document.createElement('div');
-  title.textContent = '🎉 成就解鎖！';
+  title.textContent = '🎉 ' + i18n.t("成就解鎖！");
   title.style.cssText = `
     font-size: 18px;
     font-weight: bold;
@@ -292,7 +295,7 @@ export const showAchievementNotification = (achievement: Achievement) => {
   
   // 創建提示文字
   const hint = document.createElement('div');
-  hint.textContent = '💡 點擊關閉通知 • 可到個人資料頁面查看所有成就';
+  hint.textContent = i18n.t("💡 點擊關閉通知 • 可到個人資料頁面查看所有成就");
   hint.style.cssText = `
     font-size: 12px;
     color: #6c757d;

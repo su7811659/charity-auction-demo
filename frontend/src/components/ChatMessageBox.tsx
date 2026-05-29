@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { updateMyProfile } from "../services/userService";
 import { updateUserProfile } from "../store/userSlice";
+import { useTranslation } from "react-i18next";
 
 
 dayjs.extend(utc);
@@ -49,6 +50,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
   initialMessages = [],
   onSendMessage
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState<string>('');
   const [messages, setMessages] = useState<ChatMessageProps[]>(initialMessages);
@@ -402,13 +404,13 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
     }
   };
   const themes = [
-    { key: 0, label: '海水藍', color: '#0e5c9c', subColor: '#2382fe' },
-    { key: 1, label: '天空藍', color: '#1e8bc3', subColor: '#19b5fe' },
-    { key: 2, label: '青草綠', color: '#23a15d', subColor: '#2ecc71' },
-    { key: 3, label: '活力黃', color: '#e6c231', subColor: '#d2aa0d' }, 
-    { key: 4, label: '熱情紅', color: '#d24d57', subColor: '#b71c1c' },
-    { key: 5, label: '皇家紫', color: '#7066ad', subColor: '#574f8a' },
-    { key: 6, label: '典雅黑', color: '#6c7a89', subColor: '#2e3131' } 
+    { key: 0, label: t('海水藍'), color: '#0e5c9c', subColor: '#2382fe' },
+    { key: 1, label: t('天空藍'), color: '#1e8bc3', subColor: '#19b5fe' },
+    { key: 2, label: t('青草綠'), color: '#23a15d', subColor: '#2ecc71' },
+    { key: 3, label: t('活力黃'), color: '#e6c231', subColor: '#d2aa0d' },
+    { key: 4, label: t('熱情紅'), color: '#d24d57', subColor: '#b71c1c' },
+    { key: 5, label: t('皇家紫'), color: '#7066ad', subColor: '#574f8a' },
+    { key: 6, label: t('典雅黑'), color: '#6c7a89', subColor: '#2e3131' }
 
   ]
 
@@ -440,24 +442,24 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
   );
 
   const statusList = [
-  '我要做公益',
-  '出價支持善舉',
-  '一起為愛競標',
-  '做好事也能拍',
-  '小錢成大愛',
-  '出價傳遞溫暖',
-  '公益無價，善行有你',
-  '我為公益出手',
-  '愛在拍賣中蔓延',
-  '買的是物，送的是愛',
-  '公益啦，不是敗家啦',
-  '錢沒了，德行+1',
-  '為善最樂，但好貴',
-  '公益我懂，買東西我更懂',
-  '錢沒了，但我很善良',
-  '錢包哭了，但心是暖的',
-  '我不是敗家，是在行善',
-  '媽，我在買東西救世界！'
+  t('我要做公益'),
+  t('出價支持善舉'),
+  t('一起為愛競標'),
+  t('做好事也能拍'),
+  t('小錢成大愛'),
+  t('出價傳遞溫暖'),
+  t('公益無價，善行有你'),
+  t('我為公益出手'),
+  t('愛在拍賣中蔓延'),
+  t('買的是物，送的是愛'),
+  t('公益啦，不是敗家啦'),
+  t('錢沒了，德行+1'),
+  t('為善最樂，但好貴'),
+  t('公益我懂，買東西我更懂'),
+  t('錢沒了，但我很善良'),
+  t('錢包哭了，但心是暖的'),
+  t('我不是敗家，是在行善'),
+  t('媽，我在買東西救世界！')
   ]
 
   const [userStatus] = useState<string>(_.sample(statusList) || '');
@@ -492,7 +494,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
             open={dropdownVisible}
             onOpenChange={setDropdownVisible}
           >
-            <Tooltip title="設定主題" placement="top">
+            <Tooltip title={t("設定主題")} placement="top">
               <img
                 src={settingsIcon}
                 alt="Settings"
@@ -554,7 +556,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
           <div style={{padding: '4px 20px'}}>
 
           <textarea
-            placeholder="輸入你的留言..."
+            placeholder={t("輸入你的留言...")}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             style={{
@@ -587,7 +589,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
             }}
             disabled={!inputValue.trim()}
           >
-            發送
+            {t("發送")}
           </button>
         </div>
       </div>
@@ -725,7 +727,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
                 e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
-              這不是 MM 沒有其他功能，先給你一個複製留言功能
+              {t("這不是 MM 沒有其他功能，先給你一個複製留言功能")}
             </div>
           </div>
         )}
@@ -739,7 +741,7 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({
               left: copyToast.position.x
             }}
           >
-            複製成功！
+            {t("複製成功！")}
           </div>
         )}
       </div>

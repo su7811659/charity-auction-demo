@@ -34,6 +34,7 @@ import {
   RightOutlined,
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { AppDispatch } from '../store/store';
@@ -43,6 +44,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import sleepImage from '../assets/img/sleep.jpeg';
 import RobotAvatarWithDialog, { RobotSentence } from '../components/RobotAvatarWithDialog';
+import i18n from '../i18n';
 import avatarProfessional from '../assets/img/avatar_professional.png';
 import avatarWarm from '../assets/img/avatar_warm.png';
 import avatarDomineering from '../assets/img/avatar_domineering.png';
@@ -54,6 +56,7 @@ const { Option } = Select;
 const { Dragger } = Upload;
 
 const ProductSubmit = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -85,47 +88,47 @@ const ProductSubmit = () => {
 
   // 角色選項配置（用於顯示結果）
   const characterOptions = [
-    { 
-      key: 'professional', 
-      name: '超級推銷員', 
-      icon: avatarProfessional, 
-      desc: '我不說空話，只說你真正需要知道的。',
+    {
+      key: 'professional',
+      name: t('超級推銷員'),
+      icon: avatarProfessional,
+      desc: t('我不說空話，只說你真正需要知道的。'),
       color: '#1890ff',
       bgColor: '#e6f7ff',
       avatarSize: 80
     },
-    { 
-      key: 'warm', 
-      name: '暖心說書人', 
-      icon: avatarWarm, 
-      desc: '我不只寫文案，我講故事，而這，是屬於它的故事。',
+    {
+      key: 'warm',
+      name: t('暖心說書人'),
+      icon: avatarWarm,
+      desc: t('我不只寫文案，我講故事，而這，是屬於它的故事。'),
       color: '#fa8c16',
       bgColor: '#fff7e6',
       avatarSize: 80
     },
-    { 
-      key: 'domineering', 
-      name: '霸道總裁', 
-      icon: avatarDomineering, 
-      desc: '商品我幫你挑，詞我幫你寫，你只需要動心就行。',
+    {
+      key: 'domineering',
+      name: t('霸道總裁'),
+      icon: avatarDomineering,
+      desc: t('商品我幫你挑，詞我幫你寫，你只需要動心就行。'),
       color: '#434343',
       bgColor: '#f5f5f5',
       avatarSize: 80
     },
-    { 
-      key: 'chuuni', 
-      name: '中二の少年', 
-      icon: avatarChuuni, 
-      desc: '商品只是容器，真正的力量，藏在我賦予的真名之中。',
+    {
+      key: 'chuuni',
+      name: t('中二の少年'),
+      icon: avatarChuuni,
+      desc: t('商品只是容器，真正的力量，藏在我賦予的真名之中。'),
       color: '#722ed1',
       bgColor: '#f9f0ff',
       avatarSize: 80
     },
-    { 
-      key: 'ancient', 
-      name: '古人', 
-      icon: avatarAncient, 
-      desc: '吾，名無所繫，字可忘之，棲於故紙堆中，與黃卷青燈為友。',
+    {
+      key: 'ancient',
+      name: t('古人'),
+      icon: avatarAncient,
+      desc: t('吾，名無所繫，字可忘之，棲於故紙堆中，與黃卷青燈為友。'),
       color: '#8b4513',
       bgColor: '#faf5f0',
       avatarSize: 80
@@ -153,7 +156,7 @@ const ProductSubmit = () => {
         // 獲取AI配額狀態
         fetchAiQuotaStatus(response.data.id);
       } catch (error) {
-        message.error("請重新登入");
+        message.error(t("請重新登入"));
       }
     };
     fetchUserInfo();
@@ -183,7 +186,7 @@ const ProductSubmit = () => {
       
       navigate('/upload-success', { state: { productName: form.getFieldValue('productName'), sellerName: form.getFieldValue('sellerName'), sellerNickname: form.getFieldValue('sellerNickname') } });
     } else if (status === AsyncStatus.Failed) {
-      message.error('上傳失敗');
+      message.error(t('上傳失敗'));
     }
   }, [status, dispatch, form, navigate]);
 
@@ -191,11 +194,11 @@ const ProductSubmit = () => {
     const isValidType = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
     const isValidSize = file.size / 1024 / 1024 < 10;
     if (!isValidType) {
-      message.error('請上傳 jpg / png / webp 圖片');
+      message.error(t('請上傳 jpg / png / webp 圖片'));
       return Upload.LIST_IGNORE;
     }
     if (!isValidSize) {
-      message.error('圖片大小不可超過 10MB');
+      message.error(t('圖片大小不可超過 10MB'));
       return Upload.LIST_IGNORE;
     }
     const reader = new FileReader();
@@ -285,13 +288,13 @@ const ProductSubmit = () => {
       return (
         <div style={{ textAlign: 'center', padding: '4px' }}>
           <div style={{ fontSize: '14px', marginBottom: '4px', color: '#1890ff' }}>
-            🤖 AI小助理正在創作中...
+            🤖 {t('AI小助理正在創作中...')}
           </div>
           <div style={{ fontSize: '12px', marginBottom: '6px' }}>
-            {aiLoadingMessage || '準備中...'}
+            {aiLoadingMessage || t('準備中...')}
           </div>
           <div style={{ fontSize: '11px', color: '#666' }}>
-            進度：{aiLoadingProgress}%
+            {t('進度：')}{aiLoadingProgress}%
           </div>
         </div>
       );
@@ -302,8 +305,8 @@ const ProductSubmit = () => {
       return (
         <div style={{ textAlign: 'center', padding: '4px' }}>
           <div style={{ fontSize: '16px', marginBottom: '4px' }}>😭</div>
-          <div>嗚嗚 你今天的額度用滿了</div>
-          <div>我們明天再見～</div>
+          <div>{t('嗚嗚 你今天的額度用滿了')}</div>
+          <div>{t('我們明天再見～')}</div>
         </div>
       );
     }
@@ -328,22 +331,22 @@ const ProductSubmit = () => {
       return (
         <div>
           <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#1890ff' }}>
-            AI 小助理 智能改寫功能
+            {t('AI 小助理 智能改寫功能')}
           </div>
           <div style={{ marginBottom: '6px' }}>
-            • 自動生成五種不同風格的商品描述
+            • {t('自動生成五種不同風格的商品描述')}
           </div>
           <div style={{ marginBottom: '6px' }}>
-            • 專業推銷、暖心故事、霸道總裁、中二風格、古典文雅
+            • {t('專業推銷、暖心故事、霸道總裁、中二風格、古典文雅')}
           </div>
           <div style={{ marginBottom: '6px' }}>
-            • 基於你填寫的商品資訊智能生成
+            • {t('基於你填寫的商品資訊智能生成')}
           </div>
           <div style={{ color: '#666', fontSize: '12px', marginBottom: '4px' }}>
-            今日剩餘次數：{aiQuotaStatus ? aiQuotaStatus.total - aiQuotaStatus.used : 5} 次
+            {t('今日剩餘次數：')}{aiQuotaStatus ? aiQuotaStatus.total - aiQuotaStatus.used : 5} {t('次')}
           </div>
           <div style={{ color: '#999', fontSize: '11px' }}>
-            ⏱️ 生成時間約 20-50 秒
+            ⏱️ {t('生成時間約 20-50 秒')}
           </div>
         </div>
       );
@@ -351,21 +354,21 @@ const ProductSubmit = () => {
 
     // 如果有條件不滿足，列出原因
     const fieldNames = {
-      productName: '商品名稱',
-      sellerNickname: '賣家暱稱',
-      price: '商品定價',
-      condition: '商品新舊程度'
+      productName: t('商品名稱'),
+      sellerNickname: t('賣家暱稱'),
+      price: t('商品定價'),
+      condition: t('商品新舊程度')
     };
 
     return (
       <div>
         <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ff4d4f' }}>
-          ⚠️ 請先完成以下條件：
+          ⚠️ {t('請先完成以下條件：')}
         </div>
         {missing.length > 0 && (
           <div style={{ marginBottom: '6px' }}>
             <div style={{ color: '#ff4d4f', fontSize: '12px', marginBottom: '2px' }}>
-              缺少必填欄位：
+              {t('缺少必填欄位：')}
             </div>
             {missing.map(field => (
               <div key={field} style={{ marginLeft: '12px', fontSize: '12px' }}>
@@ -377,15 +380,15 @@ const ProductSubmit = () => {
         {!hasBasicDescription && (
           <div style={{ marginBottom: '6px' }}>
             <div style={{ color: '#ff4d4f', fontSize: '12px', marginBottom: '2px' }}>
-              商品描述不符合要求：
+              {t('商品描述不符合要求：')}
             </div>
             <div style={{ marginLeft: '12px', fontSize: '12px' }}>
-              • 需要至少10個字的基本描述
+              • {t('需要至少10個字的基本描述')}
             </div>
           </div>
         )}
         <div style={{ color: '#666', fontSize: '11px', marginTop: '8px', fontStyle: 'italic' }}>
-          完成後即可使用AI智能改寫功能
+          {t('完成後即可使用AI智能改寫功能')}
         </div>
       </div>
     );
@@ -400,18 +403,18 @@ const ProductSubmit = () => {
       
       if (missing.length > 0) {
         const fieldNames = {
-          productName: '商品名稱',
-          sellerNickname: '賣家暱稱', 
-          price: '商品定價',
-          condition: '商品新舊程度'
+          productName: t('商品名稱'),
+          sellerNickname: t('賣家暱稱'),
+          price: t('商品定價'),
+          condition: t('商品新舊程度')
         };
-        message.warning(`請先填寫：${missing.map(field => fieldNames[field as keyof typeof fieldNames]).join('、')}`);
+        message.warning(`${t('請先填寫：')}${missing.map(field => fieldNames[field as keyof typeof fieldNames]).join('、')}`);
         return;
       }
-      
+
       const description = form.getFieldValue('description');
       if (!description || description.trim().length < 10) {
-        message.warning('請先在商品描述中填寫一些基本內容（至少10個字），AI才能幫你改寫得更好喔！');
+        message.warning(t('請先在商品描述中填寫一些基本內容（至少10個字），AI才能幫你改寫得更好喔！'));
         return;
       }
     }
@@ -422,16 +425,16 @@ const ProductSubmit = () => {
     
     // 等待訊息陣列
     const loadingMessages = [
-      '🤖 AI小助理 正在理解你的商品資訊...',
-      '💭 正在分析商品特色和賣點...',
-      '✨ 超級推銷員正在構思文案...',
-      '🌟 暖心說書人正在編織故事...',
-      '👑 霸道總裁正在撰寫描述...',
-      '⚡ 中二少年正在賦予真名...',
-      '📜 古人正在揮毫潑墨...',
-      '🎨 正在為每種風格潤色文字...',
-      '🔍 正在檢查文案品質...',
-      '✅ 即將完成，請稍候...'
+      `🤖 ${t('AI小助理 正在理解你的商品資訊...')}`,
+      `💭 ${t('正在分析商品特色和賣點...')}`,
+      `✨ ${t('超級推銷員正在構思文案...')}`,
+      `🌟 ${t('暖心說書人正在編織故事...')}`,
+      `👑 ${t('霸道總裁正在撰寫描述...')}`,
+      `⚡ ${t('中二少年正在賦予真名...')}`,
+      `📜 ${t('古人正在揮毫潑墨...')}`,
+      `🎨 ${t('正在為每種風格潤色文字...')}`,
+      `🔍 ${t('正在檢查文案品質...')}`,
+      `✅ ${t('即將完成，請稍候...')}`
     ];
     
     // 進度模擬器 - 修復進度條卡在99%的問題
@@ -452,7 +455,7 @@ const ProductSubmit = () => {
     
     try {
       if (!userId) {
-        message.error('請重新登入後再使用AI功能');
+        message.error(t('請重新登入後再使用AI功能'));
         setAiLoading(false);
         clearInterval(progressInterval);
         return;
@@ -485,7 +488,7 @@ const ProductSubmit = () => {
         if (response.data.message) {
           message.error(response.data.message);
         } else {
-          message.error('AI改寫失敗，請稍後再試');
+          message.error(t('AI改寫失敗，請稍後再試'));
         }
         return;
       }
@@ -504,7 +507,7 @@ const ProductSubmit = () => {
             
             // 完成進度
             setAiLoadingProgress(100);
-            setAiLoadingMessage('🎉 AI改寫完成！');
+            setAiLoadingMessage(`🎉 ${t('AI改寫完成！')}`);
             
             // 短暫延遲後顯示結果
             setTimeout(() => {
@@ -519,7 +522,7 @@ const ProductSubmit = () => {
                   used: used,
                   total: aiQuotaStatus.total
                 });
-                message.success(`AI改寫成功！今日還可使用 ${taskInfo.remaining_usage} 次`);
+                message.success(`${t('AI改寫成功！今日還可使用')} ${taskInfo.remaining_usage} ${t('次')}`);
               }
             }, 1000);
             
@@ -527,7 +530,7 @@ const ProductSubmit = () => {
             // 清除進度模擬器
             clearInterval(progressInterval);
             setAiLoading(false);
-            message.error(taskInfo.message || 'AI改寫失敗，請稍後再試');
+            message.error(taskInfo.message || t('AI改寫失敗，請稍後再試'));
             
           } else {
             // 狀態為 pending 或 processing，繼續輪詢
@@ -539,7 +542,7 @@ const ProductSubmit = () => {
           // 清除進度模擬器
           clearInterval(progressInterval);
           setAiLoading(false);
-          message.error('查詢AI改寫狀態失敗，請稍後再試');
+          message.error(t('查詢AI改寫狀態失敗，請稍後再試'));
         }
       };
       
@@ -550,7 +553,7 @@ const ProductSubmit = () => {
       console.error('AI rewrite error:', error);
       clearInterval(progressInterval);
       setAiLoading(false);
-      message.error('AI服務暫時不可用，請稍後再試');
+      message.error(t('AI服務暫時不可用，請稍後再試'));
     }
   };
 
@@ -558,56 +561,56 @@ const ProductSubmit = () => {
   const applyAiDescription = (description: string) => {
     form.setFieldValue('description', description);
     setAiModalVisible(false);
-    message.success('AI描述已套用！');
+    message.success(t('AI描述已套用！'));
   };
 
 // 機器人對話內容（載入中 Modal）
 const loadingRobotSentences: RobotSentence[] = [
-  { content: 'AI小助理正把靈感打包中📦，文案快來敲門～' },
-  { content: '在你等待的時間，讓小助理我來講個笑話吧～ 一般的狗都汪汪叫，那山上的狗怎麼叫？我想牠會說：汪汪的啦🐶⛰️' },
-  { content: '我：醫生，我開刀後多久能拉小提琴？醫生：一個月。我：太好了，我以前可是不會的！🎻😆' },
-  { content: '靈感加熱中…就像微波爆米花，還在噗通噗通🍿' },
-  { content: '來個腦筋急轉彎：葡萄被點名會怎麼回？嗯…「葡萄柚！」' },
-  { content: '你問我小鹿斑比的哥哥叫啥？我猜是那位常常帶大家去尋寶的——大鹿尋奇🦌🔎' },
-  { content: '在你等待的時間，讓小助理我再說一個～ 哪位藝人中午固定不吃午餐？答案是「中島美嘉」🎤' },
-  { content: '我正把五種角色排成隊形，禮讓先登場的那種' },
-  { content: '在你等待的時間，給你一句小提醒：學海很寬，回頭就靠岸～我也快靠岸了⛵' },
-  { content: '文案正在排版梳妝中💄，等一下下就美美見你' },
-  { content: '紅豆、綠豆、黃豆哪個最貴？答案是紅豆，因為紅豆粉粿～🍡' },
-  { content: '為什麼超人愛穿緊身衣？因為救人要「緊」嘛～🦸‍♂️✨' },
-  { content: '達文西密碼的上面是什麼？..............................達文西帳號' },
+  { content: i18n.t('AI小助理正把靈感打包中📦，文案快來敲門～') },
+  { content: i18n.t('在你等待的時間，讓小助理我來講個笑話吧～ 一般的狗都汪汪叫，那山上的狗怎麼叫？我想牠會說：汪汪的啦🐶⛰️') },
+  { content: i18n.t('我：醫生，我開刀後多久能拉小提琴？醫生：一個月。我：太好了，我以前可是不會的！🎻😆') },
+  { content: i18n.t('靈感加熱中…就像微波爆米花，還在噗通噗通🍿') },
+  { content: i18n.t('來個腦筋急轉彎：葡萄被點名會怎麼回？嗯…「葡萄柚！」') },
+  { content: i18n.t('你問我小鹿斑比的哥哥叫啥？我猜是那位常常帶大家去尋寶的——大鹿尋奇🦌🔎') },
+  { content: i18n.t('在你等待的時間，讓小助理我再說一個～ 哪位藝人中午固定不吃午餐？答案是「中島美嘉」🎤') },
+  { content: i18n.t('我正把五種角色排成隊形，禮讓先登場的那種') },
+  { content: i18n.t('在你等待的時間，給你一句小提醒：學海很寬，回頭就靠岸～我也快靠岸了⛵') },
+  { content: i18n.t('文案正在排版梳妝中💄，等一下下就美美見你') },
+  { content: i18n.t('紅豆、綠豆、黃豆哪個最貴？答案是紅豆，因為紅豆粉粿～🍡') },
+  { content: i18n.t('為什麼超人愛穿緊身衣？因為救人要「緊」嘛～🦸‍♂️✨') },
+  { content: i18n.t('達文西密碼的上面是什麼？..............................達文西帳號') },
 
   // silent（厭世但不兇）
-  { content: '嗯…我還在搬運靈感箱子，手有點痠😮‍💨', type: 'silent' },
-  { content: '進度條在走，我也在走神。給我幾秒。😑', type: 'silent' },
-  { content: '不是卡住，是我在挑比較好的詞。', type: 'silent' },
-  { content: '快好了。再點我也只會更顯得你很著急。', type: 'silent' },
-  { content: '靈感路上塞了兩個逗號和一個句點。', type: 'silent' }
+  { content: i18n.t('嗯…我還在搬運靈感箱子，手有點痠😮‍💨'), type: 'silent' },
+  { content: i18n.t('進度條在走，我也在走神。給我幾秒。😑'), type: 'silent' },
+  { content: i18n.t('不是卡住，是我在挑比較好的詞。'), type: 'silent' },
+  { content: i18n.t('快好了。再點我也只會更顯得你很著急。'), type: 'silent' },
+  { content: i18n.t('靈感路上塞了兩個逗號和一個句點。'), type: 'silent' }
 ];
 
 // 機器人對話內容（結果 Modal 標題）
 const resultHeaderRobotSentences: RobotSentence[] = [
-  { content: '出爐囉！五種文案一次奉上🎉' },
-  { content: '任務完成✅ 會議室裡，推銷員和總裁為形容詞吵了一架，說書人忙著安撫，中二少年說要壓制右眼失控的力量，古人默默寫下最後一筆。' },
-  { content: '文案到站🚉 請查收你的專屬靈感盒～' },
-  { content: '來來來～文案大功告成！我可是連催五位作者三次才收齊的，你一定要好好看看📦✨' },
-  { content: '完成✅ 祝你的商品一路長紅～' },
-  { content: '這次我超有效率，還幫大家準備了零食——雖然說書人只喝茶，總裁只喝黑咖啡☕' },
-  { content: '我覺得古人的那份可以裱起來掛牆，推銷員那份適合貼廣告，總裁那份直接拿去開會用📜' },
-  { content: '這批我自己都想收藏，真的。😍' },
-  { content: '全員任務完成，我要去喝口茶，檔案歸你啦☕' },
-  { content: '超級推銷員：搞定啦！這份文案保證讓你的商品大放異彩📈🛒' },
-  { content: '暖心說書人：我把你的商品寫成了一個故事，希望每個讀到的人都能微笑📖✨' },
-  { content: '霸道總裁拍了拍桌子：我批准這批文案上線🔥' },
-  { content: '中二少年壓低聲音：我寫的描述，都藏著力量的印記…⚡' },
-  { content: '古人提筆一揮：五式文辭，已成，君可擇之📜' },
+  { content: i18n.t('出爐囉！五種文案一次奉上🎉') },
+  { content: i18n.t('任務完成✅ 會議室裡，推銷員和總裁為形容詞吵了一架，說書人忙著安撫，中二少年說要壓制右眼失控的力量，古人默默寫下最後一筆。') },
+  { content: i18n.t('文案到站🚉 請查收你的專屬靈感盒～') },
+  { content: i18n.t('來來來～文案大功告成！我可是連催五位作者三次才收齊的，你一定要好好看看📦✨') },
+  { content: i18n.t('完成✅ 祝你的商品一路長紅～') },
+  { content: i18n.t('這次我超有效率，還幫大家準備了零食——雖然說書人只喝茶，總裁只喝黑咖啡☕') },
+  { content: i18n.t('我覺得古人的那份可以裱起來掛牆，推銷員那份適合貼廣告，總裁那份直接拿去開會用📜') },
+  { content: i18n.t('這批我自己都想收藏，真的。😍') },
+  { content: i18n.t('全員任務完成，我要去喝口茶，檔案歸你啦☕') },
+  { content: i18n.t('超級推銷員：搞定啦！這份文案保證讓你的商品大放異彩📈🛒') },
+  { content: i18n.t('暖心說書人：我把你的商品寫成了一個故事，希望每個讀到的人都能微笑📖✨') },
+  { content: i18n.t('霸道總裁拍了拍桌子：我批准這批文案上線🔥') },
+  { content: i18n.t('中二少年壓低聲音：我寫的描述，都藏著力量的印記…⚡') },
+  { content: i18n.t('古人提筆一揮：五式文辭，已成，君可擇之📜') },
 
   // silent（厭世但不兇）
-  { content: '呼！交卷了。你可以先看看，我下去一下7-11。', type: 'silent' },
-  { content: '好了。咖啡時間開始了☕', type: 'silent' },
-  { content: '五個人都交件了，各回各家，我也要下線了。', type: 'silent' },
-   { content: '霸道總裁（silent）：已經完成。別讓我重複第二次。', type: 'silent' },
-  { content: '嗯，這批真香。你去挑，我去放空一下。', type: 'silent' }
+  { content: i18n.t('呼！交卷了。你可以先看看，我下去一下7-11。'), type: 'silent' },
+  { content: i18n.t('好了。咖啡時間開始了☕'), type: 'silent' },
+  { content: i18n.t('五個人都交件了，各回各家，我也要下線了。'), type: 'silent' },
+   { content: i18n.t('霸道總裁（silent）：已經完成。別讓我重複第二次。'), type: 'silent' },
+  { content: i18n.t('嗯，這批真香。你去挑，我去放空一下。'), type: 'silent' }
 ];
 
 
@@ -629,9 +632,9 @@ const resultHeaderRobotSentences: RobotSentence[] = [
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Title level={3} style={{ textAlign: 'center', fontWeight: 700 }}>商品上傳</Title>
+          <Title level={3} style={{ textAlign: 'center', fontWeight: 700 }}>{t('商品上傳')}</Title>
           <Text type="secondary" style={{ display: 'block', textAlign: 'center', marginBottom: 24 }}>
-            請填寫以下商品資訊，標示 * 為必填欄位
+            {t('請填寫以下商品資訊，標示 * 為必填欄位')}
           </Text>
         </motion.div>
 
@@ -643,18 +646,18 @@ const resultHeaderRobotSentences: RobotSentence[] = [
           <Form form={form} layout="vertical" onFinish={onFinish}>
           <Row gutter={[32, 24]}>
             <Col span={12} style={{ paddingInline: 12 }}>
-              <Form.Item 
-                name="sellerName" label="賣家帳號"
+              <Form.Item
+                name="sellerName" label={t('賣家帳號')}
               >
-                <Input disabled 
+                <Input disabled
                   prefix={<UserOutlined />}
                 />
               </Form.Item>
-              <Form.Item 
-                name="productName" 
-                label="商品名稱"
+              <Form.Item
+                name="productName"
+                label={t('商品名稱')}
                 className="form-item-hoverable"
-                rules={[{ required: true, message: '要記得告訴我它叫什麼名字呀' }]}> 
+                rules={[{ required: true, message: t('要記得告訴我它叫什麼名字呀') }]}>
                 <Input 
                   maxLength={20} 
                   showCount 
@@ -666,15 +669,15 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                 /> 
               </Form.Item>
               <Form.Item 
-                name="sellerNickname" 
-                label="賣家暱稱"
+                name="sellerNickname"
+                label={t('賣家暱稱')}
                 className="form-item-hoverable"
-                rules={[{ required: true, message: '想不到名字嗎？ 我都取 乂卍Oo煞氣a賣家oO卍乂' }]}> 
-                <Input 
-                  maxLength={15} 
-                  showCount 
-                  onChange={e => form.setFieldValue('sellerNickname', e.target.value)} 
-                  placeholder="取一個酷酷又帥帥的暱稱吧😎" 
+                rules={[{ required: true, message: t('想不到名字嗎？ 我都取 乂卍Oo煞氣a賣家oO卍乂') }]}>
+                <Input
+                  maxLength={15}
+                  showCount
+                  onChange={e => form.setFieldValue('sellerNickname', e.target.value)}
+                  placeholder={t('取一個酷酷又帥帥的暱稱吧😎')}
                   prefix={<
                     SmileOutlined 
                     style={{ color: '#2894FF' }} 
@@ -682,11 +685,11 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                 /> 
               </Form.Item>
               <Form.Item 
-                name="price" 
-                label="商品定價"
+                name="price"
+                label={t('商品定價')}
                 className="form-item-hoverable"
-                rules={[{ required: true, message: '商品多少錢記得跟我說一下，總不能免費吧XD' }]}> 
-                <InputNumber min={1} className="w-full" addonAfter="元" onChange={(val) => form.setFieldValue('price', val)} 
+                rules={[{ required: true, message: t('商品多少錢記得跟我說一下，總不能免費吧XD') }]}>
+                <InputNumber min={1} className="w-full" addonAfter={t('元')} onChange={(val) => form.setFieldValue('price', val)}
                 prefix={<
                   DollarOutlined 
                   style={{ color: '#FF2D2D' }}
@@ -694,22 +697,22 @@ const resultHeaderRobotSentences: RobotSentence[] = [
               /> 
               </Form.Item>
               <Form.Item 
-                name="condition" 
-                label="商品新舊程度"
+                name="condition"
+                label={t('商品新舊程度')}
                 className="form-item-hoverable"
-                rules={[{ required: true, message: '別忘了告訴買家你的商品情況嘿' }]}
-              > 
-                <Select 
-                  placeholder="請選擇商品新舊程度" 
+                rules={[{ required: true, message: t('別忘了告訴買家你的商品情況嘿') }]}
+              >
+                <Select
+                  placeholder={t('請選擇商品新舊程度')}
                   onChange={(val) => form.setFieldValue('condition', val)}
                   prefix={<StarFilled style={{ color: '#fadb14' }} />}
-                  
-                > 
-                  <Option value={1}>全新</Option> 
-                  <Option value={2}>九成新</Option> 
-                  <Option value={3}>五成新</Option> 
-                  <Option value={4}>低於五成新</Option> 
-                </Select> 
+
+                >
+                  <Option value={1}>{t('全新')}</Option>
+                  <Option value={2}>{t('九成新')}</Option>
+                  <Option value={3}>{t('五成新')}</Option>
+                  <Option value={4}>{t('低於五成新')}</Option>
+                </Select>
               </Form.Item>
               <Form.Item 
                 name="donationRatio" 
@@ -717,8 +720,8 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                 className="form-item-hoverable"
                 label={
                   <span>
-                    公益捐贈比例&nbsp;
-                    <Tooltip title="如果你填 40%，代表商品成交後有 40% 的金額會捐出做公益">
+                    {t('公益捐贈比例')}&nbsp;
+                    <Tooltip title={t('如果你填 40%，代表商品成交後有 40% 的金額會捐出做公益')}>
                       <InfoCircleOutlined style={{ color: '#999' }} />
                     </Tooltip>
                   </span>
@@ -745,7 +748,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                       width: '100%'
                     }}
                   >
-                    <span>商品描述</span>
+                    <span>{t('商品描述')}</span>
                     <span
                       style={{
                         marginLeft: 'auto',
@@ -771,7 +774,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                             }`
                           }}
                         >
-                          今日已用 {aiQuotaStatus.used}/{aiQuotaStatus.total}
+                          {t('今日已用')} {aiQuotaStatus.used}/{aiQuotaStatus.total}
                         </span>
                       )}
                       <Tooltip
@@ -817,10 +820,10 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                         >
                           {aiLoading ? (
                             <div style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
-                              思考中...
+                              {t('思考中...')}
                             </div>
                           ) : (
-                            'AI改寫'
+                            t('AI改寫')
                           )}
                         </Button>
                       </Tooltip>
@@ -832,31 +835,31 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                   {
                     required: true,
                     message:
-                      '字，是記憶的容器。寫下幾句話，讓人們認識它，然後愛上它。'
+                      t('字，是記憶的容器。寫下幾句話，讓人們認識它，然後愛上它。')
                   }
                 ]}
-              > 
-                <Input.TextArea 
-                  maxLength={250} 
-                  showCount 
-                  rows={10} 
-                  placeholder="說一下這個商品的資訊吧！也可以說說你跟它的感人故事來提高AI小助理的評價唷！" 
+              >
+                <Input.TextArea
+                  maxLength={250}
+                  showCount
+                  rows={10}
+                  placeholder={t('說一下這個商品的資訊吧！也可以說說你跟它的感人故事來提高AI小助理的評價唷！')}
                   onChange={e => form.setFieldValue('description', e.target.value)}
                 /> 
                 </Form.Item>
               <Form.Item 
-                name="image" 
-                label="商品圖片" 
+                name="image"
+                label={t('商品圖片')}
                 className="form-item-hoverable"
                 valuePropName="fileList"
-                 
-                getValueFromEvent={normFile} rules={[{ required: true, message: '你的商品是不是隱形的？快把它變出來給我看啦～' }]}
-              > 
+
+                getValueFromEvent={normFile} rules={[{ required: true, message: t('你的商品是不是隱形的？快把它變出來給我看啦～') }]}
+              >
                 <Dragger 
                   beforeUpload={beforeUpload} 
                   showUploadList={false} 
                   accept="image/*" 
-                  fileList={imageList}> {imagePreview ? ( <img src={imagePreview} alt="預覽" style={{ width: '100%', objectFit: 'contain', aspectRatio: '16 / 9', borderRadius: 8 }} /> ) : ( <> <p className="ant-upload-drag-icon"><InboxOutlined /></p> <p className="ant-upload-text">拖放圖片至此或點擊上傳</p> <p className="ant-upload-hint">圖片大小不超過 10MB</p> </> )} 
+                  fileList={imageList}> {imagePreview ? ( <img src={imagePreview} alt={t('預覽')} style={{ width: '100%', objectFit: 'contain', aspectRatio: '16 / 9', borderRadius: 8 }} /> ) : ( <> <p className="ant-upload-drag-icon"><InboxOutlined /></p> <p className="ant-upload-text">{t('拖放圖片至此或點擊上傳')}</p> <p className="ant-upload-hint">{t('圖片大小不超過 10MB')}</p> </> )}
                 </Dragger> 
               </Form.Item>
             </Col>
@@ -885,7 +888,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
               e.currentTarget.style.transform = 'scale(1)';
             }}
           >
-            一鍵填入
+            {t('一鍵填入')}
           </Button>
         )}
 
@@ -921,7 +924,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          清空商品資訊
+          {t('清空商品資訊')}
         </Button>
 
         {/* 送出（根據開發模式調整樣式） */}
@@ -953,18 +956,18 @@ const resultHeaderRobotSentences: RobotSentence[] = [
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          上傳你的愛心
+          {t('上傳你的愛心')}
         </Button>
       </div>
         </Form>
         <Modal
           open={submitPreviewVisible}
-          title="確認上傳商品資料"
+          title={t('確認上傳商品資料')}
           onCancel={() => setSubmitPreviewVisible(false)}
           footer={
             <>
               <Button onClick={() => setSubmitPreviewVisible(false)}>
-                我想再改改
+                {t('我想再改改')}
               </Button>
               <Button
                 type="primary"
@@ -973,35 +976,35 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                   setSubmitPreviewVisible(false);
                 }}
               >
-                確認送出
+                {t('確認送出')}
               </Button>
             </>
           }
         >
           {submitPreviewData && (
             <Descriptions column={1} bordered size="small">
-              <Descriptions.Item label="商品名稱">{submitPreviewData.productName}</Descriptions.Item>
-              <Descriptions.Item label="賣家暱稱">{submitPreviewData.sellerNickname}</Descriptions.Item>
-              <Descriptions.Item label="價格">{`$${submitPreviewData.price}`}</Descriptions.Item>
-              <Descriptions.Item label="新舊程度">
+              <Descriptions.Item label={t('商品名稱')}>{submitPreviewData.productName}</Descriptions.Item>
+              <Descriptions.Item label={t('賣家暱稱')}>{submitPreviewData.sellerNickname}</Descriptions.Item>
+              <Descriptions.Item label={t('價格')}>{`$${submitPreviewData.price}`}</Descriptions.Item>
+              <Descriptions.Item label={t('新舊程度')}>
                 {{
-                  '1': '全新',
-                  '2': '九成新',
-                  '3': '五成新',
-                  '4': '低於五成新',
+                  '1': t('全新'),
+                  '2': t('九成新'),
+                  '3': t('五成新'),
+                  '4': t('低於五成新'),
                 }[String(submitPreviewData.condition)]
                 }
               </Descriptions.Item>
-              <Descriptions.Item label="商品描述">{submitPreviewData.description}</Descriptions.Item>
-              <Descriptions.Item label="捐贈比例">{submitPreviewData.donationRatio}%</Descriptions.Item>
-              <Descriptions.Item label="圖片">
+              <Descriptions.Item label={t('商品描述')}>{submitPreviewData.description}</Descriptions.Item>
+              <Descriptions.Item label={t('捐贈比例')}>{submitPreviewData.donationRatio}%</Descriptions.Item>
+              <Descriptions.Item label={t('圖片')}>
                 {submitPreviewData.image?.[0]?.originFileObj ? (
                   <Image
                     src={URL.createObjectURL(submitPreviewData.image[0].originFileObj)}
                     width={200}
                   />
                 ) : (
-                  '尚未上傳'
+                  t('尚未上傳')
                 )}
               </Descriptions.Item>
             </Descriptions>
@@ -1037,10 +1040,10 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                     placement="top"
                     inline={false}
                   />
-                  AI小助理為你生成了五種風格的描述
+                  {t('AI小助理為你生成了五種風格的描述')}
                 </div>
                 <div style={{ fontSize: '14px', color: '#999' }}>
-                  左右切換查看不同風格，點擊「套用此描述」即可使用
+                  {t('左右切換查看不同風格，點擊「套用此描述」即可使用')}
                 </div>
               </div>
 
@@ -1206,7 +1209,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                   }}
                   style={{ flex: 1, maxWidth: '120px' }}
                 >
-                  取消
+                  {t('取消')}
                 </Button>
                 <Button
                   type="primary"
@@ -1234,7 +1237,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  套用此描述
+                  {t('套用此描述')}
                 </Button>
               </div>
 
@@ -1287,7 +1290,7 @@ const resultHeaderRobotSentences: RobotSentence[] = [
               />
             </div>
             <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', color: '#1890ff' }}>
-              AI小助理 正在為你生成精彩描述
+              {t('AI小助理 正在為你生成精彩描述')}
             </div>
             <div style={{ marginBottom: '20px' }}>
               <Progress 
@@ -1299,12 +1302,12 @@ const resultHeaderRobotSentences: RobotSentence[] = [
                 style={{ marginBottom: '12px' }}
               />
               <div style={{ fontSize: '14px', color: '#666', minHeight: '20px' }}>
-                {aiLoadingMessage || '準備中...'}
+                {aiLoadingMessage || t('準備中...')}
               </div>
             </div>
             <div style={{ fontSize: '12px', color: '#999', lineHeight: '1.5' }}>
-              <div>預計需要 20-50 秒</div>
-              <div>請耐心等候，AI小助理正在為你創作五種風格的描述</div>
+              <div>{t('預計需要 20-50 秒')}</div>
+              <div>{t('請耐心等候，AI小助理正在為你創作五種風格的描述')}</div>
             </div>
           </div>
         </Modal>

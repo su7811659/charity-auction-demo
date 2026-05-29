@@ -1,4 +1,5 @@
 // TotalDonationCounter.tsx
+import { useTranslation } from "react-i18next";
 import { Tooltip, Popover } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { ReactNode, useEffect, useState, useRef } from "react";
@@ -93,10 +94,11 @@ const AnimatedNumber: React.FC<{ value: number }> = ({ value }) => {
   );
 };
 
-export const TotalDonationCounter: React.FC<TotalDonationCounterProps> = ({ 
-  totalDonation, 
-  popoverContent 
+export const TotalDonationCounter: React.FC<TotalDonationCounterProps> = ({
+  totalDonation,
+  popoverContent
 }) => {
+  const { t } = useTranslation();
   return (
     <div style={{ 
       display: "flex", 
@@ -107,8 +109,8 @@ export const TotalDonationCounter: React.FC<TotalDonationCounterProps> = ({
       fontSize: 14 
     }}>
       <div style={{ display: "flex", paddingRight: 4, gap: "0.35rem" }}>
-        <span style={{ color: "#ccc", position: 'relative', top: -1 }}>已累積</span>
-        <Tooltip title="此金額為所有商品成交後的總捐贈金額">
+        <span style={{ color: "#ccc", position: 'relative', top: -1 }}>{t("已累積")}</span>
+        <Tooltip title={t("此金額為所有商品成交後的總捐贈金額")}>
           <InfoCircleOutlined style={{ color: "#69c0ff" }} />
         </Tooltip>
       </div>

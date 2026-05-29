@@ -1,6 +1,7 @@
 // SellerProductTable.tsx
 import React, { useState } from "react";
 import { Table, Button, Modal, Descriptions } from "antd";
+import { useTranslation } from "react-i18next";
 import { Product } from "../types/productResponse";
 import { ColumnsType } from "antd/es/table";
 import LazyImage from "../components/LazyImage";
@@ -10,16 +11,17 @@ interface Props {
 }
 
 const SellerProductTable: React.FC<Props> = ({ products }) => {
+    const { t } = useTranslation();
     const [cardModalVisible, setCardModalVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     const columns: ColumnsType<Product> = [
-        { title: "商品名稱", dataIndex: "product_name", key: "name", width: 180 },
-        { title: "價格", dataIndex: "price", key: "price", render: (val) => `$${val}`, width: 80 },
-        { title: "捐贈比例", dataIndex: "donation_ratio", key: "donation_ratio", render: (val) => `${val}%`, width: 80 },
-        { title: "捐贈金額", key: "donation", render: (_, record) => `$${Math.round(record.price * (record.donation_ratio || 0) / 100)}`, width: 90 },
-        { 
-          title: "賣家收益", 
+        { title: t("商品名稱"), dataIndex: "product_name", key: "name", width: 180 },
+        { title: t("價格"), dataIndex: "price", key: "price", render: (val) => `$${val}`, width: 80 },
+        { title: t("捐贈比例"), dataIndex: "donation_ratio", key: "donation_ratio", render: (val) => `${val}%`, width: 80 },
+        { title: t("捐贈金額"), key: "donation", render: (_, record) => `$${Math.round(record.price * (record.donation_ratio || 0) / 100)}`, width: 90 },
+        {
+          title: t("賣家收益"),
           key: "seller_revenue", 
           render: (_, record) => {
             // 直接使用資料庫中的 seller_income（線上交易時後端已設為0）
@@ -32,9 +34,9 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
           }, 
           width: 100 
         },
-        { 
-          title: "須追繳", 
-          key: "need_collect", 
+        {
+          title: t("須追繳"),
+          key: "need_collect",
           render: (_, record) => {
             const needCollect = record.is_online_deal ? Math.round(record.price * (record.donation_ratio || 0) / 100) : 0;
             return (
@@ -45,9 +47,9 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
           }, 
           width: 80 
         },
-        { 
-          title: "線上交易", 
-          dataIndex: "is_online_deal", 
+        {
+          title: t("線上交易"),
+          dataIndex: "is_online_deal",
           key: "is_online_deal", 
           render: (val) => (
             <span style={{ color: val ? '#1890ff' : '#d9d9d9' }}>
@@ -56,10 +58,10 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
           ), 
           width: 80 
         },
-        { title: "賣家暱稱", dataIndex: "seller_nickname", key: "nickname", width: 100 },
-        { title: "買家名稱", dataIndex: "buyer_name", key: "buyer_name", width: 100 },
+        { title: t("賣家暱稱"), dataIndex: "seller_nickname", key: "nickname", width: 100 },
+        { title: t("買家名稱"), dataIndex: "buyer_name", key: "buyer_name", width: 100 },
         {
-            title: "更多資訊",
+            title: t("更多資訊"),
             key: "action",
             width: 80,
             render: (_, record) => (
@@ -70,7 +72,7 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
                         setCardModalVisible(true);
                     }}
                 >
-                    詳細
+                    {t("詳細")}
                 </Button>
             ),
         },
@@ -91,7 +93,7 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
                 open={cardModalVisible}
                 onCancel={() => setCardModalVisible(false)}
                 footer={null}
-                title="商品詳細卡片預覽"
+                title={t("商品詳細卡片預覽")}
             >
                 {selectedProduct && (
                     <div style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
@@ -108,16 +110,16 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
                             }}
                         />
                         <Descriptions column={1} bordered size="small">
-                            <Descriptions.Item label="商品名稱">{selectedProduct.product_name}</Descriptions.Item>
-                            <Descriptions.Item label="價格">${selectedProduct.price}</Descriptions.Item>
-                            <Descriptions.Item label="捐贈比例">{selectedProduct.donation_ratio}%</Descriptions.Item>
-                            <Descriptions.Item label="捐贈金額">${Math.round(selectedProduct.price * (selectedProduct.donation_ratio || 0) / 100)}</Descriptions.Item>
-                            <Descriptions.Item label="賣家收益">
+                            <Descriptions.Item label={t("商品名稱")}>{selectedProduct.product_name}</Descriptions.Item>
+                            <Descriptions.Item label={t("價格")}>${selectedProduct.price}</Descriptions.Item>
+                            <Descriptions.Item label={t("捐贈比例")}>{selectedProduct.donation_ratio}%</Descriptions.Item>
+                            <Descriptions.Item label={t("捐贈金額")}>${Math.round(selectedProduct.price * (selectedProduct.donation_ratio || 0) / 100)}</Descriptions.Item>
+                            <Descriptions.Item label={t("賣家收益")}>
                                 <span style={{ color: selectedProduct.is_online_deal ? '#d9d9d9' : '#52c41a' }}>
                                     ${Math.round(selectedProduct.seller_income || 0)}
                                 </span>
                             </Descriptions.Item>
-                            <Descriptions.Item label="須追繳金額">
+                            <Descriptions.Item label={t("須追繳金額")}>
                                 <span style={{ 
                                     color: selectedProduct.is_online_deal ? '#ff4d4f' : '#d9d9d9',
                                     fontWeight: selectedProduct.is_online_deal ? 'bold' : 'normal'
@@ -125,26 +127,26 @@ const SellerProductTable: React.FC<Props> = ({ products }) => {
                                     ${selectedProduct.is_online_deal ? Math.round(selectedProduct.price * (selectedProduct.donation_ratio || 0) / 100) : 0}
                                 </span>
                             </Descriptions.Item>
-                            <Descriptions.Item label="線上交易">
+                            <Descriptions.Item label={t("線上交易")}>
                                 <span style={{ color: selectedProduct.is_online_deal ? '#1890ff' : '#d9d9d9' }}>
-                                    {selectedProduct.is_online_deal ? '是 ✓' : '否 ✗'}
+                                    {selectedProduct.is_online_deal ? t('是 ✓') : t('否 ✗')}
                                 </span>
                             </Descriptions.Item>
-                            <Descriptions.Item label="賣家 Email">{selectedProduct.seller_name}</Descriptions.Item>
-                            <Descriptions.Item label="賣家暱稱">{selectedProduct.seller_nickname}</Descriptions.Item>
-                            <Descriptions.Item label="商品狀態">
+                            <Descriptions.Item label={t("賣家 Email")}>{selectedProduct.seller_name}</Descriptions.Item>
+                            <Descriptions.Item label={t("賣家暱稱")}>{selectedProduct.seller_nickname}</Descriptions.Item>
+                            <Descriptions.Item label={t("商品狀態")}>
                                 {selectedProduct.product_status === 0
-                                    ? "尚未到貨"
+                                    ? t("尚未到貨")
                                     : selectedProduct.product_status === 1
-                                        ? "已到貨待成交"
+                                        ? t("已到貨待成交")
                                         : selectedProduct.product_status === 2
-                                            ? "已成交"
+                                            ? t("已成交")
                                             : "-"}
                             </Descriptions.Item>
-                            <Descriptions.Item label="買家姓名">
+                            <Descriptions.Item label={t("買家姓名")}>
                                 {selectedProduct.product_status === 2 ? selectedProduct.buyer_name || "-" : "-"}
                             </Descriptions.Item>
-                            <Descriptions.Item label="AI 評價">
+                            <Descriptions.Item label={t("AI 評價")}>
                                 {selectedProduct.ai_comment || "-"}
                             </Descriptions.Item>
                         </Descriptions>

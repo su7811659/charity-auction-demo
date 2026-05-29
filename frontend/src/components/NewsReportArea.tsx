@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Avatar } from 'antd';
 import { RobotOutlined } from '@ant-design/icons';
+import { useTranslation } from "react-i18next";
 
 interface NewsReportAreaProps {
   content: string;
@@ -15,6 +16,7 @@ const NewsReportArea: React.FC<NewsReportAreaProps> = ({
   lineLength = 30, // 預設每行30個字符
   scrollSpeed = 2000 // 預設每2秒滾動一行
 }) => {
+  const { t } = useTranslation();
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -112,13 +114,13 @@ const NewsReportArea: React.FC<NewsReportAreaProps> = ({
             color: '#333',
             marginBottom: '2px'
           }}>
-            AI 新聞播報員
+            {t("AI 新聞播報員")}
           </div>
           <div style={{
             fontSize: '12px',
             color: '#666'
           }}>
-            為您播報最新市集動態
+            {t("為您播報最新市集動態")}
           </div>
         </div>
       </div>
@@ -172,7 +174,7 @@ const NewsReportArea: React.FC<NewsReportAreaProps> = ({
             fontSize: '12px',
             color: '#666'
           }}>
-            <span>播報中</span>
+            <span>{t("播報中")}</span>
             <div style={{
               width: '6px',
               height: '6px',

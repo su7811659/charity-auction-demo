@@ -1,6 +1,7 @@
 // TopDonorsPopover.tsx
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Donor {
   nickname: string;
@@ -12,6 +13,7 @@ interface TopDonorsPopoverProps {
 }
 
 export const TopDonorsPopover: React.FC<TopDonorsPopoverProps> = ({ donors }) => {
+  const { t } = useTranslation();
   const MEDAL_EMOJIS = ["🥇", "🥈", "🥉"];
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
@@ -122,7 +124,7 @@ export const TopDonorsPopover: React.FC<TopDonorsPopoverProps> = ({ donors }) =>
         animate={{ scale: 1 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        🏆 大善人排行榜 🏆
+        🏆 {t("大善人排行榜")} 🏆
       </motion.div>
 
       {donors.length === 0 ? (
@@ -137,7 +139,7 @@ export const TopDonorsPopover: React.FC<TopDonorsPopoverProps> = ({ donors }) =>
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.2 }}
         >
-          🤗 善心小缺席，等你來加入！
+          🤗 {t("善心小缺席，等你來加入！")}
         </motion.div>
       ) : (
         <div style={{ 
@@ -303,7 +305,7 @@ export const TopDonorsPopover: React.FC<TopDonorsPopoverProps> = ({ donors }) =>
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.5 }}
       >
-        💝 感謝每一份愛心捐贈
+        💝 {t("感謝每一份愛心捐贈")}
       </motion.div>
       </motion.div>
     </>

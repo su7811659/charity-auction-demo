@@ -4,7 +4,9 @@
  */
 
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import { ShoppingCartOutlined, CheckCircleOutlined, CloseCircleOutlined, ShopOutlined } from '@ant-design/icons';
+import i18n from "../i18n";
 
 /**
  * 重新排列所有現有通知的位置
@@ -44,10 +46,11 @@ interface OnlineDealNotificationProps {
   onClose?: () => void;
 }
 
-const OnlineDealNotification: React.FC<OnlineDealNotificationProps> = ({ 
+const OnlineDealNotification: React.FC<OnlineDealNotificationProps> = ({
   notification,
   onClose
 }) => {
+  const { t } = useTranslation();
   console.log('🔔 OnlineDealNotification 組件渲染，數據:', notification);
   
   const getIcon = () => {
@@ -136,7 +139,7 @@ const OnlineDealNotification: React.FC<OnlineDealNotificationProps> = ({
             opacity: 0.8
           }}
         >
-          商品：{notification.productName} • {notification.otherParty}
+          {t("商品：")}{notification.productName} • {notification.otherParty}
         </div>
         
         <div
@@ -147,7 +150,7 @@ const OnlineDealNotification: React.FC<OnlineDealNotificationProps> = ({
             fontStyle: 'italic'
           }}
         >
-          💡 點擊關閉通知 • 前往線上交易頁面查看詳情
+          {t("💡 點擊關閉通知 • 前往線上交易頁面查看詳情")}
         </div>
       </div>
     </div>
@@ -375,7 +378,7 @@ export const showOnlineDealNotification = (notification: OnlineDealNotificationD
   // 創建商品資訊
   const productInfo = document.createElement('div');
   productInfo.innerHTML = `
-    <span style="color: #8c8c8c; font-size: 13px;">商品：</span>
+    <span style="color: #8c8c8c; font-size: 13px;">${i18n.t("商品：")}</span>
     <span style="color: #262626; font-weight: 500; font-size: 13px;">${notification.productName}</span>
   `;
   productInfo.style.cssText = `
@@ -385,7 +388,7 @@ export const showOnlineDealNotification = (notification: OnlineDealNotificationD
   // 創建用戶資訊
   const userInfo = document.createElement('div');
   userInfo.innerHTML = `
-    <span style="color: #8c8c8c; font-size: 13px;">來自：</span>
+    <span style="color: #8c8c8c; font-size: 13px;">${i18n.t("來自：")}</span>
     <span style="color: #1890ff; font-weight: 500; font-size: 13px;">${notification.otherParty}</span>
   `;
   userInfo.style.cssText = `
@@ -394,7 +397,7 @@ export const showOnlineDealNotification = (notification: OnlineDealNotificationD
 
   // 創建提示文字
   const hint = document.createElement('div');
-  hint.textContent = '💡 點擊關閉 • 前往線上交易頁面查看詳情';
+  hint.textContent = i18n.t("💡 點擊關閉 • 前往線上交易頁面查看詳情");
   hint.style.cssText = `
     font-size: 11px;
     color: #bfbfbf;

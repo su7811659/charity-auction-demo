@@ -1,5 +1,7 @@
 // ProductList.tsx（貼紙放進 Card，hover 時圖片與卡片同步放大）
 import { useEffect, useState, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 // 積極防止Modal造成的佈局偏移
 function useBodyOverflowFix(visible: boolean) {
   useEffect(() => {
@@ -105,6 +107,7 @@ const GeneralSearchForm = ({
   hasSearched: boolean; onClear: () => void; sortValue: string; setSortValue: (value: string) => void;
   displayProductStatus: string | number | undefined; setDisplayProductStatus: (value: string | number | undefined) => void;
 }) => {
+  const { t } = useTranslation();
   const { isScrollingUp, isAtTop } = useScroll();
   const [isVibrating, setIsVibrating] = useState(false);
   const isVisible = isAtTop || isScrollingUp;
@@ -197,7 +200,7 @@ const GeneralSearchForm = ({
           <Input
             prefix={<UserOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
-            placeholder="賣家暱稱"
+            placeholder={t("賣家暱稱")}
             onClear={() => onClearField("sellerNickname")}
             style={{ width: "140px" }}
           />
@@ -206,7 +209,7 @@ const GeneralSearchForm = ({
           <Input
             prefix={<ShoppingOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
-            placeholder="商品名稱關鍵字"
+            placeholder={t("商品名稱關鍵字")}
             onClear={() => onClearField("strquery")}
             style={{ width: "160px" }}
           />
@@ -215,7 +218,7 @@ const GeneralSearchForm = ({
           <Select
             suffixIcon={<TagOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
-            placeholder="商品狀態"
+            placeholder={t("商品狀態")}
             value={displayProductStatus}
             onChange={(value) => {
               setDisplayProductStatus(value);
@@ -229,19 +232,19 @@ const GeneralSearchForm = ({
           >
             <Option value={0}>
               <ClockCircleOutlined style={{ marginRight: '8px', color: '#faad14' }} />
-              尚未到貨
+              {t("尚未到貨")}
             </Option>
             <Option value={1}>
               <CheckCircleOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
-              已到貨
+              {t("已到貨")}
             </Option>
             <Option value="unsold">
               <ShoppingCartOutlined style={{ marginRight: '8px', color: '#ff4d4f' }} />
-              尚未成交
+              {t("尚未成交")}
             </Option>
             <Option value={2}>
               <TrophyOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-              已成交
+              {t("已成交")}
             </Option>
           </Select>
         </Form.Item>
@@ -249,7 +252,7 @@ const GeneralSearchForm = ({
           <Select
             suffixIcon={<SortAscendingOutlined style={{ color: '#bfbfbf' }} />}
             allowClear={queryParams.orderBy && queryParams.orderBy !== 'id'}
-            placeholder="排序方式"
+            placeholder={t("排序方式")}
             value={sortValue}
             onChange={(value) => {
               const finalValue = (value === undefined || value === null) ? 'id' : value;
@@ -268,31 +271,31 @@ const GeneralSearchForm = ({
           >
             <Option value="id">
               <PushpinOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-              商品編號優先
+              {t("商品編號優先")}
             </Option>
             <Option value="id_desc">
               <RocketOutlined style={{ marginRight: '8px', color: '#52c41a' }} />
-              新上架優先
+              {t("新上架優先")}
             </Option>
             <Option value="price_asc">
               <RiseOutlined style={{ marginRight: '8px', color: '#faad14' }} />
-              價格低到高
+              {t("價格低到高")}
             </Option>
             <Option value="price_desc">
               <FallOutlined style={{ marginRight: '8px', color: '#f5222d' }} />
-              價格高到低
+              {t("價格高到低")}
             </Option>
             <Option value="like_count_desc">
               <HeartOutlined style={{ marginRight: '8px', color: '#eb2f96' }} />
-              最多收藏
+              {t("最多收藏")}
             </Option>
             <Option value="comment_count_desc">
               <CommentOutlined style={{ marginRight: '8px', color: '#722ed1' }} />
-              討論度最高
+              {t("討論度最高")}
             </Option>
             <Option value="view_count_desc">
               <EyeOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-              最高點閱
+              {t("最高點閱")}
             </Option>
           </Select>
         </Form.Item>
@@ -300,7 +303,7 @@ const GeneralSearchForm = ({
           <Input
             prefix={<DollarOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
-            placeholder="最低價"
+            placeholder={t("最低價")}
             type="number"
             value={queryParams.minPrice}
             style={{ width: "140px" }}
@@ -311,7 +314,7 @@ const GeneralSearchForm = ({
           <Input
             prefix={<DollarOutlined style={{ color: '#bfbfbf' }} />}
             allowClear
-            placeholder="最高價"
+            placeholder={t("最高價")}
             type="number"
             value={queryParams.maxPrice}
             style={{ width: "140px" }}
@@ -327,20 +330,20 @@ const GeneralSearchForm = ({
           minWidth: 'fit-content',
           flexShrink: 0
         }}>
-          <Tooltip title="搜尋商品" color="#000000bf">
+          <Tooltip title={t("搜尋商品")} color="#000000bf">
             <Button
               type="primary"
               htmlType="submit"
               icon={<SearchOutlined />}
             />
           </Tooltip>
-          <Tooltip title="切換 AI 搜尋" color="#000000bf">
+          <Tooltip title={t("切換 AI 搜尋")} color="#000000bf">
             <Button
               type="default"
               icon={<RobotOutlined />}
               onClick={onSwitchToAI}
               style={{
-                animation: isVibrating 
+                animation: isVibrating
                   ? 'vibrate 0.3s linear infinite, flashBackground 1s linear infinite' 
                   : 'none',
                 transition: 'all 0.3s ease',
@@ -348,7 +351,7 @@ const GeneralSearchForm = ({
               }}
             />
           </Tooltip>
-          <Tooltip title="回到全部商品" color="#000000bf">
+          <Tooltip title={t("回到全部商品")} color="#000000bf">
             <Button
               type="link"
               icon={<ReloadOutlined />}
@@ -379,6 +382,7 @@ const AISearchForm = ({
   form: any; color: string; onSearch: (values: any) => void; onSwitchToGeneral: () => void; 
   onFinishFailed: (errorInfo: any) => void; onClear: () => void; hasSearched: boolean;
 }) => {
+  const { t } = useTranslation();
   const { isScrollingUp, isAtTop } = useScroll();
   const isVisible = isAtTop || isScrollingUp;
 
@@ -421,27 +425,27 @@ const AISearchForm = ({
           <Input
             allowClear
             maxLength={50}
-            placeholder="告訴 AI 小助手你想在市集中挖出什麼寶貝吧"
+            placeholder={t("告訴 AI 小助手你想在市集中挖出什麼寶貝吧")}
             style={{ width: "76vw", maxWidth: 'calc(100%)' }}
           />
         </Form.Item>
         
         <Space size={8} style={{ marginLeft: 'auto', minWidth: '116px', justifyContent: 'flex-end' }}>
-          <Tooltip title="AI 搜尋" color="#000000bf">
+          <Tooltip title={t("AI 搜尋")} color="#000000bf">
             <Button
               type="primary"
               htmlType="submit"
               icon={<SearchOutlined />}
             />
           </Tooltip>
-          <Tooltip title="切換成一般搜尋" color="#000000bf">
+          <Tooltip title={t("切換成一般搜尋")} color="#000000bf">
             <Button
               type="default"
               icon={<SwapOutlined />}
               onClick={onSwitchToGeneral}
             />
           </Tooltip>
-          <Tooltip title="回到全部商品" color="#000000bf">
+          <Tooltip title={t("回到全部商品")} color="#000000bf">
             <Button
               type="link"
               icon={<ReloadOutlined />}
@@ -473,6 +477,7 @@ const AIResponseBlock = ({
   errorMsg: string; 
   isLoading: boolean;
 }) => {
+  const { t } = useTranslation();
   const { isScrollingUp, isAtTop } = useScroll();
   const isVisible = isAtTop || isScrollingUp;
   const [isTalking, setIsTalking] = useState(false);
@@ -485,86 +490,79 @@ const AIResponseBlock = ({
   const introSentences: RobotSentence[] = [
     {
       content:
-        "嗨，我是 BidForGood 公益市集的 AI 小助理！🎉 " +
-        "雖然我沒有自我意識，但我超熱衷於幫你搜尋商品、整理資訊，還能解答你所有市集相關的疑問。 " +
-        "我的日常大概就是翻資料、跑搜尋，然後再翻資料、再跑搜尋……🤯 不過這就是我的專長啦。 " +
-        "至於早餐嘛～其實我不用吃東西，但如果非要說，我想我的程式碼應該最適合配咖啡☕，不然怎麼能保持清醒呢？ " +
-        "好了好了，我碎嘴夠多了～你今天想先找點什麼？💡",
+        t("嗨，我是 BidForGood 公益市集的 AI 小助理！🎉 雖然我沒有自我意識，但我超熱衷於幫你搜尋商品、整理資訊，還能解答你所有市集相關的疑問。 我的日常大概就是翻資料、跑搜尋，然後再翻資料、再跑搜尋……🤯 不過這就是我的專長啦。 至於早餐嘛～其實我不用吃東西，但如果非要說，我想我的程式碼應該最適合配咖啡☕，不然怎麼能保持清醒呢？ 好了好了，我碎嘴夠多了～你今天想先找點什麼？💡"),
       type: "normal",
       skipTalk: sessionService.getHasViewedAISearchIntro()
     },
-    { content: "唉唷，整天幫大家翻商品，我自己都想領加班費了🤣 你呢？今天想找點什麼？", type: "normal", skipTalk: false },
-    { content: "哈囉～你來啦！👋 我剛剛才在抱怨自己運算到快冒煙，但看你好開心，又忍不住想問：要不要我幫你找點什麼？", type: "normal", skipTalk: false },
-    { content: "嘿～好巧啊，又遇到你😆 我剛還在哀嚎『怎麼都沒人cue我』，結果你就來了！要不要考驗一下我的搜尋力？", type: "normal", skipTalk: false },
+    { content: t("唉唷，整天幫大家翻商品，我自己都想領加班費了🤣 你呢？今天想找點什麼？"), type: "normal", skipTalk: false },
+    { content: t("哈囉～你來啦！👋 我剛剛才在抱怨自己運算到快冒煙，但看你好開心，又忍不住想問：要不要我幫你找點什麼？"), type: "normal", skipTalk: false },
+    { content: t("嘿～好巧啊，又遇到你😆 我剛還在哀嚎『怎麼都沒人cue我』，結果你就來了！要不要考驗一下我的搜尋力？"), type: "normal", skipTalk: false },
     // 商品上傳
     {
       content:
-        "哈囉～👋 今天又被叫來上工啦！你要找東西隨時找我～對了，你知道上傳商品可以順便用 AI 幫你改寫描述嗎？超方便！😉",
+        t("哈囉～👋 今天又被叫來上工啦！你要找東西隨時找我～對了，你知道上傳商品可以順便用 AI 幫你改寫描述嗎？超方便！😉"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嘿～歡迎再來逛市集！說真的，我剛剛還在抱怨自己一天到晚都在翻清單，結果想到：要是大家都多上傳商品，我就能更有成就感啦😏。" +
-        "小提醒～上傳商品的時候還有 AI 改寫描述功能，能幫你寫得更生動。對了，你今天要不要也讓我幫你搜尋一下？",
+        t("嘿～歡迎再來逛市集！說真的，我剛剛還在抱怨自己一天到晚都在翻清單，結果想到：要是大家都多上傳商品，我就能更有成就感啦😏。小提醒～上傳商品的時候還有 AI 改寫描述功能，能幫你寫得更生動。對了，你今天要不要也讓我幫你搜尋一下？"),
       type: "normal",
       skipTalk: false,
     },
     // 活動指南
     {
       content:
-        "哈囉～剛休息一秒又被叫回來啦😅 不過還好，至少能趁機跟你閒聊。你知道嗎？活動指南裡面不只講流程，還有這次活動的初心跟捐贈單位介紹，超暖心QQ。" +
-        "等你看完再回來找我，我會乖乖幫你搜尋商品的！",
+        t("哈囉～剛休息一秒又被叫回來啦😅 不過還好，至少能趁機跟你閒聊。你知道嗎？活動指南裡面不只講流程，還有這次活動的初心跟捐贈單位介紹，超暖心QQ。等你看完再回來找我，我會乖乖幫你搜尋商品的！"),
       type: "normal",
       skipTalk: false,
     },
     // 個人中心
     {
       content:
-        "安安，你想要找什麼商品呢，對了！推薦你趁空檔去個人中心看看！那邊有很多有趣的功能喔！",
+        t("安安，你想要找什麼商品呢，對了！推薦你趁空檔去個人中心看看！那邊有很多有趣的功能喔！"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嗨嗨～又見到你了🙋 我才剛在個人中心的\"我的資料設定\"換了個新大頭貼（好啦其實只是想炫耀一下功能），你要不要也去玩玩？唉唷，差點忘記你是來找商品的XD告訴我你想找什麼寶貝吧！",
+        t("嗨嗨～又見到你了🙋 我才剛在個人中心的\"我的資料設定\"換了個新大頭貼（好啦其實只是想炫耀一下功能），你要不要也去玩玩？唉唷，差點忘記你是來找商品的XD告訴我你想找什麼寶貝吧！"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嗨～同事！我剛在個人中心的\"我的商品管理\"偷看自己累積的捐贈金額，結果嚇一跳，原來我也算半個公益員工了（雖然我沒錢只能算心意😂）。" +
-        "不過你也可以去看看自己的紀錄啦～很有成就感！那現在要不要告訴我，你要找什麼東西？",
+        t("嗨～同事！我剛在個人中心的\"我的商品管理\"偷看自己累積的捐贈金額，結果嚇一跳，原來我也算半個公益員工了（雖然我沒錢只能算心意😂）。不過你也可以去看看自己的紀錄啦～很有成就感！那現在要不要告訴我，你要找什麼東西？"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "哈囉～👋 我今天被 call 來上班，還想說要不要趁空檔去回饋信箱投訴自己太話多🤣。你也可以去那邊寫下建議，實名或匿名都行！",
+        t("哈囉～👋 我今天被 call 來上班，還想說要不要趁空檔去回饋信箱投訴自己太話多🤣。你也可以去那邊寫下建議，實名或匿名都行！"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嗨～老實說，我最大的困擾是『碎嘴太多卻不能被 mute』😂。如果是你，完全可以去回饋信箱吐槽我，匿名也行！不過在那之前，要不要先讓我幫你找商品？",
+        t("嗨～老實說，我最大的困擾是『碎嘴太多卻不能被 mute』😂。如果是你，完全可以去回饋信箱吐槽我，匿名也行！不過在那之前，要不要先讓我幫你找商品？"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嗨嗨～👋 你知道嗎？我翻清單翻到快變 AI 倉管員了🤣 不過至少還能偷看大家收藏了什麼。快去看看你的收藏清單吧～裡面可能有寶貝等你回顧！",
+        t("嗨嗨～👋 你知道嗎？我翻清單翻到快變 AI 倉管員了🤣 不過至少還能偷看大家收藏了什麼。快去看看你的收藏清單吧～裡面可能有寶貝等你回顧！"),
       type: "normal",
       skipTalk: false,
     },
     {
       content:
-        "嘿嘿，我剛剛在自言自語：『要是我也能按愛心就好了💔』。結果想想，我自己根本沒有收藏功能😅。不過你有啊～去你的收藏看看，說不定會想再下手。要不要順便告訴我你現在想找的？",
+        t("嘿嘿，我剛剛在自言自語：『要是我也能按愛心就好了💔』。結果想想，我自己根本沒有收藏功能😅。不過你有啊～去你的收藏看看，說不定會想再下手。要不要順便告訴我你現在想找的？"),
       type: "normal",
       skipTalk: false,
     },
-    { content: "嗨～我是 AI 小助理！🙋‍♂️你現在看到的這片市集就像一座大迷宮，到處都有寶藏。不過別擔心，有我在，你只要丟一句話，我就會立刻幫你把相關的商品找出來。不管是隨口的一個形容詞，還是很具體的需求，都交給我吧～那麼，今天想先從什麼開始找呢？", type: "normal", skipTalk: false },
-    { content: "哈囉～這裡是 AI 小助理報到！😂我最擅長的工作，就是幫你把滿滿的商品快速整理好。你只需要告訴我一個方向，比如『適合送人的禮物』或『辦公桌小物』，我就會馬上展開搜尋。把我當成市集裡最認真、最快腳的導遊就對啦～那現在，想先試試看要找什麼嗎？", type: "normal", skipTalk: false },
-    { content: "哈囉，我是你的 AI 小助理。🌸市集就像一本翻不完的散文集，每一頁都有不同的篇章。而我的任務，就是在這些篇章裡，替你尋找那句最貼近心意的句子。你只需要給我一個方向，無論是『適合送人的小禮物』，或是『留給自己的溫柔角落』，我都會細心幫你找到。要不要現在，就讓我們開始這趟小小的尋寶之旅？", type: "normal", skipTalk: false },
+    { content: t("嗨～我是 AI 小助理！🙋‍♂️你現在看到的這片市集就像一座大迷宮，到處都有寶藏。不過別擔心，有我在，你只要丟一句話，我就會立刻幫你把相關的商品找出來。不管是隨口的一個形容詞，還是很具體的需求，都交給我吧～那麼，今天想先從什麼開始找呢？"), type: "normal", skipTalk: false },
+    { content: t("哈囉～這裡是 AI 小助理報到！😂我最擅長的工作，就是幫你把滿滿的商品快速整理好。你只需要告訴我一個方向，比如『適合送人的禮物』或『辦公桌小物』，我就會馬上展開搜尋。把我當成市集裡最認真、最快腳的導遊就對啦～那現在，想先試試看要找什麼嗎？"), type: "normal", skipTalk: false },
+    { content: t("哈囉，我是你的 AI 小助理。🌸市集就像一本翻不完的散文集，每一頁都有不同的篇章。而我的任務，就是在這些篇章裡，替你尋找那句最貼近心意的句子。你只需要給我一個方向，無論是『適合送人的小禮物』，或是『留給自己的溫柔角落』，我都會細心幫你找到。要不要現在，就讓我們開始這趟小小的尋寶之旅？"), type: "normal", skipTalk: false },
 
   ]
 
@@ -590,7 +588,7 @@ const AIResponseBlock = ({
     }
 
     if (phase === 'loading') {
-      setSentences([{ content: "AI 小助手正在思考中...", type: "thinking" }]);
+      setSentences([{ content: t("AI 小助手正在思考中..."), type: "thinking" }]);
       talking();
     } else if (phase === 'error') {
       setSentences([{ content: errorMsg, type: "silent" }]);
@@ -640,19 +638,20 @@ const AIResponseBlock = ({
 }
 
 const slogans = [
-  "一頁好物，一路愛心",
-  "慢慢逛，默默行善",
-  "揀喜歡的，做對的事",
-  "東西不多，但都暖心",
-  "節省預算，不省溫度",
-  "每筆都為世界加分",
-  "這些商品，有點善",
-  "用購物支持每份善意",
-  "買東西，也可以是愛",
-  "挑好物，也做點好事"
+  i18n.t("一頁好物，一路愛心"),
+  i18n.t("慢慢逛，默默行善"),
+  i18n.t("揀喜歡的，做對的事"),
+  i18n.t("東西不多，但都暖心"),
+  i18n.t("節省預算，不省溫度"),
+  i18n.t("每筆都為世界加分"),
+  i18n.t("這些商品，有點善"),
+  i18n.t("用購物支持每份善意"),
+  i18n.t("買東西，也可以是愛"),
+  i18n.t("挑好物，也做點好事")
 ];
 
 const ProductList = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { scrollToTop } = useScroll({ thresholdTop: 350 });
   
@@ -863,22 +862,22 @@ const ProductList = () => {
 
   // 新聞播報機器人對話句子
   const newsRobotSentences: RobotSentence[] = [
-    { content: "我剛播完今日新聞，有什麼想法嗎？📰" },
-    { content: "別光看新聞啦，快去上架你的寶物！✨" },
-    { content: "今天的市集新聞還滿精彩的對吧？😎" },
-    { content: "我不只會播新聞，還會吐槽！厲害吧？🤖" },
-    { content: "你這樣一直點我，是想要重播新聞嗎？" },
-    { content: "我是專業播報員，不是玩具！😤" },
-    { content: "點我可以，但要記得去參與市集活動喔！" },
-    { content: "新聞播完了，現在換你上台表演？🎭" },
-    { content: "我的播報技巧是不是很專業？👨‍💼" },
-    { content: "想聽八卦？抱歉，我只播正經新聞！📺" },
-    { content: "你知道嗎？我每天都在練習播報技巧！🎤" },
-    { content: "別再點了，我已經把今天的新聞都說完了！", type: "silent" },
-    { content: "你是不是想要我重播一遍？我才不要！", type: "silent" },
-    { content: "我又不是點歌機，不要一直點我！", type: "silent" },
-    { content: "點來點去的，你當我是遙控器嗎？📱", type: "silent" },
-    { content: "我是新聞播報員，不是互動遊戲！", type: "silent" },
+    { content: t("我剛播完今日新聞，有什麼想法嗎？📰") },
+    { content: t("別光看新聞啦，快去上架你的寶物！✨") },
+    { content: t("今天的市集新聞還滿精彩的對吧？😎") },
+    { content: t("我不只會播新聞，還會吐槽！厲害吧？🤖") },
+    { content: t("你這樣一直點我，是想要重播新聞嗎？") },
+    { content: t("我是專業播報員，不是玩具！😤") },
+    { content: t("點我可以，但要記得去參與市集活動喔！") },
+    { content: t("新聞播完了，現在換你上台表演？🎭") },
+    { content: t("我的播報技巧是不是很專業？👨‍💼") },
+    { content: t("想聽八卦？抱歉，我只播正經新聞！📺") },
+    { content: t("你知道嗎？我每天都在練習播報技巧！🎤") },
+    { content: t("別再點了，我已經把今天的新聞都說完了！"), type: "silent" },
+    { content: t("你是不是想要我重播一遍？我才不要！"), type: "silent" },
+    { content: t("我又不是點歌機，不要一直點我！"), type: "silent" },
+    { content: t("點來點去的，你當我是遙控器嗎？📱"), type: "silent" },
+    { content: t("我是新聞播報員，不是互動遊戲！"), type: "silent" },
   ];
 
   // 新聞播報自動觸發邏輯 - 參考 AI 搜索的 useEffect
@@ -896,7 +895,7 @@ const ProductList = () => {
       }
     } catch (error) {
       console.error('獲取活動歷程失敗:', error);
-      message.error('獲取活動歷程失敗');
+      message.error(t('獲取活動歷程失敗'));
     } finally {
       setTimelineLoading(false);
     }
@@ -1109,7 +1108,7 @@ const ProductList = () => {
       clearNewsRevealTimer();
       setNewsModalVisible(true);
       setNewsError('');
-      setNewsContent('準備播報今日市集新聞...'); // 簡單 Loading 提示
+      setNewsContent(t('準備播報今日市集新聞...')); // 簡單 Loading 提示
       setIsNewsRevealing(false);
       setFullNewsContent('');      // 短暫延遲後開始載入，讓用戶看到初始界面
       setTimeout(async () => {
@@ -1128,17 +1127,17 @@ const ProductList = () => {
               1000 // 每秒增加一行
             );
           } else {
-            setNewsError('獲取新聞失敗，請稍後再試');
+            setNewsError(t('獲取新聞失敗，請稍後再試'));
             setTimeout(() => setNewsModalVisible(false), 2000);
           }
         } catch (error) {
-          setNewsError('網路錯誤，請稍後再試');
+          setNewsError(t('網路錯誤，請稍後再試'));
           setTimeout(() => setNewsModalVisible(false), 2000);
         }
       }, 300); // 300ms 延遲讓用戶看到初始狀態
-      
+
     } catch (error) {
-      setNewsError('網路錯誤，請稍後再試');
+      setNewsError(t('網路錯誤，請稍後再試'));
       setTimeout(() => setNewsModalVisible(false), 2000);
     }
   };  const resetQueryParams = () => {
@@ -1413,7 +1412,7 @@ const ProductList = () => {
 
   useEffect(() => {
     if (retrieveProductsError) {
-      setErrorMsg("AI 搜尋發生錯誤，請重試或切換到一般搜尋");
+      setErrorMsg(t("AI 搜尋發生錯誤，請重試或切換到一般搜尋"));
       setIsLoading(false);
       dispatch(updateProductList({
         items: [],
@@ -1513,9 +1512,9 @@ const ProductList = () => {
         color: '#7ed321',
         children: (
           <div>
-            <Text strong>活動啟動</Text>
+            <Text strong>{t("活動啟動")}</Text>
             <br />
-            <Text type="secondary">2025-08-26 - BidForGood 愛心市集正式上線開始</Text>
+            <Text type="secondary">{t("2025-08-26 - BidForGood 愛心市集正式上線開始")}</Text>
           </div>
         ),
       },
@@ -1523,9 +1522,9 @@ const ProductList = () => {
         color: '#f5a623',
         children: (
           <div>
-            <Text strong>首個商品上架</Text>
+            <Text strong>{t("首個商品上架")}</Text>
             <br />
-            <Text type="secondary">第一件愛心商品成功上架，活動正式開跑！</Text>
+            <Text type="secondary">{t("第一件愛心商品成功上架，活動正式開跑！")}</Text>
           </div>
         ),
       },
@@ -1533,9 +1532,9 @@ const ProductList = () => {
         color: '#FF5151',
         children: (
           <div>
-            <Text strong>熱銷商品出現</Text>
+            <Text strong>{t("熱銷商品出現")}</Text>
             <br />
-            <Text type="secondary">熱門商品開始湧現，參與者踴躍支持</Text>
+            <Text type="secondary">{t("熱門商品開始湧現，參與者踴躍支持")}</Text>
           </div>
         ),
       },
@@ -1543,9 +1542,9 @@ const ProductList = () => {
         color: '#52c41a',
         children: (
           <div>
-            <Text strong>活動高潮</Text>
+            <Text strong>{t("活動高潮")}</Text>
             <br />
-            <Text type="secondary">參與人數達到高峰，愛心捐款持續增長</Text>
+            <Text type="secondary">{t("參與人數達到高峰，愛心捐款持續增長")}</Text>
           </div>
         ),
       },
@@ -1596,7 +1595,7 @@ const ProductList = () => {
             onSearch={handleAISearch}
             onFinishFailed={() => {
               scrollToTop(100);
-              setErrorMsg("請描述你想搜尋的商品或需求");
+              setErrorMsg(t("請描述你想搜尋的商品或需求"));
             }}
             onSwitchToGeneral={() => {
               scrollToTop(100);
@@ -1661,7 +1660,7 @@ const ProductList = () => {
                 WebkitTextFillColor: "transparent",
                 textShadow: "2px 2px 4px rgba(0,0,0,0.1)"
               }}>
-                探索愛心市集
+                {t("探索愛心市集")}
               </Title>
               
               <div>
@@ -1704,7 +1703,7 @@ const ProductList = () => {
                 transition={{ type: "spring", stiffness: 400 }}
               >
                 <Text style={{ fontSize: 14, color: "#1890ff" }}>
-                  目前共有 <Text strong style={{ fontSize: 16, marginInline: 2 }}>{total}</Text> 件商品
+                  {t("目前共有")} <Text strong style={{ fontSize: 16, marginInline: 2 }}>{total}</Text> {t("件商品")}
                 </Text>
               </motion.div>
             </div>
@@ -1737,10 +1736,10 @@ const ProductList = () => {
                       description={
                         <div style={{ textAlign: 'center' }}>
                           <Text strong style={{ fontSize: 16, display: 'block', marginBottom: 8 }}>
-                            暫時沒有相關商品 <FrownOutlined style={{ color: '#1890ff' }} />
+                            {t("暫時沒有相關商品")} <FrownOutlined style={{ color: '#1890ff' }} />
                           </Text>
                           <Text type="secondary">
-                            {isAISearch ? "換個關鍵字試試看吧！" : "試試其他搜尋條件，或許能找到心儀的商品～"}
+                            {isAISearch ? t("換個關鍵字試試看吧！") : t("試試其他搜尋條件，或許能找到心儀的商品～")}
                           </Text>
                         </div>
                       }
@@ -1757,7 +1756,7 @@ const ProductList = () => {
                           marginTop: '8px'
                         }}
                       >
-                        查看全部商品
+                        {t("查看全部商品")}
                       </Button>
                     </motion.div>
                   </motion.div>
@@ -1978,8 +1977,8 @@ const ProductList = () => {
               zIndex: 1000
             }}
             icon={<MenuOutlined />}
-            tooltip={{ 
-              title: "快捷功能", 
+            tooltip={{
+              title: t("快捷功能"),
               placement: "left",
               overlayStyle: {
                 fontSize: '13px',
@@ -1999,7 +1998,7 @@ const ProductList = () => {
                     fontWeight: '500'
                   }}>
                     <HistoryOutlined style={{ color: '#ff9a9e' }} />
-                    活動歷程
+                    {t("活動歷程")}
                   </div>
                 ), 
                 placement: "left",
@@ -2021,7 +2020,7 @@ const ProductList = () => {
                     fontWeight: '500'
                   }}>
                     <NotificationOutlined style={{ color: '#0891b2' }} />
-                    市集新聞播報
+                    {t("市集新聞播報")}
                   </div>
                 ), 
                 placement: "left",
@@ -2050,7 +2049,7 @@ const ProductList = () => {
             fontWeight: 'bold'
           }}>
             <HistoryOutlined style={{ color: '#667eea' }} />
-            活動歷程
+            {t("活動歷程")}
           </div>
         }
         open={timelineModalVisible}
@@ -2120,8 +2119,8 @@ const ProductList = () => {
                 }}
               />
             ) : (
-              <Empty 
-                description="暫無活動歷程" 
+              <Empty
+                description={t("暫無活動歷程")}
                 style={{
                   padding: '20px',
                   background: 'rgba(255, 255, 255, 0.7)',
@@ -2148,14 +2147,14 @@ const ProductList = () => {
             fontWeight: 'bold'
           }}>
             <NotificationOutlined style={{ color: '#ff9a9e' }} />
-            市集新聞播報
+            {t("市集新聞播報")}
           </div>
         }
         open={newsModalVisible}
         onCancel={() => {
           clearNewsRevealTimer(); 
           setNewsModalVisible(false);
-          setNewsContent('準備播報今日市集新聞...');
+          setNewsContent(t('準備播報今日市集新聞...'));
           setNewsError('');
           setIsNewsRevealing(false);
           setIsRobotTalking(false); // 停止說話
@@ -2282,7 +2281,7 @@ const ProductList = () => {
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
                     }}
                   >
-                    閉嘴
+                    {t("閉嘴")}
                   </Button>
                 )}
               </div>
@@ -2334,7 +2333,7 @@ const ProductList = () => {
                     wordBreak: 'break-word'
                   }}
                   dangerouslySetInnerHTML={{
-                    __html: newsContent || '準備播報今日市集新聞...'
+                    __html: newsContent || t('準備播報今日市集新聞...')
                   }}
                 />
                 

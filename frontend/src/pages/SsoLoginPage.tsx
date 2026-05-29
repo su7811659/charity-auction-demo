@@ -2,8 +2,10 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const SsoLoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setShowAuthDialog } = useContext(AuthContext);
 
@@ -13,7 +15,7 @@ const SsoLoginPage = () => {
     console.log("window.location.href:", window.location.href);
 
     if (!raw || !raw.startsWith("key=")) {
-      alert(`未提供合法登入資訊 ${url} ${raw}`);
+      alert(`${t("未提供合法登入資訊")} ${url} ${raw}`);
       navigate("/");
       return;
     }
@@ -37,12 +39,12 @@ const SsoLoginPage = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert(`登入失敗 ${err}`);
+        alert(`${t("登入失敗")} ${err}`);
         navigate("/");
       });
   }, [navigate, setShowAuthDialog]);
 
-  return <div>登入中，請稍候...</div>;
+  return <div>{t("登入中，請稍候...")}</div>;
 };
 
 export default SsoLoginPage;

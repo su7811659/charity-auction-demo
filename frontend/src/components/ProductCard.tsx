@@ -8,6 +8,8 @@ import AiRating04 from "../assets/img/ai_tag_04.svg";
 import AiRating05 from "../assets/img/ai_tag_05.svg";
 import GoodIcon from "../assets/img/good.png";
 import LazyImage from "./LazyImage";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 
 const { Title } = Typography;
@@ -24,16 +26,16 @@ const getAiRatingImage = (rating: number) => {
 };
 
 const SOLD_MESSAGES = [
-  "我被 {name} 抱回家了！",
-  "恭喜 {name} 入手成功！",
-  "我的命定之人是 {name}！",
-  "再見啦～它跟 {name} 走了！",
-  "這寶貝屬於 {name}",
-  "「已被收編（by {name}）！」",
-  "來不及囉，{name} 搶先！",
-  "此物已歸 {name} 所有！",
-  "{name}：「我先買先贏！」",
-  "被眼尖的 {name} 搶走啦！"
+  i18n.t("我被 {name} 抱回家了！"),
+  i18n.t("恭喜 {name} 入手成功！"),
+  i18n.t("我的命定之人是 {name}！"),
+  i18n.t("再見啦～它跟 {name} 走了！"),
+  i18n.t("這寶貝屬於 {name}"),
+  i18n.t("「已被收編（by {name}）！」"),
+  i18n.t("來不及囉，{name} 搶先！"),
+  i18n.t("此物已歸 {name} 所有！"),
+  i18n.t("{name}：「我先買先贏！」"),
+  i18n.t("被眼尖的 {name} 搶走啦！")
 ] as const;
 
 interface ProductCardProps {
@@ -55,6 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({
   onLike,
   priority = false // 預設非優先
 }) => {
+  const { t } = useTranslation();
   const [likeAnimating, setLikeAnimating] = useState(false);
   const [donationBadgeHover, setDonationBadgeHover] = useState(false);
 
@@ -63,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({
   const shouldShowAiRating = useMemo(() => (product.ai_rating ?? 0) >= 3, [product.ai_rating]);
   const shouldShowDonationBadge = useMemo(() => (product.donation_ratio ?? 0) >= 60, [product.donation_ratio]);
   const donationBadgeText = useMemo(() => {
-    if (product.donation_ratio >= 60) return "此物為捐贈比例達 60% 以上商品所產生的善意循環光球";
+    if (product.donation_ratio >= 60) return t("此物為捐贈比例達 60% 以上商品所產生的善意循環光球");
     return "";
   }, [product.donation_ratio]);
   
@@ -74,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({
   
   const { messageBefore, messageAfter, buyerName } = useMemo(() => {
     // 提取 email 的 local part（@ 前面的部分）
-    const rawBuyerName = product.buyer_name || "買家";
+    const rawBuyerName = product.buyer_name || t("買家");
     const buyerName = rawBuyerName.includes("@") 
       ? rawBuyerName.split("@")[0] 
       : rawBuyerName;
@@ -230,8 +233,8 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({
             {/* ❤️ 收藏按鈕 */}
             {showUnlike && (
               <Tooltip title={
-                !likedProductsLoaded ? "載入中..." : 
-                liked ? "取消收藏" : "加入收藏"
+                !likedProductsLoaded ? t("載入中...") :
+                liked ? t("取消收藏") : t("加入收藏")
               }>
                 {!likedProductsLoaded ? (
                   // 載入中狀態：顯示灰色愛心
@@ -333,7 +336,7 @@ const ProductCard: React.FC<ProductCardProps> = React.memo(({
           <Title level={4} style={{ fontSize: 16, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {product.product_name}
           </Title>
-          <Tag color="blue" style={{ fontSize: 12 }}>編號: {product.id}</Tag>
+          <Tag color="blue" style={{ fontSize: 12 }}>{t("編號:")} {product.id}</Tag>
         </div>
         <div style={{
           color: "#666",
