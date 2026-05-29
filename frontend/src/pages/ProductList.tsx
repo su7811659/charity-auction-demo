@@ -788,12 +788,13 @@ const ProductList = () => {
   const [isPageChanging, setIsPageChanging] = useState(false); // 添加換頁狀態
   const [previousPageSize, setPreviousPageSize] = useState(pageSize); // 追蹤上一次的 pageSize
   const [userPreferencesApplied, setUserPreferencesApplied] = useState(false); // 追蹤用戶偏好是否已應用
-  const [isUserDataLoading, setIsUserDataLoading] = useState(true); // 追蹤用戶資料載入狀態
-  
+  // 未登入（無 jwt）時不需等待 profile，直接視為載入完成，讓訪客也能瀏覽商品
+  const [isUserDataLoading, setIsUserDataLoading] = useState(() => !!localStorage.getItem('jwt'));
+
   // 監控用戶資料載入狀態
   useEffect(() => {
-    if (currentUser !== null) {
-      // 用戶資料已載入（不管是登錄還是未登錄狀態）
+    // 已登入且 profile 載入完成，或未登入（無 token），都視為「載入完成」
+    if (currentUser !== null || !localStorage.getItem('jwt')) {
       setIsUserDataLoading(false);
     }
   }, [currentUser]);
