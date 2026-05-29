@@ -17,6 +17,8 @@ import { RootState, AppDispatch } from "../store/store";
 import logo from '@/assets/img/logo.svg';
 
 import { NavigationMenu } from '../components/NavigationMenu';
+import LanguageToggle from '../components/LanguageToggle';
+import { useTranslation } from 'react-i18next';
 import { TotalDonationCounter } from "../components/TotalDonationCounter";
 import { TopDonorsPopover } from "../components/TopDonorsPopover";
 import systemConfigService from "../services/systemConfigService";
@@ -65,6 +67,7 @@ const POLL_INTERVAL = 60000; // 降低到 30 秒，減少伺服器負載
 
 const UserLayout: React.FC = () => {
   // Removed unused destructured elements from theme.useToken()
+  const { t } = useTranslation();
 
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
@@ -372,11 +375,12 @@ const UserLayout: React.FC = () => {
             selectedKey={getSelectedKey()}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: '100%' }}>
           <TotalDonationCounter
             totalDonation={totalDonation}
             popoverContent={<TopDonorsPopover donors={topDonors} />}
           />
+          <LanguageToggle />
         </div>
       </Header>
       {/* Divider below header for separation */}
@@ -395,7 +399,7 @@ const UserLayout: React.FC = () => {
         padding: "18px 0 10px 0",
         display: location.pathname.startsWith("/user") ? "none" : undefined,
       }}>
-        公益二手平台 ©{new Date().getFullYear()} Powered by BidForGood
+        {t("公益二手平台")} ©{new Date().getFullYear()} Powered by BidForGood
       </Footer>
       
       <ScrollToTopButton

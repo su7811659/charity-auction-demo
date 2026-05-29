@@ -1,6 +1,7 @@
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 
 interface RouteItem {
@@ -16,6 +17,7 @@ interface NavigationMenuProps {
 }
 
 export const NavigationMenu: React.FC<NavigationMenuProps> = ({ routes, selectedKey }) => {
+	const { t } = useTranslation();
 	return (
 		<Menu
 			theme="dark"
@@ -26,7 +28,7 @@ export const NavigationMenu: React.FC<NavigationMenuProps> = ({ routes, selected
 		>
 			{routes.map(route => (
 				<Menu.Item key={route.key} icon={route.icon}>
-					<Link to={route.path}>{route.label}</Link>
+					<Link to={route.path}>{t(route.label)}</Link>
 				</Menu.Item>
 			))}
 		</Menu>

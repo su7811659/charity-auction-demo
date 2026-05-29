@@ -19,8 +19,11 @@ import UserFeedbackPage from "./pages/user/UserFeedbackPage";
 import UserOnlineDealsPage from "./pages/user/UserOnlineDealsPage";
 
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import useSystemTheme from "./hooks/useSystemTheme";
 import { ConfigProvider } from "antd";
+import enUS from "antd/locale/en_US";
+import zhTW from "antd/locale/zh_TW";
 import theme from "antd/es/theme";
 import UploadSuccess from "./pages/UploadSuccess";
 import SystemConfigPage from "./pages/SystemConfigPage";
@@ -37,6 +40,8 @@ import useGlobalNotificationManager from "./hooks/useGlobalNotificationManager";
 
 function App() {
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
+  const antdLocale = i18n.language === "zh" ? zhTW : enUS;
   const { startListening, stopListening } = useAchievementListener();
   const { startGlobalNotificationChecker, stopGlobalNotificationChecker, manualCheck } = useGlobalNotificationManager();
 
@@ -87,6 +92,7 @@ function App() {
 
   return (
     <ConfigProvider
+      locale={antdLocale}
       theme={{
         algorithm: systemTheme === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {

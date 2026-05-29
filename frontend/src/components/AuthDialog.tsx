@@ -12,11 +12,13 @@ import { AuthContext } from "../context/AuthContext";
 import RobotAvatarWithDialog, { RobotSentence } from "./RobotAvatarWithDialog";
 import axios from "axios";
 import { LoginOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Title, Paragraph } = Typography;
 
 const AuthDialog: React.FC = () => {
   const { showAuthDialog, setShowAuthDialog } = useContext(AuthContext);
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [devEmail, setDevEmail] = useState("demo@bidforgood.com");
 
@@ -27,7 +29,7 @@ const AuthDialog: React.FC = () => {
 
   const handleDevLogin = async () => {
     if (!devEmail) {
-      message.warning("請輸入 email");
+      message.warning(t("請輸入 email"));
       return;
     }
     setLoading(true);
@@ -35,21 +37,21 @@ const AuthDialog: React.FC = () => {
       const response = await axios.post("/api/auth/dev-login", { email: devEmail });
       const token = response.data.token;
       localStorage.setItem("jwt", token);
-      message.success("登入成功，正在進入 Demo～");
+      message.success(t("登入成功，正在進入 Demo～"));
       handleClose();
       window.location.reload();
     } catch (err) {
       console.error(err);
-      message.error("登入失敗，請再試一次");
+      message.error(t("登入失敗，請再試一次"));
     } finally {
       setLoading(false);
     }
   };
 
   const robotLines: RobotSentence[] = [
-    { content: "嗨～點一下就能用 Demo 帳號進來逛逛喔 🤖", type: "normal" },
-    { content: "沒登入我不能幫你看商品欸😢", type: "silent" },
-    { content: "登入後我就可以派上用場了！", type: "normal" },
+    { content: t("嗨～點一下就能用 Demo 帳號進來逛逛喔 🤖"), type: "normal" },
+    { content: t("沒登入我不能幫你看商品欸😢"), type: "silent" },
+    { content: t("登入後我就可以派上用場了！"), type: "normal" },
   ];
 
   const shapes = [
@@ -137,10 +139,10 @@ const AuthDialog: React.FC = () => {
           disableTickle={true}
         />
 
-        <Title level={4} style={{ marginTop: 16 }}>歡迎來到 BidForGood 公益市集 Demo 👋</Title>
+        <Title level={4} style={{ marginTop: 16 }}>{t("歡迎來到 BidForGood 公益市集 Demo 👋")}</Title>
         <Divider style={{ margin: "16px auto", width: "60px" }} />
         <Paragraph type="secondary" style={{ marginBottom: 24 }}>
-          這是一個作品集展示用的 Demo。點下方按鈕即可用 Demo 帳號進入，無需註冊。
+          {t("這是一個作品集展示用的 Demo。點下方按鈕即可用 Demo 帳號進入，無需註冊。")}
         </Paragraph>
 
         <Space direction="vertical" style={{ width: "100%" }} size="middle">
@@ -153,11 +155,11 @@ const AuthDialog: React.FC = () => {
             className="login-button-hover"
             icon={<LoginOutlined />}
           >
-            以 Demo 帳號進入
+            {t("以 Demo 帳號進入")}
           </Button>
 
           <Input
-            placeholder="或自訂 email 進入（例如 you@bidforgood.com）"
+            placeholder={t("或自訂 email 進入（例如 you@bidforgood.com）")}
             value={devEmail}
             onChange={(e) => setDevEmail(e.target.value)}
             onPressEnter={handleDevLogin}
