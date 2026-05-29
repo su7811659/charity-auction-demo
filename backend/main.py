@@ -109,6 +109,24 @@ def verify_admin(admin_token: str = Header(...)):
 # make sure database exists
 Base.metadata.create_all(bind=engine)
 
+# Demo：若資料庫為空，啟動時自動灌入示範資料（idempotent，不依賴部署平台的啟動指令）
+try:
+    _seed_db = SessionLocal()
+    try:
+        _is_empty = _seed_db.query(Product).count() == 0
+    finally:
+        _seed_db.close()
+    if _is_empty:
+        import subprocess
+        import sys as _sys
+        _scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts")
+        print("[seed] 資料庫為空，啟動時灌入示範資料…")
+        subprocess.run([_sys.executable, "seed_data.py", "50"], cwd=_scripts_dir, check=False)
+        subprocess.run([_sys.executable, "seed_interactions.py", "all"], cwd=_scripts_dir, check=False)
+        print("[seed] 完成。")
+except Exception as _seed_err:
+    print(f"[seed] 啟動 seeding 略過：{_seed_err}")
+
 #create db session
 def get_db():
     db = SessionLocal()
