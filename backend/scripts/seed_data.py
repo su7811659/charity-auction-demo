@@ -18,33 +18,33 @@ from datetime import datetime, timezone
 
 # Sample data for generating fake products
 SELLER_NAMES = [
-    "張小明", "李小華", "王小美", "陳小強", "林小芳", 
-    "黃小偉", "劉小玲", "吳小傑", "蔡小雅", "許小豪"
+    "Alex Chen", "Jamie Lee", "Taylor Wang", "Jordan Lin", "Casey Huang",
+    "Morgan Liu", "Riley Wu", "Sam Tsai", "Avery Hsu", "Quinn Yang"
 ]
 
 SELLER_NICKNAMES = [
-    "愛心小天使", "公益達人", "慈善家", "溫暖使者", "希望之光",
-    "愛心媽媽", "公益爸爸", "慈善小王子", "溫暖小公主", "希望之星"
+    "KindAngel", "CharityPro", "TheGiver", "WarmHeart", "HopeBringer",
+    "CaringMom", "GenerousDad", "PrinceOfGood", "KindPrincess", "StarOfHope"
 ]
 
 PRODUCT_NAMES = [
     "iPhone 14 Pro", "MacBook Air", "iPad Pro", "AirPods Pro", "Apple Watch",
-    "Sony 電視", "Nintendo Switch", "PS5", "Xbox Series X", "Canon 相機",
-    "Nike 運動鞋", "Adidas 外套", "Uniqlo 衣服", "Zara 包包", "H&M 褲子",
-    "星巴克保溫杯", "無印良品文具", "IKEA 家具", "小米手機", "華為平板"
+    "Sony TV", "Nintendo Switch", "PS5", "Xbox Series X", "Canon Camera",
+    "Nike Sneakers", "Adidas Jacket", "Uniqlo Shirt", "Zara Bag", "H&M Pants",
+    "Starbucks Tumbler", "Muji Stationery", "IKEA Furniture", "Xiaomi Phone", "Huawei Tablet"
 ]
 
 DESCRIPTIONS = [
-    "全新未拆封，原廠保固中",
-    "九成新，使用不到一年",
-    "八成新，功能完全正常",
-    "七成新，有輕微使用痕跡",
-    "六成新，適合預算有限的買家",
-    "五成新，價格實惠",
-    "四成新，需要一些保養",
-    "三成新，適合DIY修復",
-    "二手商品，狀況如圖所示",
-    "朋友贈送，用不到所以出售"
+    "Brand new, factory sealed, still under warranty",
+    "Like new, used for less than a year",
+    "80% new, fully functional",
+    "70% new, minor signs of use",
+    "60% new, great for a tight budget",
+    "50% new, very affordable",
+    "40% new, needs a little care",
+    "30% new, good for a DIY fix",
+    "Second-hand, condition as shown in the photos",
+    "A gift I never used, so passing it on"
 ]
 
 IMAGE_URLS = [
@@ -61,29 +61,29 @@ IMAGE_URLS = [
 ]
 
 AI_COMMENTS = [
-    "這是一個非常實用的商品，品質優良",
-    "性價比很高，值得推薦",
-    "適合送禮或自用都很不錯",
-    "商品狀況良好，可以放心購買",
-    "價格合理，物超所值",
-    "品牌值得信賴，品質有保障",
-    "功能齊全，使用方便",
-    "外觀精美，做工精細",
-    "實用性強，推薦購買",
-    "品質穩定，值得信賴"
+    "A very practical item with great quality",
+    "Excellent value for money, highly recommended",
+    "Perfect as a gift or for yourself",
+    "In good condition, buy with confidence",
+    "Reasonably priced and well worth it",
+    "A trusted brand with guaranteed quality",
+    "Fully featured and easy to use",
+    "Beautiful design with fine craftsmanship",
+    "Highly practical, recommended",
+    "Stable, reliable quality"
 ]
 
 AI_FIT_OWNERS = [
-    "適合學生族群",
-    "適合上班族",
-    "適合家庭主婦",
-    "適合科技愛好者",
-    "適合運動愛好者",
-    "適合時尚人士",
-    "適合實用主義者",
-    "適合收藏家",
-    "適合DIY愛好者",
-    "適合預算有限的買家"
+    "Great for students",
+    "Great for office workers",
+    "Great for homemakers",
+    "Great for tech lovers",
+    "Great for sports enthusiasts",
+    "Great for the fashion-conscious",
+    "Great for practical-minded people",
+    "Great for collectors",
+    "Great for DIY lovers",
+    "Great for budget-conscious buyers"
 ]
 
 def generate_fake_product():

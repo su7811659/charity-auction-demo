@@ -16,26 +16,26 @@ from datetime import datetime, timezone
 
 # Sample comment content
 COMMENT_CONTENTS = [
-    "看起來很不錯！",
-    "價格合理，考慮購買",
-    "商品狀況如何？",
-    "可以議價嗎？",
-    "有興趣，請聯絡我",
-    "品質看起來很好",
-    "適合送禮嗎？",
-    "有保固嗎？",
-    "可以面交嗎？",
-    "商品還在嗎？",
-    "很喜歡這個商品",
-    "性價比很高",
-    "賣家很友善",
-    "交易很順利",
-    "推薦這個賣家",
-    "商品符合描述",
-    "包裝很完整",
-    "出貨很快",
-    "服務很好",
-    "下次還會購買"
+    "This looks great!",
+    "Fair price, thinking about buying",
+    "What condition is it in?",
+    "Is the price negotiable?",
+    "Interested, please contact me",
+    "The quality looks good",
+    "Would this make a good gift?",
+    "Is there any warranty?",
+    "Can we meet up for the handover?",
+    "Is this item still available?",
+    "I really like this one",
+    "Great value for money",
+    "The seller is very friendly",
+    "The transaction went smoothly",
+    "Highly recommend this seller",
+    "The item matches the description",
+    "Very well packaged",
+    "Shipped really fast",
+    "Great service",
+    "Would buy from here again"
 ]
 
 def add_fake_likes(num_likes=100):
