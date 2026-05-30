@@ -2,6 +2,7 @@
 // 查不到的 key 會自動 fallback 回中文（見 i18n/index.ts），因此可逐步擴充、不會破版。
 export const en: Record<string, string> = {
   "首頁": "Home",
+  "商品列表": "Browse",
   "上傳商品": "Sell an Item",
   "活動指南": "How It Works",
   "活動總結": "Event Summary",
