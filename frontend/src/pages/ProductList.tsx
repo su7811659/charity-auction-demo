@@ -798,6 +798,13 @@ const ProductList = () => {
     }
   }, [currentUser]);
 
+  // 安全網：即使 currentUser 一直沒載入（例如 token 已過期、profile 抓不到），
+  // 最多等 3 秒就放行商品列表，避免列表永遠卡在空白。
+  useEffect(() => {
+    const timer = setTimeout(() => setIsUserDataLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // 當使用者偏好設定載入後，更新查詢參數並重新載入資料
   useEffect(() => {
     if (currentUser && currentUser.default_product_status !== undefined && currentUser.default_sort_order !== undefined && !userPreferencesApplied) {
