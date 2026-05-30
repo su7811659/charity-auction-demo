@@ -1,20 +1,19 @@
 import json
-from langchain.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI  # Use ChatOpenAI for chat-based models
-from langchain_core.rate_limiters import InMemoryRateLimiter  # To handle rate limits, see https://python.langchain.com/docs/how_to/chat_model_rate_limiting/
 from utils.logger import Logger
 
 logger = Logger.get_logger(logger_name="LangChain Service")
-
-rate_limiter = InMemoryRateLimiter(
-    requests_per_second=7000
-)
 
 def generate_response(context: str, user_query: str, total_products: int = 0) -> str:
     # Demo 模式：未設定真實 OpenAI key 時回傳示範訊息，不呼叫 LLM
     from services.ai_demo import ai_enabled, demo_chat_response
     if not ai_enabled():
         return demo_chat_response()
+
+    # 延遲載入 langchain（demo 模式不載入，省記憶體）
+    from langchain.prompts import PromptTemplate
+    from langchain_openai import ChatOpenAI
+    from langchain_core.rate_limiters import InMemoryRateLimiter
+    rate_limiter = InMemoryRateLimiter(requests_per_second=7000)
 
     # Define the LangChain prompt template
     prompt_template = PromptTemplate(
@@ -72,6 +71,10 @@ def extract_conditions_with_langchain(user_query: str) -> dict:
     from services.ai_demo import ai_enabled
     if not ai_enabled():
         return {}
+    from langchain.prompts import PromptTemplate
+    from langchain_openai import ChatOpenAI
+    from langchain_core.rate_limiters import InMemoryRateLimiter
+    rate_limiter = InMemoryRateLimiter(requests_per_second=7000)
     try:
         # Define the LangChain prompt template for condition extraction
         prompt_template = PromptTemplate(

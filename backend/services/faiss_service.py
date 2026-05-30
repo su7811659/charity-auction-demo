@@ -1,37 +1,51 @@
 import os
-import faiss
 import re
 import numpy as np
 from sqlalchemy.orm import Session
 from schemas.like_schema import Like
 from schemas.comment_schema import Comment
-from openai import OpenAI
 from config import settings
 from repositories.product_repository import get_approved_products, get_approved_product_by_id
-from services.langchain_service import extract_conditions_with_langchain
 from viewmodels.product_viewmodel import ProductViewModel
 from utils.logger import Logger
 from utils.product_formatter import ProductFormatter
 
 logger = Logger.get_logger(logger_name="FAISS Service")
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
-
 DATA_DIR = "data"
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# Initialize FAISS index
-dimension = 1536  # Embedding size for text-embedding-ada-002
+# Embedding size for text-embedding-ada-002
+dimension = 1536
 index_path = os.path.join(DATA_DIR, "faiss_index.bin")
 
-# Attempt to load the index from disk
-if os.path.exists(index_path):
-    index = faiss.read_index(index_path)
-    logger.info(f"FAISS index loaded from {index_path}")
-else:
-    # Use IndexIDMap to support ID-based management
-    index = faiss.IndexIDMap(faiss.IndexFlatL2(dimension))
-    logger.info("No existing FAISS index found. Initialized a new index.")
+# 重的相依套件（faiss / openai / langchain）改成「延遲載入」：
+# Demo 模式（未設定 OpenAI key）完全不會載入它們，啟動記憶體大幅降低，避免免費方案 OOM。
+_index = None
+_openai_client = None
+
+
+def _get_faiss_and_index():
+    """延遲載入 faiss 並建立/讀取索引（僅在真的需要 AI 時呼叫）。"""
+    global _index
+    import faiss  # 延遲匯入
+    if _index is None:
+        if os.path.exists(index_path):
+            _index = faiss.read_index(index_path)
+            logger.info(f"FAISS index loaded from {index_path}")
+        else:
+            _index = faiss.IndexIDMap(faiss.IndexFlatL2(dimension))
+            logger.info("No existing FAISS index found. Initialized a new index.")
+    return faiss, _index
+
+
+def _get_openai_client():
+    """延遲建立 OpenAI client。"""
+    global _openai_client
+    if _openai_client is None:
+        from openai import OpenAI  # 延遲匯入
+        _openai_client = OpenAI(api_key=settings.OPENAI_API_KEY)
+    return _openai_client
 
 # Function to generate embeddings
 def generate_embedding(text: str) -> np.ndarray:
@@ -40,6 +54,7 @@ def generate_embedding(text: str) -> np.ndarray:
     if not ai_enabled():
         return np.zeros(dimension, dtype=np.float32)
 
+    client = _get_openai_client()
     response = client.embeddings.create(input=text, model="text-embedding-ada-002")
     return np.array(response.data[0].embedding, dtype=np.float32)
 
@@ -49,6 +64,11 @@ def populate_faiss_index(db: Session, batch_size=100):
     Populate the FAISS index with embeddings from the database.
     Avoid adding duplicate embeddings.
     """
+    from services.ai_demo import ai_enabled
+    if not ai_enabled():
+        logger.info("Demo mode: skip FAISS populate")
+        return
+    faiss, index = _get_faiss_and_index()
     try:
         products = get_approved_products(db)
 
@@ -142,6 +162,12 @@ def extract_conditions(query: str) -> dict:
 
 # Search FAISS index
 def search_faiss(db: Session, query: str, top_k: int = 100, email: str = '', similarity_threshold: float = 0.6, use_openai: bool = False):
+    # Demo 模式：不做語意搜尋（不載入 faiss），回傳空結果
+    from services.ai_demo import ai_enabled
+    if not ai_enabled():
+        return []
+    from services.langchain_service import extract_conditions_with_langchain
+    faiss, index = _get_faiss_and_index()
     try:
         # Step 1: Extract conditions
         if use_openai:
@@ -221,6 +247,10 @@ def update_faiss_index(product_id: int, embedding: np.ndarray):
     Update the FAISS index with new or modified embedding vectors,
     then write the updated index to disk for persistent storage.
     """
+    from services.ai_demo import ai_enabled
+    if not ai_enabled():
+        return
+    faiss, index = _get_faiss_and_index()
     try:
         if isinstance(index, faiss.IndexIDMap):
             # Remove old embedding if it exists
